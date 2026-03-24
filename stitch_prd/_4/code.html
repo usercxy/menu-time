@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary": "#6e6353",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "on-error-container": "#68001f",
+              "surface-container-highest": "#eae9dd",
+              "surface-tint": "#a84533",
+              "error-dim": "#770326",
+              "on-error": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "surface-container-low": "#fcf9f3",
+              "tertiary-container": "#feefda",
+              "inverse-primary": "#f7816b",
+              "on-primary-container": "#721e10",
+              "primary": "#a84533",
+              "surface": "#fffcf7",
+              "surface-container-high": "#f0eee4",
+              "surface-container": "#f6f4ec",
+              "secondary-fixed": "#e4f5e2",
+              "on-tertiary-container": "#635949",
+              "error-container": "#f76a80",
+              "secondary-fixed-dim": "#d6e7d4",
+              "secondary-container": "#e4f5e2",
+              "primary-dim": "#983a28",
+              "on-primary": "#ffffff",
+              "error": "#b3374e",
+              "surface-dim": "#e4e3d6",
+              "on-primary-fixed": "#550801",
+              "on-secondary": "#ffffff",
+              "background": "#fffcf7",
+              "primary-container": "#ffac9c",
+              "inverse-on-surface": "#9e9d98",
+              "surface-variant": "#eae9dd",
+              "on-background": "#373831",
+              "on-surface": "#373831",
+              "primary-fixed-dim": "#ff9783",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "tertiary-fixed": "#feefda",
+              "on-secondary-container": "#4f5e4f",
+              "on-surface-variant": "#64655c",
+              "on-secondary-fixed-variant": "#596859",
+              "outline-variant": "#babaaf",
+              "on-tertiary-fixed": "#504738",
+              "secondary-dim": "#4d5c4d",
+              "on-primary-fixed-variant": "#7e2718",
+              "on-secondary-fixed": "#3d4c3d",
+              "primary-fixed": "#ffac9c",
+              "secondary": "#596859",
+              "surface-bright": "#fffcf7",
+              "outline": "#818178",
+              "inverse-surface": "#0e0e0c",
+              "tertiary-dim": "#615747"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #fffcf7;
+            color: #373831;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#a84533] dark:text-[#d66853]">arrow_back</span>
+<h1 class="font-['Noto_Serif'] font-bold tracking-tight text-xl text-[#a84533] dark:text-[#d66853]">设置</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#6e6353] dark:text-stone-400">search</span>
+</div>
+</header>
+<main class="pt-20 px-4 max-w-2xl mx-auto space-y-6">
+<!-- Account Section -->
+<section class="space-y-3">
+<h2 class="font-headline text-lg font-bold px-2 text-tertiary">Account</h2>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(55,56,49,0.06)] p-4 flex items-center gap-4 border border-outline-variant/10">
+<div class="relative">
+<img alt="Profile Photo" class="w-16 h-16 rounded-full object-cover border-2 border-primary/20" data-alt="portrait of a woman in her 50s with a warm smile, wearing an apron in a sunlit rustic kitchen setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkxciJogSQoxiVcyo8gNfATL1BMAPv8jxZu2Xq-yM0guo0r2fQ1QuSHcSMuinNEbp9KsCZhmHGPVDdUSyUBopHObBGL2yO0M1Wt1YvNS9UpIyYyqzeZS-arKPeFEIbPM1NZK675v3Lo9ZxwoWwkuOnYviV3ROMXkZo3XDQPFr_HaNd08lN1JMaOJDC8lqdZbbP1KhAuN2Qe2eBK_Pqkm1Pek9zN0k9JVnsXJFAQr1Bw9tZHaUPsK-Zp6xuI3QigacqQPz9TxEG0bw"/>
+<div class="absolute bottom-0 right-0 bg-primary text-white rounded-full p-1 shadow-sm">
+<span class="material-symbols-outlined text-xs" style="font-size: 14px;">edit</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="font-headline text-lg text-on-surface">Keeper of Recipes</p>
+<p class="text-on-surface-variant text-sm">Account ID: SHI-8829-2024</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</section>
+<!-- Family Space Section -->
+<section class="space-y-3">
+<h2 class="font-headline text-lg font-bold px-2 text-tertiary">Family Space</h2>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(55,56,49,0.06)] overflow-hidden border border-outline-variant/10">
+<div class="p-4 flex items-center justify-between border-b border-surface-container-low hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">castle</span>
+<div>
+<p class="font-semibold text-on-surface">The Smith Estate</p>
+<p class="text-xs text-on-surface-variant">4 members active</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">group</span>
+<p class="font-medium text-on-surface">Member Management</p>
+</div>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Data & Backup Section -->
+<section class="space-y-3">
+<h2 class="font-headline text-lg font-bold px-2 text-tertiary">Data &amp; Backup</h2>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(55,56,49,0.06)] overflow-hidden border border-outline-variant/10">
+<div class="p-4 flex items-center justify-between border-b border-surface-container-low hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">picture_as_pdf</span>
+<p class="font-medium text-on-surface">Export to PDF (Handmade Style)</p>
+</div>
+<span class="material-symbols-outlined text-outline">download</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">cloud_done</span>
+<div>
+<p class="font-medium text-on-surface">Cloud Sync Status</p>
+<p class="text-xs text-secondary">Last synced: 2 minutes ago</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">sync</span>
+</div>
+</div>
+</section>
+<!-- App Preferences Section -->
+<section class="space-y-3">
+<h2 class="font-headline text-lg font-bold px-2 text-tertiary">App Preferences</h2>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(55,56,49,0.06)] overflow-hidden border border-outline-variant/10">
+<div class="p-4 flex items-center justify-between border-b border-surface-container-low">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">dark_mode</span>
+<p class="font-medium text-on-surface">Dark Mode</p>
+</div>
+<div class="w-12 h-6 bg-outline-variant/30 rounded-full relative cursor-pointer">
+<div class="absolute left-1 top-1 w-4 h-4 bg-surface rounded-full shadow-sm"></div>
+</div>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">notifications</span>
+<p class="font-medium text-on-surface">Notification Settings</p>
+</div>
+<div class="w-12 h-6 bg-primary/80 rounded-full relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-4 bg-surface rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Support Section -->
+<section class="space-y-3">
+<h2 class="font-headline text-lg font-bold px-2 text-tertiary">Support</h2>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_12px_32px_rgba(55,56,49,0.06)] overflow-hidden border border-outline-variant/10">
+<div class="p-4 flex items-center justify-between border-b border-surface-container-low hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="font-medium text-on-surface">About Shiguangji</p>
+</div>
+<span class="material-symbols-outlined text-outline text-sm">1k</span>
+</div>
+<div class="p-4 flex items-center justify-between hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">help</span>
+<p class="font-medium text-on-surface">Help Center</p>
+</div>
+<span class="material-symbols-outlined text-outline">open_in_new</span>
+</div>
+</div>
+</section>
+<!-- Logout Action -->
+<div class="pt-4 px-2">
+<button class="w-full py-4 text-error font-semibold flex items-center justify-center gap-2 bg-error/5 rounded-xl border border-error/10 hover:bg-error/10 transition-colors">
+<span class="material-symbols-outlined">logout</span>
+                Sign Out
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-[2rem] bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md border-t border-[#babaaf]/15 shadow-[0px_-4px_24px_rgba(55,56,49,0.04)] flex justify-around items-center h-20 px-4 pb-safe w-full">
+<div class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 opacity-70 hover:opacity-100 transition-all">
+<span class="material-symbols-outlined" data-icon="book_2">book_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Heirlooms</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 opacity-70 hover:opacity-100 transition-all">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Kitchen</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 opacity-70 hover:opacity-100 transition-all">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Family</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#a84533] dark:text-[#d66853] bg-[#a84533]/10 dark:bg-[#d66853]/10 rounded-2xl px-4 py-1">
+<span class="material-symbols-outlined" data-icon="settings" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Settings</span>
+</div>
+</nav>
+</body></html>

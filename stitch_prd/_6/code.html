@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shiguangji - Tag System Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary": "#6e6353",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "on-error-container": "#68001f",
+              "surface-container-highest": "#eae9dd",
+              "surface-tint": "#a84533",
+              "error-dim": "#770326",
+              "on-error": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "surface-container-low": "#fcf9f3",
+              "tertiary-container": "#feefda",
+              "inverse-primary": "#f7816b",
+              "on-primary-container": "#721e10",
+              "primary": "#a84533",
+              "surface": "#fffcf7",
+              "surface-container-high": "#f0eee4",
+              "surface-container": "#f6f4ec",
+              "secondary-fixed": "#e4f5e2",
+              "on-tertiary-container": "#635949",
+              "error-container": "#f76a80",
+              "secondary-fixed-dim": "#d6e7d4",
+              "secondary-container": "#e4f5e2",
+              "primary-dim": "#983a28",
+              "on-primary": "#ffffff",
+              "error": "#b3374e",
+              "surface-dim": "#e4e3d6",
+              "on-primary-fixed": "#550801",
+              "on-secondary": "#ffffff",
+              "background": "#fffcf7",
+              "primary-container": "#ffac9c",
+              "inverse-on-surface": "#9e9d98",
+              "surface-variant": "#eae9dd",
+              "on-background": "#373831",
+              "on-surface": "#373831",
+              "primary-fixed-dim": "#ff9783",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "tertiary-fixed": "#feefda",
+              "on-secondary-container": "#4f5e4f",
+              "on-surface-variant": "#64655c",
+              "on-secondary-fixed-variant": "#596859",
+              "outline-variant": "#babaaf",
+              "on-tertiary-fixed": "#504738",
+              "secondary-dim": "#4d5c4d",
+              "on-primary-fixed-variant": "#7e2718",
+              "on-secondary-fixed": "#3d4c3d",
+              "primary-fixed": "#ffac9c",
+              "secondary": "#596859",
+              "surface-bright": "#fffcf7",
+              "outline": "#818178",
+              "inverse-surface": "#0e0e0c",
+              "tertiary-dim": "#615747"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fffcf7;
+            color: #373831;
+        }
+        .serif-text {
+            font-family: 'Noto Serif', serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 backdrop-blur-md flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#a84533] hover:bg-[#fcf9f3] p-2 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-xl font-['Noto_Serif'] font-bold tracking-tight text-[#a84533]">标签体系</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-[#6e6353] hover:bg-[#fcf9f3] p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="text-[#6e6353] hover:bg-[#fcf9f3] p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-20 px-6 max-w-4xl mx-auto space-y-10">
+<!-- Introduction / Header Section -->
+<section class="mt-4">
+<div class="relative overflow-hidden rounded-3xl bg-surface-container-low p-8 flex flex-col md:flex-row items-center gap-8">
+<div class="flex-1 space-y-3 text-left">
+<h2 class="serif-text text-3xl font-bold text-on-surface tracking-tight">Tag Library</h2>
+<p class="text-on-surface-variant font-medium max-w-md leading-relaxed">Organize your family culinary heritage by flavors, occasions, and ingredients to find memories faster.</p>
+</div>
+<div class="w-full md:w-48 h-32 rounded-2xl overflow-hidden relative shadow-lg">
+<img alt="Handwritten recipe tags" class="w-full h-full object-cover" data-alt="Close-up of elegant handwritten recipe tags on textured cream paper with sprigs of dried rosemary in soft warm light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn0-lpEui-yCOl4v2GISxs0E1WEt5u0wxZ8ctvyy9m9GTkhAUPBgKm4Iw_DldJM0REKjOt-McT7CaGyMXpWbpHYYfUTgRo2WGTdQ-oA6RIf9xu6pLkg401wond4ke_VyPYZ3Kkk1J6LbL7OwzocPN_vvP9vttbdEq9UHxjTiPnqBHhR2F-o9PkVW3CzYkcTMgf4aCN1goKy9kt7TcsLlPrpsrbvVyMWLI5CZ8JrduON1ADsWKUC4fn218DEk7Ng-aBLwhV5oK8O_8"/>
+<div class="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
+</div>
+</div>
+</section>
+<!-- Tag Groups Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Flavor Group -->
+<section class="space-y-4">
+<div class="flex items-center justify-between border-b border-outline-variant/15 pb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<h3 class="serif-text text-xl font-bold text-on-surface">Flavor</h3>
+</div>
+<button class="text-primary hover:bg-primary/5 p-1 rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-3">
+<!-- Soft Colored Pills -->
+<div class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Spicy
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Sour-Sweet
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Umami
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Salty-Rich
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+</div>
+</section>
+<!-- Scene Group -->
+<section class="space-y-4">
+<div class="flex items-center justify-between border-b border-outline-variant/15 pb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">event_note</span>
+<h3 class="serif-text text-xl font-bold text-on-surface">Scene</h3>
+</div>
+<button class="text-primary hover:bg-primary/5 p-1 rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="inline-flex items-center gap-2 bg-tertiary-container text-on-tertiary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Quick Dinner
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-tertiary-container text-on-tertiary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Holiday Feast
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-tertiary-container text-on-tertiary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Breakfast
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-tertiary-container text-on-tertiary-container px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Picnic
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+</div>
+</section>
+<!-- Main Ingredient Group -->
+<section class="md:col-span-2 space-y-4">
+<div class="flex items-center justify-between border-b border-outline-variant/15 pb-2">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">set_meal</span>
+<h3 class="serif-text text-xl font-bold text-on-surface">Main Ingredient</h3>
+</div>
+<button class="text-primary hover:bg-primary/5 p-1 rounded-lg transition-all active:scale-95">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Seafood
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Mushroom
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Vegetable
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Pork
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Beef
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-surface-container-high text-on-surface px-4 py-2 rounded-full font-medium text-sm hover:opacity-100 transition-all">
+                        Tofu
+                        <span class="material-symbols-outlined text-[16px] cursor-pointer opacity-60 hover:opacity-100">close</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Bento Style Tip Card -->
+<section class="pt-6">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-primary/5 rounded-[2rem] p-8 relative overflow-hidden group">
+<div class="relative z-10 space-y-4">
+<span class="bg-primary text-white text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full">Pro Tip</span>
+<h4 class="serif-text text-2xl font-bold text-primary-dim">Smart Auto-Grouping</h4>
+<p class="text-on-surface-variant leading-relaxed max-w-sm">Enable "Family Context" to let Shiguangji automatically suggest tags based on your previous entries and photo metadata.</p>
+<button class="bg-primary text-white px-6 py-2.5 rounded-xl font-semibold text-sm transition-all hover:shadow-lg active:scale-95">Configure Auto-Tags</button>
+</div>
+<div class="absolute -right-8 -bottom-8 opacity-10 rotate-12 group-hover:rotate-6 transition-transform duration-700">
+<span class="material-symbols-outlined text-[180px]">category</span>
+</div>
+</div>
+<div class="bg-surface-container-highest rounded-[2rem] p-8 flex flex-col justify-between">
+<h4 class="serif-text text-xl font-bold text-on-surface">Untagged Items</h4>
+<div class="text-4xl font-['Noto_Serif'] font-bold text-primary mt-4">12</div>
+<p class="text-sm text-on-surface-variant font-medium mt-2">Recipes needing a tag</p>
+<div class="mt-6 flex -space-x-3">
+<div class="w-10 h-10 rounded-full border-2 border-surface overflow-hidden bg-surface-dim">
+<img alt="Thumbnail 1" class="w-full h-full object-cover" data-alt="Close-up of a vibrant green salad in a ceramic bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDq6ziPoy1myM5ymfzJRyjJyomfra3cHM8EVQUloplqK1GckGVaD5LWScxJAnx2as4lY111PIvJ5qii_AnMJqaoxlinh3FERvB9iwMO6TGEY-PMLts1Dk9g1i_1rYZ8iiQVPJdNtszZgRGpHns9iMD62sdmCIKNeYOHevVEKKHecHbCVDetqZr8ZebXqWoFhqMCc7By4bZoeIdx43s-BO_u4wz7Wensi2PLMbEobWh1XIOE0spq9RKRmP1FPVs3fH06LwtdEnZ3AEo"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface overflow-hidden bg-surface-dim">
+<img alt="Thumbnail 2" class="w-full h-full object-cover" data-alt="Top view of hot noodle soup with steam" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMsInChVyD0HIoN7SN5HvR0qk4baf9XvNH_3EK5GuazNyuCzCwgs2-q6mldubETBsa0DPiDkZtUJSuwzLtQbekmikpoLRg1jVfy19xxQUDkU3_RL-4vPquqoUpFMMSzmRf5xLmAICSY15K6JtUu6wiPd99X5LXY_HCapotrBMkbgmvIxXaqjGWIC5QLWo9PBDYCcBZp1w3ZD9WHIHADQ7DDUGdWNzNF-528M9A-Zj8rAsOQ7fEemtg-2JpNMFBZRfFbnlCTDzWin8"/>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-surface flex items-center justify-center bg-primary text-white text-xs font-bold">+10</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- NavigationDrawer (Representative of the mapping for 'Tag Library') -->
+<!-- Hidden by default, showing active state on BottomNav -->
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#fffcf7]/80 backdrop-blur-md rounded-t-[2rem] shadow-[0px_-4px_24px_rgba(55,56,49,0.04)] border-t border-[#babaaf]/15 flex justify-around items-center h-20 px-4 pb-safe w-full">
+<a class="flex flex-col items-center justify-center text-[#6e6353] opacity-70 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">book_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Heirlooms</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] opacity-70 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Kitchen</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] opacity-70 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Family</span>
+</a>
+<!-- Active Nav: Category Manager/Tag Library context -->
+<a class="flex flex-col items-center justify-center text-[#a84533] bg-[#a84533]/10 rounded-2xl px-4 py-1 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Settings</span>
+</a>
+</nav>
+</body></html>

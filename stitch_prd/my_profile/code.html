@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed": "#550801",
+              "on-surface-variant": "#64655c",
+              "on-surface": "#373831",
+              "inverse-surface": "#0e0e0c",
+              "on-tertiary-fixed": "#504738",
+              "outline-variant": "#babaaf",
+              "surface-container-highest": "#eae9dd",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#4f5e4f",
+              "on-background": "#373831",
+              "primary-dim": "#983a28",
+              "on-error": "#ffffff",
+              "on-tertiary-container": "#635949",
+              "secondary-fixed": "#e4f5e2",
+              "on-primary": "#ffffff",
+              "error-container": "#f76a80",
+              "tertiary": "#6e6353",
+              "secondary-container": "#e4f5e2",
+              "inverse-primary": "#f7816b",
+              "on-primary-container": "#721e10",
+              "error": "#b3374e",
+              "surface-container-high": "#f0eee4",
+              "on-error-container": "#68001f",
+              "background": "#fffcf7",
+              "surface-container": "#f6f4ec",
+              "primary-fixed": "#ffac9c",
+              "secondary-dim": "#4d5c4d",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#feefda",
+              "surface-variant": "#eae9dd",
+              "tertiary-fixed": "#feefda",
+              "surface-dim": "#e4e3d6",
+              "surface-tint": "#a84533",
+              "surface-container-low": "#fcf9f3",
+              "error-dim": "#770326",
+              "on-secondary-fixed": "#3d4c3d",
+              "primary": "#a84533",
+              "surface-bright": "#fffcf7",
+              "on-secondary-fixed-variant": "#596859",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "secondary": "#596859",
+              "secondary-fixed-dim": "#d6e7d4",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#7e2718",
+              "primary-fixed-dim": "#ff9783",
+              "tertiary-dim": "#615747",
+              "surface": "#fffcf7",
+              "primary-container": "#ffac9c",
+              "inverse-on-surface": "#9e9d98",
+              "outline": "#818178"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .font-noto-serif { font-family: 'Noto Serif SC', serif; }
+        .font-plus-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#a84533] hover:bg-[#fcf9f3] p-2 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-noto-serif text-2xl font-bold text-[#a84533] tracking-tight">食光记</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-[#a84533] hover:bg-[#fcf9f3] p-2 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-24 px-4 max-w-2xl mx-auto">
+<!-- Profile Header -->
+<section class="mb-8 p-6 rounded-xl bg-surface-container-low flex items-center gap-6 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-32 h-32 rounded-full bg-primary/5 blur-3xl"></div>
+<div class="relative">
+<div class="w-20 h-20 rounded-full border-2 border-primary-container overflow-hidden shadow-sm">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="Close up portrait of a smiling elderly man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJ410vx9YaUXHWpOZKb1WaLHab8C46ehTQWo_tL40SJ5xPrjR84qZH7vOjG3nqfyyaAYMFC6JIMNFOFWiTi2t4-Lq9iL8sHnNH9tAovgU1DqRPZF656tRu6aVOaQtN44tuJ4NeK3lTsvDATgJKyhs7t_ZukPOAxNoqR_UzE-cBdnyWzG5v6eiB3gxL36AVYz2h9wZlhX5USizGLS1AIcLtno2MZifMol5AVpHSHncbb-5QLMBVbwLKiVpff4Tvh75R809-0YlTxYQ"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-on-primary text-[10px] px-2 py-0.5 rounded-full font-bold shadow-sm">
+                    家主
+                </div>
+</div>
+<div>
+<h2 class="font-headline text-2xl text-on-surface mb-1">林深见鹿</h2>
+<p class="text-on-surface-variant text-sm flex items-center gap-1 font-medium">
+                    传承家味，留存食光
+                </p>
+<div class="mt-3 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-semibold">
+<span class="material-symbols-outlined text-sm" data-icon="family_history" style="font-variation-settings: 'FILL' 1;">family_history</span>
+                    林氏家族核心成员
+                </div>
+</div>
+</section>
+<!-- Bento Grid Statistics -->
+<section class="grid grid-cols-3 gap-3 mb-8">
+<div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-[0px_12px_32px_rgba(55,56,49,0.06)]">
+<span class="text-2xl font-headline text-primary mb-1">128</span>
+<span class="text-[11px] font-bold text-tertiary uppercase tracking-wider">食谱创作</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-[0px_12px_32px_rgba(55,56,49,0.06)]">
+<span class="text-2xl font-headline text-primary mb-1">45</span>
+<span class="text-[11px] font-bold text-tertiary uppercase tracking-wider">记忆日志</span>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl flex flex-col items-center justify-center text-center shadow-[0px_12px_32px_rgba(55,56,49,0.06)]">
+<span class="text-2xl font-headline text-primary mb-1">312</span>
+<span class="text-[11px] font-bold text-tertiary uppercase tracking-wider">版本存挡</span>
+</div>
+</section>
+<!-- Menu Section -->
+<section class="space-y-3">
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<a class="flex items-center justify-between p-4 hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+</div>
+<span class="font-medium">分类管理</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+<div class="h-[1px] mx-4 bg-outline-variant/10"></div>
+<a class="flex items-center justify-between p-4 hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-tertiary-container flex items-center justify-center text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="sell">sell</span>
+</div>
+<span class="font-medium">标签体系</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<a class="flex items-center justify-between p-4 hover:bg-surface-container transition-colors group relative" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="groups" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<span class="font-medium">家族协作</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-primary text-on-primary text-[10px] font-bold tracking-tighter">P1</span>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</a>
+</div>
+<div class="bg-surface-container-low rounded-xl overflow-hidden">
+<a class="flex items-center justify-between p-4 hover:bg-surface-container transition-colors group" href="#">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</div>
+<span class="font-medium">系统设置</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Editorial Quote Card -->
+<section class="mt-12 p-8 bg-tertiary-container/30 rounded-2xl relative border border-tertiary-container/50 italic text-center">
+<span class="material-symbols-outlined absolute top-4 left-4 text-tertiary/20 text-4xl" data-icon="format_quote">format_quote</span>
+<p class="font-headline text-lg text-tertiary-dim leading-relaxed">
+                “ 唯有爱与美食，不可辜负。”
+            </p>
+<p class="mt-2 text-xs font-bold text-tertiary/60 tracking-widest uppercase">— 林氏家训 —</p>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-safe h-20 bg-[#fffcf7]/90 backdrop-blur-xl z-50 border-t border-[#babaaf]/10 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#6e6353] hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="menu_book">menu_book</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">食谱库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_today">calendar_today</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">计划</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#a84533] bg-[#a84533]/5 rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">我的</span>
+</a>
+</nav>
+</body></html>

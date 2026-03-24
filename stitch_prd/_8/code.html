@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shiguangji - 版本对比</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed": "#e4f5e2",
+              "surface": "#fffcf7",
+              "surface-variant": "#eae9dd",
+              "primary-fixed-dim": "#ff9783",
+              "on-primary-fixed-variant": "#7e2718",
+              "on-primary-container": "#721e10",
+              "secondary-container": "#e4f5e2",
+              "on-background": "#373831",
+              "primary-container": "#ffac9c",
+              "primary-fixed": "#ffac9c",
+              "surface-container-high": "#f0eee4",
+              "surface-container-lowest": "#ffffff",
+              "on-error-container": "#68001f",
+              "background": "#fffcf7",
+              "tertiary": "#6e6353",
+              "secondary-dim": "#4d5c4d",
+              "on-surface": "#373831",
+              "on-tertiary-fixed": "#504738",
+              "surface-container-low": "#fcf9f3",
+              "inverse-on-surface": "#9e9d98",
+              "surface-container": "#f6f4ec",
+              "on-secondary-container": "#4f5e4f",
+              "tertiary-container": "#feefda",
+              "tertiary-fixed": "#feefda",
+              "outline-variant": "#babaaf",
+              "on-primary": "#ffffff",
+              "on-error": "#ffffff",
+              "secondary": "#596859",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "surface-bright": "#fffcf7",
+              "error": "#b3374e",
+              "surface-dim": "#e4e3d6",
+              "inverse-surface": "#0e0e0c",
+              "surface-container-highest": "#eae9dd",
+              "primary": "#a84533",
+              "on-surface-variant": "#64655c",
+              "on-secondary-fixed-variant": "#596859",
+              "inverse-primary": "#f7816b",
+              "on-primary-fixed": "#550801",
+              "error-dim": "#770326",
+              "on-tertiary-container": "#635949",
+              "primary-dim": "#983a28",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "outline": "#818178",
+              "surface-tint": "#a84533",
+              "secondary-fixed-dim": "#d6e7d4",
+              "on-secondary": "#ffffff",
+              "tertiary-dim": "#615747",
+              "on-secondary-fixed": "#3d4c3d",
+              "on-tertiary": "#ffffff",
+              "error-container": "#f76a80"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #fffcf7;
+        color: #373831;
+      }
+      .noto-serif {
+        font-family: 'Noto Serif SC', serif;
+      }
+      .custom-shadow {
+        box-shadow: 0px 12px 32px rgba(55, 56, 49, 0.06);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#a84533] dark:text-[#d66853] active:scale-95 duration-200 ease-in-out">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-['Noto_Serif'] font-bold tracking-tight text-[#a84533] dark:text-[#d66853] text-xl">版本对比</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-[#6e6353] dark:text-stone-400 font-['Plus_Jakarta_Sans'] text-sm">Shiguangji</span>
+</div>
+</header>
+<main class="pt-24 px-4 max-w-5xl mx-auto">
+<!-- Recipe Header & Toggle -->
+<div class="mb-10 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h2 class="noto-serif text-4xl md:text-5xl font-bold text-on-surface mb-2 tracking-tight">菠萝咕噜肉</h2>
+<p class="text-secondary font-medium tracking-wide">Sweet &amp; Sour Pork with Pineapple</p>
+</div>
+<div class="inline-flex p-1 bg-surface-container rounded-full custom-shadow">
+<button class="px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 bg-surface-container-lowest text-on-surface shadow-sm">
+                    V2 Classic
+                </button>
+<button class="px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 text-on-surface-variant hover:text-on-surface">
+                    V3 Healthy
+                </button>
+</div>
+</div>
+<!-- Change Summary Bento Grid -->
+<section class="mb-12">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">analytics</span>
+<h3 class="noto-serif text-xl font-bold">变动摘要</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="md:col-span-2 bg-surface-container-low p-6 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 right-0 p-4 opacity-10">
+<span class="material-symbols-outlined text-8-xl" style="font-size: 120px;">history_edu</span>
+</div>
+<p class="text-tertiary text-sm mb-4">核心调整方向</p>
+<p class="noto-serif text-lg leading-relaxed max-w-md">
+                        本次迭代致力于在保留经典风味的同时，通过替换天然食材和精简调料，显著降低热量摄入，使其更符合现代健康饮食习惯。
+                    </p>
+</div>
+<div class="bg-primary/5 p-6 rounded-xl flex flex-col justify-center border-l-4 border-primary">
+<p class="text-primary font-bold text-sm uppercase tracking-wider mb-1">Sugar</p>
+<div class="flex items-baseline gap-2">
+<span class="noto-serif text-3xl font-bold text-primary">-50g</span>
+</div>
+<p class="text-on-surface-variant text-xs mt-2">减少了约 40% 的精制糖分使用</p>
+</div>
+<div class="bg-secondary/5 p-6 rounded-xl flex flex-col justify-center border-l-4 border-secondary">
+<p class="text-secondary font-bold text-sm uppercase tracking-wider mb-1">Ingredient</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="noto-serif text-xl font-bold text-secondary">新鲜菠萝</span>
+</div>
+<p class="text-on-surface-variant text-xs mt-2">替换罐头菠萝，增加天然纤维与果酸</p>
+</div>
+<div class="md:col-span-2 bg-surface-container-highest/40 p-6 rounded-xl flex items-center gap-6">
+<img class="w-24 h-24 object-cover rounded-lg shadow-sm" data-alt="close-up of vibrant sweet and sour pork with fresh pineapple chunks on a rustic ceramic plate with natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS-AAxaFWT27aSKs2PhvRPJU4XmXcfrPQjo9v-eEMCZ0tyaQKd2lkPVrLusCBe1RQFWpQwhZfLPa5JjkOJWOSpFNoMmMXn5jDUTQsMulr1F5BmrPgFAQqeNZ7Z--C7k9QGMl7NtBv8053KRt1MwoHioeUFjbvxI2JUv6N-2GLmoosnib9S76c2k9yLs4q8jViJxER8GjiP4-5p3YL6GL5rZWh5qi9IrW_2glGHgbc1n8J5dSzvQcKH0i1SkcKacdPl0zrl6rYlySs"/>
+<div>
+<span class="text-xs text-tertiary block mb-1">成品预览对比</span>
+<p class="noto-serif font-medium italic">"色泽更趋于自然的金黄，口感清甜不腻。"</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Side-by-Side Comparison -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+<!-- Ingredients Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between border-b border-outline-variant/15 pb-2">
+<h3 class="noto-serif text-2xl font-bold">主料调整</h3>
+<div class="flex gap-4 text-xs font-medium">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span> 减少</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> 增加</span>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg custom-shadow">
+<div class="flex items-center gap-4">
+<span class="text-on-surface-variant">里脊肉</span>
+<span class="text-xs bg-surface-container px-2 py-0.5 rounded text-tertiary">300g</span>
+</div>
+<span class="text-xs text-outline italic">无变动</span>
+</div>
+<div class="flex items-center justify-between p-4 bg-primary/5 border border-primary/10 rounded-lg">
+<div class="flex items-center gap-4">
+<span class="text-primary font-semibold">白砂糖</span>
+<span class="text-xs bg-primary/10 px-2 py-0.5 rounded text-primary">20g</span>
+</div>
+<div class="flex items-center text-primary">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+<span class="text-xs font-bold">-50g</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-secondary/5 border border-secondary/10 rounded-lg">
+<div class="flex items-center gap-4">
+<span class="text-secondary font-semibold">新鲜菠萝</span>
+<span class="text-xs bg-secondary/10 px-2 py-0.5 rounded text-secondary">150g</span>
+</div>
+<div class="flex items-center text-secondary">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-xs font-bold">新增</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 bg-surface-container-lowest rounded-lg custom-shadow opacity-50">
+<div class="flex items-center gap-4">
+<span class="text-on-surface-variant line-through">罐头菠萝</span>
+</div>
+<span class="text-xs text-primary font-medium italic">已移除</span>
+</div>
+</div>
+</section>
+<!-- Steps Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between border-b border-outline-variant/15 pb-2">
+<h3 class="noto-serif text-2xl font-bold">步骤变化</h3>
+</div>
+<div class="relative pl-8 space-y-10 before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container-highest">
+<div class="relative">
+<div class="absolute -left-[30px] top-0 w-6 h-6 rounded-full bg-surface-container-highest border-4 border-surface flex items-center justify-center text-[10px] font-bold">1</div>
+<div class="p-4 bg-surface-container-lowest rounded-xl custom-shadow">
+<h4 class="font-bold text-sm mb-1 text-tertiary">准备工作</h4>
+<p class="text-sm leading-relaxed text-on-surface-variant">里脊肉切块，加入料酒、少许盐腌制 15 分钟。</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[30px] top-0 w-6 h-6 rounded-full bg-secondary border-4 border-surface-container-low flex items-center justify-center text-[10px] font-bold text-white">2</div>
+<div class="p-4 bg-secondary-container rounded-xl border-l-4 border-secondary">
+<h4 class="font-bold text-sm mb-1 text-secondary">关键调整：新鲜菠萝处理</h4>
+<p class="text-sm leading-relaxed text-on-secondary-container">将新鲜菠萝切成等大块状，盐水浸泡 10 分钟后沥干备用。这一步能去除涩味并激发清甜。</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[30px] top-0 w-6 h-6 rounded-full bg-primary border-4 border-surface-container-low flex items-center justify-center text-[10px] font-bold text-white">3</div>
+<div class="p-4 bg-primary-container/20 rounded-xl border-l-4 border-primary">
+<h4 class="font-bold text-sm mb-1 text-primary">酱汁熬煮</h4>
+<p class="text-sm leading-relaxed text-on-primary-container">锅中倒入少量油，加入番茄酱、香醋和<span class="font-bold underline decoration-primary">调整后的糖量</span>。小火慢熬至粘稠起泡。</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[30px] top-0 w-6 h-6 rounded-full bg-surface-container-highest border-4 border-surface flex items-center justify-center text-[10px] font-bold">4</div>
+<div class="p-4 bg-surface-container-lowest rounded-xl custom-shadow">
+<h4 class="font-bold text-sm mb-1 text-tertiary">翻炒收汁</h4>
+<p class="text-sm leading-relaxed text-on-surface-variant">倒入炸好的肉块与菠萝，大火快速翻炒使酱汁均匀包裹。出锅前撒上少许白芝麻。</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sticky Bottom Action (Not NavBar, but Task-focused Action) -->
+<div class="mt-16 flex flex-col md:flex-row items-center justify-center gap-4">
+<button class="w-full md:w-auto px-10 py-4 bg-primary text-white rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform active:scale-95">
+                保存并切换至 V3 Healthy
+            </button>
+<button class="w-full md:w-auto px-10 py-4 bg-surface-container-highest text-on-surface rounded-full font-bold hover:bg-surface-dim transition-colors">
+                维持 V2 Classic
+            </button>
+</div>
+</main>
+<!-- BottomNavBar (Following Schema Filter: This page feels like a detailed comparison, but let's include nav for ecosystem consistency) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-[2rem] bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md border-t border-[#babaaf]/15 shadow-[0px_-4px_24px_rgba(55,56,49,0.04)] flex justify-around items-center h-20 px-4 pb-safe w-full md:hidden">
+<a class="flex flex-col items-center justify-center text-[#a84533] dark:text-[#d66853] bg-[#a84533]/10 dark:bg-[#d66853]/10 rounded-2xl px-4 py-1 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">book_2</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Heirlooms</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 opacity-70 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Kitchen</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 opacity-70 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Family</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 opacity-70 hover:opacity-100 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Settings</span>
+</a>
+</nav>
+</body></html>

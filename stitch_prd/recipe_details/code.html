@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>食光记 - 菜谱详情</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#373831",
+                        "primary-dim": "#983a28",
+                        "surface-container": "#f6f4ec",
+                        "tertiary": "#6e6353",
+                        "primary-fixed": "#ffac9c",
+                        "surface": "#fffcf7",
+                        "on-surface-variant": "#64655c",
+                        "outline-variant": "#babaaf",
+                        "secondary": "#596859",
+                        "primary-container": "#ffac9c",
+                        "on-secondary-fixed-variant": "#596859",
+                        "surface-container-highest": "#eae9dd",
+                        "on-error-container": "#68001f",
+                        "on-tertiary-container": "#635949",
+                        "on-primary": "#ffffff",
+                        "background": "#fffcf7",
+                        "on-secondary-container": "#4f5e4f",
+                        "on-primary-container": "#721e10",
+                        "secondary-container": "#e4f5e2",
+                        "on-primary-fixed": "#550801",
+                        "inverse-surface": "#0e0e0c",
+                        "inverse-on-surface": "#9e9d98",
+                        "error-dim": "#770326",
+                        "secondary-dim": "#4d5c4d",
+                        "surface-container-high": "#f0eee4",
+                        "tertiary-fixed": "#feefda",
+                        "error-container": "#f76a80",
+                        "on-primary-fixed-variant": "#7e2718",
+                        "primary": "#a84533",
+                        "on-tertiary-fixed-variant": "#6e6353",
+                        "outline": "#818178",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#373831",
+                        "tertiary-container": "#feefda",
+                        "tertiary-fixed-dim": "#f0e0cc",
+                        "on-secondary-fixed": "#3d4c3d",
+                        "error": "#b3374e",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#e4f5e2",
+                        "secondary-fixed-dim": "#d6e7d4",
+                        "primary-fixed-dim": "#ff9783",
+                        "on-tertiary-fixed": "#504738",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#fcf9f3",
+                        "surface-variant": "#eae9dd",
+                        "surface-tint": "#a84533",
+                        "surface-dim": "#e4e3d6",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#fffcf7",
+                        "tertiary-dim": "#615747",
+                        "inverse-primary": "#f7816b"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif SC", "serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .font-noto-serif { font-family: 'Noto Serif SC', serif; }
+        .font-plus-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<button class="p-2 text-[#6e6353] hover:bg-[#fcf9f3] transition-colors rounded-full active:scale-95">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-noto-serif text-2xl font-bold text-[#a84533] tracking-tight">外婆的红烧肉</h1>
+<button class="p-2 text-[#6e6353] hover:bg-[#fcf9f3] transition-colors rounded-full active:scale-95">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</header>
+<main class="pt-16 pb-32">
+<!-- Hero Section -->
+<section class="relative w-full h-[397px] overflow-hidden">
+<img alt="Traditional Braised Pork Belly" class="w-full h-full object-cover" data-alt="Close up of glossy braised pork belly in a clay pot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLsQmNn9OJD5Ue8yyRJpNVh-yi9V1r2hqsI7KcQ4NuKr1s1ffx58dgHg8Ly4M5y2IyQZAyRT38Fo8ojWU1GJCTkJqQVrCCUsPrIbjmgoVDMsAB8rIACLsuq3KvFWAb3wTyEiz5D4tMQRvLZH9ZRpZi9YR4op2Xz-xtQ7FuhQT0sB5doaNiSDdwfNFdG4yqroyljNsE-keRKYptQjvsiV-aUUV0q5U4E7P33kd3ST4pGY3KbKZ9r6tOaX3na3Ir5zU3p98nUL6pVrY"/>
+<div class="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-surface to-transparent"></div>
+</section>
+<!-- Content Shell -->
+<div class="px-6 -mt-12 relative z-10">
+<!-- Header Stats -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0px_12px_32px_rgba(55,56,49,0.06)] flex justify-around items-center mb-8">
+<div class="text-center">
+<p class="text-label-md text-on-surface-variant font-medium">准备时间</p>
+<p class="font-headline text-lg text-primary">20 分钟</p>
+</div>
+<div class="w-[1px] h-8 bg-outline-variant/20"></div>
+<div class="text-center">
+<p class="text-label-md text-on-surface-variant font-medium">烹饪时间</p>
+<p class="font-headline text-lg text-primary">60 分钟</p>
+</div>
+<div class="w-[1px] h-8 bg-outline-variant/20"></div>
+<div class="text-center">
+<p class="text-label-md text-on-surface-variant font-medium">难度</p>
+<p class="font-headline text-lg text-primary">中等</p>
+</div>
+</div>
+<!-- Tab Navigation -->
+<nav class="flex gap-4 mb-8 overflow-x-auto no-scrollbar pb-2">
+<button class="px-6 py-2 bg-primary text-on-primary rounded-full font-medium whitespace-nowrap">菜谱 (Recipe)</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-medium whitespace-nowrap">版本 (Versions)</button>
+<button class="px-6 py-2 bg-surface-container-high text-on-surface-variant rounded-full font-medium whitespace-nowrap">时光轴 (Timeline)</button>
+</nav>
+<!-- Ingredients Section -->
+<section class="mb-10">
+<h2 class="font-headline text-2xl text-on-surface mb-6 flex items-center gap-2">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                    主料食材
+                </h2>
+<div class="grid grid-cols-1 gap-4">
+<div class="flex justify-between items-center p-4 bg-surface-container-low rounded-lg">
+<span class="font-medium">五花肉 (Pork Belly)</span>
+<span class="text-tertiary">500g</span>
+</div>
+<div class="flex justify-between items-center p-4 bg-surface-container-low rounded-lg">
+<span class="font-medium">冰糖 (Rock Sugar)</span>
+<span class="text-tertiary">30g</span>
+</div>
+<div class="flex justify-between items-center p-4 bg-surface-container-low rounded-lg">
+<span class="font-medium">老抽 (Dark Soy Sauce)</span>
+<span class="text-tertiary">2 汤勺</span>
+</div>
+<div class="flex justify-between items-center p-4 bg-surface-container-low rounded-lg">
+<span class="font-medium">生姜 (Ginger)</span>
+<span class="text-tertiary">4 片</span>
+</div>
+</div>
+</section>
+<!-- Cooking Steps -->
+<section class="mb-10">
+<h2 class="font-headline text-2xl text-on-surface mb-6 flex items-center gap-2">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+                    烹饪步骤
+                </h2>
+<div class="space-y-8">
+<div class="flex gap-4">
+<span class="font-headline text-3xl text-primary/30 shrink-0">01</span>
+<div>
+<p class="text-on-surface leading-relaxed">五花肉切成 2cm 见方的方块，冷水入锅焯水，放入两片姜和少许料酒去腥。水开后撇去浮沫，捞出沥干水分备用。</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="font-headline text-3xl text-primary/30 shrink-0">02</span>
+<div>
+<p class="text-on-surface leading-relaxed">锅中放极少油，下五花肉中小火煸炒至微微焦黄吐油，捞出肉块，锅底留适量底油。</p>
+</div>
+</div>
+<div class="flex gap-4">
+<span class="font-headline text-3xl text-primary/30 shrink-0">03</span>
+<div>
+<p class="text-on-surface leading-relaxed">下冰糖炒至枣红色出糖色，快速倒入五花肉翻炒上色。加入老抽、生抽、姜片和香料炒香。</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Chef's Tip - Pasted Note Style -->
+<section class="mb-12">
+<div class="bg-tertiary-container p-6 rounded-lg rotate-[-1deg] shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-8 h-8 bg-on-tertiary-container/5 rounded-bl-full"></div>
+<h3 class="font-headline text-on-tertiary-container mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-xl" data-icon="tips_and_updates">tips_and_updates</span>
+                        主厨贴士
+                    </h3>
+<p class="text-on-tertiary-container/80 text-sm leading-relaxed">
+                        外婆常说：炒糖色是关键，火候一定要小，看到颜色变枣红立刻入肉，否则会发苦。最后收汁阶段不要离开灶台，汁水浓稠发亮时风味最佳。
+                    </p>
+</div>
+</section>
+<!-- Quick Actions Grid -->
+<section class="grid grid-cols-2 gap-4 mb-12">
+<button class="flex flex-col items-center justify-center p-6 bg-secondary-container text-on-secondary-container rounded-xl transition-transform active:scale-95">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="history_edu">history_edu</span>
+<span class="font-medium">写新版本</span>
+</button>
+<button class="flex flex-col items-center justify-center p-6 bg-tertiary-container text-on-tertiary-container rounded-xl transition-transform active:scale-95">
+<span class="material-symbols-outlined text-3xl mb-2" data-icon="calendar_add_on">calendar_add_on</span>
+<span class="font-medium">加入计划</span>
+</button>
+</section>
+</div>
+</main>
+<!-- Fixed Action Button - Record Memory -->
+<button class="fixed right-6 bottom-24 w-16 h-16 bg-primary text-on-primary rounded-full shadow-[0px_12px_32px_rgba(168,69,51,0.3)] flex items-center justify-center z-50 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="edit_note">edit_note</span>
+</button>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-safe h-20 bg-[#fffcf7]/90 dark:bg-stone-900/90 backdrop-blur-xl z-50 border-t border-[#babaaf]/10 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#a84533] dark:text-[#d66853] bg-[#a84533]/5 rounded-xl px-3 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">食谱库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">计划</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">我的</span>
+</a>
+</nav>
+</body></html>

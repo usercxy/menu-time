@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-background": "#373831",
+              "primary-dim": "#983a28",
+              "surface-container": "#f6f4ec",
+              "tertiary": "#6e6353",
+              "primary-fixed": "#ffac9c",
+              "surface": "#fffcf7",
+              "on-surface-variant": "#64655c",
+              "outline-variant": "#babaaf",
+              "secondary": "#596859",
+              "primary-container": "#ffac9c",
+              "on-secondary-fixed-variant": "#596859",
+              "surface-container-highest": "#eae9dd",
+              "on-error-container": "#68001f",
+              "on-tertiary-container": "#635949",
+              "on-primary": "#ffffff",
+              "background": "#fffcf7",
+              "on-secondary-container": "#4f5e4f",
+              "on-primary-container": "#721e10",
+              "secondary-container": "#e4f5e2",
+              "on-primary-fixed": "#550801",
+              "inverse-surface": "#0e0e0c",
+              "inverse-on-surface": "#9e9d98",
+              "error-dim": "#770326",
+              "secondary-dim": "#4d5c4d",
+              "surface-container-high": "#f0eee4",
+              "tertiary-fixed": "#feefda",
+              "error-container": "#f76a80",
+              "on-primary-fixed-variant": "#7e2718",
+              "primary": "#a84533",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "outline": "#818178",
+              "on-tertiary": "#ffffff",
+              "on-surface": "#373831",
+              "tertiary-container": "#feefda",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "on-secondary-fixed": "#3d4c3d",
+              "error": "#b3374e",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#e4f5e2",
+              "secondary-fixed-dim": "#d6e7d4",
+              "primary-fixed-dim": "#ff9783",
+              "on-tertiary-fixed": "#504738",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#fcf9f3",
+              "surface-variant": "#eae9dd",
+              "surface-tint": "#a84533",
+              "surface-dim": "#e4e3d6",
+              "on-secondary": "#ffffff",
+              "surface-bright": "#fffcf7",
+              "tertiary-dim": "#615747",
+              "inverse-primary": "#f7816b"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fffcf7;
+            color: #373831;
+        }
+        .noto-serif {
+            font-family: 'Noto Serif SC', serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#6e6353] dark:text-stone-400 hover:bg-[#fcf9f3] p-2 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="font-headline text-2xl font-bold text-[#a84533] dark:text-[#d66853] tracking-tight">食光记</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-[#6e6353] dark:text-stone-400 hover:bg-[#fcf9f3] p-2 rounded-full transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+</header>
+<main class="pt-20 px-4 md:px-8 max-w-7xl mx-auto">
+<!-- Search Bar -->
+<div class="mt-4 mb-8">
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+</div>
+<input class="w-full bg-surface-container border-none rounded-xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/20 transition-all font-body" placeholder="搜索味蕾记忆..." type="text"/>
+</div>
+</div>
+<!-- Category Tabs -->
+<nav class="flex overflow-x-auto gap-3 pb-6 no-scrollbar -mx-4 px-4">
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-primary text-on-primary font-medium text-sm shadow-md transition-all">全部</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all">肉类</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all">素菜</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all">汤羹</button>
+<button class="whitespace-nowrap px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all">点心</button>
+</nav>
+<!-- Recipe Grid (Asymmetric Bento-like feel) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1: Large Featured -->
+<div class="group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(55,56,49,0.06)] transition-all hover:translate-y-[-4px]">
+<div class="aspect-[4/3] overflow-hidden relative">
+<img alt="Red Braised Pork" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Traditional Chinese red braised pork belly in a clay pot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDuGEA9GQCuZ6FajXOA2bUfXIxZII16zDQ33PaZg6MwN8AhPDZLEMsfENeOsp3n0N4qp9zc-xWxC3rSZshC3OjeJ0QjXeQ1Bw0gUj-1Aidbc17rBaZHflMPxAR5LfoAKNcNow-rEDSW9eIFwQLMPeMT_2uujGsxn16bS4LydNW3WrnMwO1CaVqpBGmtbHDca6Zu-9OEJ4iPxoSFxFv4XxtDZr2M3veYB0fJUfTbRdYqLa8nk8H472GNs_8KsxIqNb_GD7DVQysxgng"/>
+<div class="absolute top-4 right-4 bg-primary/90 text-on-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                        V3 - 大姨的秘方
+                    </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-2xl font-bold text-on-surface tracking-tight">红烧肉</h3>
+<div class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="history_edu">history_edu</span>
+                            12 食光印记
+                        </div>
+</div>
+<div class="flex items-center gap-4 mt-4 text-on-surface-variant text-sm font-label">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_month">calendar_month</span>
+                            上次烹饪: 2023.10.24
+                        </div>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(55,56,49,0.06)] transition-all hover:translate-y-[-4px]">
+<div class="aspect-[4/3] overflow-hidden relative">
+<img alt="Mushroom Soup" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Creamy mushroom soup with fresh herbs and toast" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn28zoRTa3YHym5tENSeLWRuHz7s-nqz81m2xtqWTDCpvaOQttAj_aZO2Zygm3YEw_7OPenRJeHWeZ2SBBw4uabk72coVTl98EwP1uSDzEfBkym0ny6S8VMjQ_4GV5ZmTfgfOryENRHHAlEtfg1eaZueBCQwDb7FFuI8Bcrm6nsuTikB6rMhPUGI_26H0oXetN3OmNV2ViOTRnZn8b5hAbl6w9AkIhh9UASr1LrNE2nnPUSff6YLo6besjYKbk7wEWSta672hz2S4"/>
+<div class="absolute top-4 right-4 bg-secondary/90 text-on-secondary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                        V1 - 基础版
+                    </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-2xl font-bold text-on-surface tracking-tight">奶油蘑菇汤</h3>
+<div class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="history_edu">history_edu</span>
+                            4 印记
+                        </div>
+</div>
+<div class="flex items-center gap-4 mt-4 text-on-surface-variant text-sm font-label">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_month">calendar_month</span>
+                            上次烹饪: 昨天
+                        </div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(55,56,49,0.06)] transition-all hover:translate-y-[-4px]">
+<div class="aspect-[4/3] overflow-hidden relative">
+<img alt="Stir-fry Noodles" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Spicy sichuan noodles with bok choy and chili oil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLxOveJLcASNWLGtnNhyQclraGPNiRr5Ig14xlqqP2AeSpKfx3yJCMI5IQtZxpHP4eMABHMZBQMRy-CG83ULe5EZKw3NkzblfxvUj0P7OvXvLQLJtA1aUrCzXSxXuiEAid6J71afwnRfCZv8TINgOhiLpdKJ7wrAMEB5hyjYMQNYwTc-Fwo6q9LTsEfjBGPpRqsxGObhOeUol_moa62Dg9gVht24BWIW7IGtEWRMSTdx15TcVxHo9vF1KQMdXd7zqFU_ShWhls3kg"/>
+<div class="absolute top-4 right-4 bg-primary/90 text-on-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                        V2 - 减脂版
+                    </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-2xl font-bold text-on-surface tracking-tight">老弄堂炒面</h3>
+<div class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="history_edu">history_edu</span>
+                            28 印记
+                        </div>
+</div>
+<div class="flex items-center gap-4 mt-4 text-on-surface-variant text-sm font-label">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_month">calendar_month</span>
+                            上次烹饪: 2023.11.02
+                        </div>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-[0px_12px_32px_rgba(55,56,49,0.06)] transition-all hover:translate-y-[-4px]">
+<div class="aspect-[4/3] overflow-hidden relative">
+<img alt="Dumplings" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Handmade chinese dumplings on a wooden board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3ottAzscUNcmI2EdA-wyKEtHnrJoBNG1lcxrr4S7aAJN-aWHpzHNQluYOZIsdTS2m6rssHGp8EcMRVcxDy16MHwCndck_tNDqqyxgvUodn9R7S9ip-rQ14Vy4QNnr5LjoYxmvqH-JkasOjcNb4cwjyLAeq08M6EqOaH8LJRZV366q089ghFs5u4B4wEsXWhRJmItEyoBsyEcldEvSHnu3RifXsIisFnfM2X_K2q9wuZAxDnW1Od89qu_AvuSrQ04wdF91tMccmbI"/>
+<div class="absolute top-4 right-4 bg-tertiary/90 text-on-tertiary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">
+                        V4 - 团圆版
+                    </div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-2xl font-bold text-on-surface tracking-tight">三鲜手工水饺</h3>
+<div class="bg-tertiary-container text-on-tertiary-container px-2 py-1 rounded-lg text-xs font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="history_edu">history_edu</span>
+                            52 印记
+                        </div>
+</div>
+<div class="flex items-center gap-4 mt-4 text-on-surface-variant text-sm font-label">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="calendar_month">calendar_month</span>
+                            上次烹饪: 2023.12.22
+                        </div>
+</div>
+</div>
+</div>
+<!-- Floating CTA inside the grid flow (Editorial style) -->
+<div class="md:col-span-2 lg:col-span-1 flex flex-col justify-center items-center p-8 bg-primary/5 rounded-xl border-2 border-dashed border-primary/20">
+<div class="text-center">
+<span class="material-symbols-outlined text-primary text-5xl mb-4" data-icon="menu_book">menu_book</span>
+<h4 class="font-headline text-xl font-bold text-primary mb-2">续写你的味道故事</h4>
+<p class="text-on-surface-variant text-sm mb-6">每一道菜都是时光的见证，记录下你今天的烹饪心得吧。</p>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold shadow-lg active:scale-90 transition-transform">
+                        新增菜谱
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-safe h-20 bg-[#fffcf7]/90 dark:bg-stone-900/90 backdrop-blur-xl z-50 border-t border-[#babaaf]/10 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body text-[11px] font-medium tracking-wide mt-1">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#a84533] dark:text-[#d66853] bg-[#a84533]/5 rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+<span class="font-body text-[11px] font-medium tracking-wide mt-1">食谱库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-body text-[11px] font-medium tracking-wide mt-1">计划</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-body text-[11px] font-medium tracking-wide mt-1">我的</span>
+</a>
+</nav>
+<!-- Floating Action Button (FAB) -->
+<button class="fixed right-6 bottom-24 bg-primary text-on-primary w-14 h-14 rounded-full shadow-xl flex items-center justify-center active:scale-90 transition-all z-40">
+<span class="material-symbols-outlined text-3xl" data-icon="edit_note">edit_note</span>
+</button>
+</body></html>

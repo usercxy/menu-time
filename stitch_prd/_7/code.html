@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary": "#6e6353",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "on-error-container": "#68001f",
+              "surface-container-highest": "#eae9dd",
+              "surface-tint": "#a84533",
+              "error-dim": "#770326",
+              "on-error": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "surface-container-low": "#fcf9f3",
+              "tertiary-container": "#feefda",
+              "inverse-primary": "#f7816b",
+              "on-primary-container": "#721e10",
+              "primary": "#a84533",
+              "surface": "#fffcf7",
+              "surface-container-high": "#f0eee4",
+              "surface-container": "#f6f4ec",
+              "secondary-fixed": "#e4f5e2",
+              "on-tertiary-container": "#635949",
+              "error-container": "#f76a80",
+              "secondary-fixed-dim": "#d6e7d4",
+              "secondary-container": "#e4f5e2",
+              "primary-dim": "#983a28",
+              "on-primary": "#ffffff",
+              "error": "#b3374e",
+              "surface-dim": "#e4e3d6",
+              "on-primary-fixed": "#550801",
+              "on-secondary": "#ffffff",
+              "background": "#fffcf7",
+              "primary-container": "#ffac9c",
+              "inverse-on-surface": "#9e9d98",
+              "surface-variant": "#eae9dd",
+              "on-background": "#373831",
+              "on-surface": "#373831",
+              "primary-fixed-dim": "#ff9783",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "tertiary-fixed": "#feefda",
+              "on-secondary-container": "#4f5e4f",
+              "on-surface-variant": "#64655c",
+              "on-secondary-fixed-variant": "#596859",
+              "outline-variant": "#babaaf",
+              "on-tertiary-fixed": "#504738",
+              "secondary-dim": "#4d5c4d",
+              "on-primary-fixed-variant": "#7e2718",
+              "on-secondary-fixed": "#3d4c3d",
+              "primary-fixed": "#ffac9c",
+              "secondary": "#596859",
+              "surface-bright": "#fffcf7",
+              "outline": "#818178",
+              "inverse-surface": "#0e0e0c",
+              "tertiary-dim": "#615747"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.scrapbook-texture {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBk-AoqjoPiDbZLJummjVAxQ1q4-uhEjkyPAWqgi8xJKka8MIYHLMHIWUewC-2XZGnuMANuaZGLKOYpbpaUe6N6nLpDHridLy8D0GrQMRFZ0PHeHoSkObI0ovG2ZDGXO5WZo-jYuUewQIjOqWY0SOpoZKKz29tYDSZVeiqi0sEH333wjKlFt139B5TjF2PJjHwaeGPu0Y6Uq9qP84eEKR38Au7I7mkArMmCHa4teQTAFUaX6sYR3wdJFs1U3DtQMoXDOr05zN3OmTA)
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body scrapbook-texture min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 backdrop-blur-md flex items-center justify-between px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#fcf9f3] transition-colors active:scale-95 duration-200 ease-in-out text-[#a84533]">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Noto_Serif'] font-bold tracking-tight text-xl text-[#a84533]">分类管理</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center text-[#6e6353] hover:bg-[#fcf9f3] rounded-full transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto">
+<!-- Search Bar -->
+<div class="mb-8">
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-xl" data-icon="search">search</span>
+</div>
+<input class="w-full bg-surface-container-low border-none rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary/20 transition-all shadow-sm" placeholder="搜索分类..." type="text"/>
+</div>
+</div>
+<!-- Add Category Action -->
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="font-headline text-2xl font-bold text-on-surface">我的食谱集</h2>
+<p class="text-tertiary text-sm mt-1">整理您的传家手艺</p>
+</div>
+<button class="bg-[#a84533] text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-lg shadow-[#a84533]/20 hover:bg-primary-dim transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="font-semibold text-sm">添加分类</span>
+</button>
+</div>
+<!-- Categories Bento Grid / List -->
+<div class="space-y-4">
+<!-- Category Item: Meat -->
+<div class="group relative bg-surface-container-lowest p-5 rounded-[2rem] flex items-center justify-between shadow-[0px_12px_32px_rgba(55,56,49,0.04)] hover:shadow-md transition-all border border-transparent hover:border-outline-variant/10">
+<div class="flex items-center gap-5">
+<div class="cursor-grab text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<div class="w-16 h-16 rounded-2xl bg-primary-container/20 flex items-center justify-center text-primary-dim">
+<span class="material-symbols-outlined text-4xl" data-icon="set_meal">set_meal</span>
+</div>
+<div>
+<h3 class="font-headline text-lg font-bold">肉禽海鲜</h3>
+<p class="text-tertiary text-sm">24 道食谱</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-error-container/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Category Item: Vegetables -->
+<div class="group relative bg-surface-container-lowest p-5 rounded-[2rem] flex items-center justify-between shadow-[0px_12px_32px_rgba(55,56,49,0.04)] hover:shadow-md transition-all border border-transparent hover:border-outline-variant/10">
+<div class="flex items-center gap-5">
+<div class="cursor-grab text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<div class="w-16 h-16 rounded-2xl bg-secondary-container/30 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-4xl" data-icon="eco">eco</span>
+</div>
+<div>
+<h3 class="font-headline text-lg font-bold">时令时蔬</h3>
+<p class="text-tertiary text-sm">18 道食谱</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-error-container/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Category Item: Soup -->
+<div class="group relative bg-surface-container-lowest p-5 rounded-[2rem] flex items-center justify-between shadow-[0px_12px_32px_rgba(55,56,49,0.04)] hover:shadow-md transition-all border border-transparent hover:border-outline-variant/10">
+<div class="flex items-center gap-5">
+<div class="cursor-grab text-outline-variant opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined" data-icon="drag_indicator">drag_indicator</span>
+</div>
+<div class="w-16 h-16 rounded-2xl bg-tertiary-container/40 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-4xl" data-icon="soup_kitchen">soup_kitchen</span>
+</div>
+<div>
+<h3 class="font-headline text-lg font-bold">滋补汤羹</h3>
+<p class="text-tertiary text-sm">12 道食谱</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined" data-icon="edit">edit</span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-outline hover:text-error hover:bg-error-container/10 transition-colors">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Category Item: Dessert (Asymmetric Highlight) -->
+<div class="grid grid-cols-2 gap-4">
+<div class="group bg-surface-container-lowest p-6 rounded-[2.5rem] shadow-[0px_12px_32px_rgba(55,56,49,0.04)] border border-transparent hover:border-primary/10 transition-all flex flex-col items-center text-center">
+<div class="w-20 h-20 rounded-full bg-[#fce4ec] flex items-center justify-center text-[#e91e63] mb-4">
+<span class="material-symbols-outlined text-5xl" data-icon="icecream">icecream</span>
+</div>
+<h3 class="font-headline text-lg font-bold">甜品点心</h3>
+<p class="text-tertiary text-sm">32 道食谱</p>
+<div class="mt-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-outline"><span class="material-symbols-outlined text-sm" data-icon="settings">settings</span></button>
+</div>
+</div>
+<div class="group bg-surface-container-lowest p-6 rounded-[2.5rem] shadow-[0px_12px_32px_rgba(55,56,49,0.04)] border border-transparent hover:border-secondary/10 transition-all flex flex-col items-center text-center">
+<div class="w-20 h-20 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary mb-4">
+<span class="material-symbols-outlined text-5xl" data-icon="cookie">cookie</span>
+</div>
+<h3 class="font-headline text-lg font-bold">休闲零食</h3>
+<p class="text-tertiary text-sm">15 道食谱</p>
+<div class="mt-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-outline"><span class="material-symbols-outlined text-sm" data-icon="settings">settings</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Decorative Scrapbook Element -->
+<div class="mt-12 p-8 bg-tertiary-container/30 rounded-3xl relative overflow-hidden border border-tertiary-fixed-dim/20">
+<div class="absolute -right-4 -top-4 opacity-10 rotate-12">
+<span class="material-symbols-outlined text-9xl" data-icon="auto_stories">auto_stories</span>
+</div>
+<div class="relative z-10">
+<p class="font-headline italic text-tertiary-dim leading-relaxed">
+                    "美食不仅是味觉的记忆，更是家族情感的纽带。为每一种味道找到它专属的归宿。"
+                </p>
+<div class="mt-4 flex items-center gap-2">
+<div class="w-8 h-px bg-tertiary-fixed-dim"></div>
+<span class="text-xs uppercase tracking-widest text-tertiary font-bold">食光笔记 · 编研</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-[2rem] bg-[#fffcf7]/80 backdrop-blur-md border-t border-[#babaaf]/15 shadow-[0px_-4px_24px_rgba(55,56,49,0.04)] flex justify-around items-center h-20 px-4 pb-safe w-full">
+<a class="flex flex-col items-center justify-center text-[#6e6353] opacity-70 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Recipes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] opacity-70 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Timeline</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] opacity-70 hover:opacity-100 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Family</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#a84533] bg-[#a84533]/10 rounded-2xl px-4 py-1 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium tracking-wide">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Background Blur / Modal Mockup (Optional logic placeholder) -->
+<div class="hidden fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] flex items-center justify-center p-6">
+<div class="bg-surface w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl">
+<h2 class="font-headline text-2xl font-bold mb-6">新建分类</h2>
+<div class="space-y-4">
+<div>
+<label class="text-sm font-bold text-tertiary mb-2 block">分类名称</label>
+<input class="w-full bg-surface-container border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-primary/20" type="text"/>
+</div>
+<div>
+<label class="text-sm font-bold text-tertiary mb-2 block">选择图标</label>
+<div class="grid grid-cols-5 gap-3">
+<button class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-tertiary hover:bg-primary/10 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="bakery_dining">bakery_dining</span>
+</button>
+<button class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-tertiary hover:bg-primary/10 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="local_cafe">local_cafe</span>
+</button>
+<button class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-tertiary hover:bg-primary/10 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="breakfast_dining">breakfast_dining</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-8 flex gap-3">
+<button class="flex-1 py-3 text-tertiary font-bold hover:bg-surface-container rounded-xl transition-colors">取消</button>
+<button class="flex-1 py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20">保存分类</button>
+</div>
+</div>
+</div>
+</body></html>

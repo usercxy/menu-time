@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error-dim": "#770326",
+              "tertiary-fixed": "#feefda",
+              "error": "#b3374e",
+              "surface": "#fffcf7",
+              "on-secondary-fixed-variant": "#596859",
+              "on-primary-fixed-variant": "#7e2718",
+              "surface-container-highest": "#eae9dd",
+              "secondary": "#596859",
+              "on-secondary-container": "#4f5e4f",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-container": "#635949",
+              "surface-container-low": "#fcf9f3",
+              "tertiary-dim": "#615747",
+              "on-surface-variant": "#64655c",
+              "secondary-dim": "#4d5c4d",
+              "on-error-container": "#68001f",
+              "primary-dim": "#983a28",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "inverse-on-surface": "#9e9d98",
+              "inverse-primary": "#f7816b",
+              "surface-tint": "#a84533",
+              "on-background": "#373831",
+              "tertiary-container": "#feefda",
+              "tertiary": "#6e6353",
+              "surface-container-high": "#f0eee4",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "surface-dim": "#e4e3d6",
+              "primary-fixed-dim": "#ff9783",
+              "on-primary-fixed": "#550801",
+              "surface-container-lowest": "#ffffff",
+              "inverse-surface": "#0e0e0c",
+              "secondary-fixed": "#e4f5e2",
+              "on-tertiary-fixed": "#504738",
+              "on-primary": "#ffffff",
+              "on-primary-container": "#721e10",
+              "surface-variant": "#eae9dd",
+              "outline-variant": "#babaaf",
+              "on-error": "#ffffff",
+              "on-secondary": "#ffffff",
+              "secondary-container": "#e4f5e2",
+              "error-container": "#f76a80",
+              "primary-fixed": "#ffac9c",
+              "surface-bright": "#fffcf7",
+              "on-secondary-fixed": "#3d4c3d",
+              "background": "#fffcf7",
+              "on-surface": "#373831",
+              "secondary-fixed-dim": "#d6e7d4",
+              "primary": "#a84533",
+              "surface-container": "#f6f4ec",
+              "outline": "#818178",
+              "primary-container": "#ffac9c"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC", "serif"],
+              "body": ["Plus Jakarta Sans", "sans-serif"],
+              "label": ["Plus Jakarta Sans", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fffcf7;
+            color: #373831;
+        }
+        .scrapbook-rotate-left { transform: rotate(-1deg); }
+        .scrapbook-rotate-right { transform: rotate(1deg); }
+        .glass-header {
+            background: rgba(255, 252, 247, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md shadow-[0px_12px_32px_rgba(55,56,49,0.06)] flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#a84533] dark:text-[#d66853] hover:bg-[#fcf9f3] p-2 rounded-full transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="font-headline text-xl font-bold text-[#a84533] dark:text-[#d66853] tracking-tight">记一笔</h1>
+</div>
+<div class="flex items-center">
+<button class="bg-primary text-on-primary px-6 py-1.5 rounded-full font-medium text-sm shadow-sm active:scale-95 duration-200">
+                保存记录
+            </button>
+</div>
+</header>
+<main class="pt-24 px-4 max-w-2xl mx-auto space-y-8">
+<!-- Recipe Association & Date (Asymmetric Editorial Layout) -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-xl scrapbook-rotate-left shadow-[0px_12px_32px_rgba(55,56,49,0.04)]">
+<label class="text-xs font-bold uppercase tracking-widest text-secondary mb-2 block">关联菜谱</label>
+<div class="flex items-center gap-3 py-2 border-b border-outline-variant/30">
+<span class="material-symbols-outlined text-primary">restaurant_menu</span>
+<span class="font-headline text-lg">外婆的红烧肉</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl scrapbook-rotate-right">
+<label class="text-xs font-bold uppercase tracking-widest text-secondary mb-2 block">做菜日期</label>
+<div class="flex items-center gap-3 py-2 border-b border-outline-variant/30">
+<span class="material-symbols-outlined text-tertiary">calendar_today</span>
+<span class="font-body font-medium">2023年10月24日</span>
+</div>
+</div>
+</section>
+<!-- Content Area: The Journal Paper -->
+<section class="relative bg-surface-container-lowest p-8 rounded-xl shadow-[0px_12px_32px_rgba(55,56,49,0.06)]">
+<div class="absolute top-4 right-4 opacity-10">
+<span class="material-symbols-outlined text-6xl">edit_note</span>
+</div>
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-on-surface font-body text-lg leading-relaxed placeholder:text-outline-variant/50 min-h-[160px]" placeholder="记录此刻的故事..."></textarea>
+<div class="mt-4 flex flex-wrap gap-2">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 bg-secondary-container text-secondary rounded-full text-sm font-medium">
+<span class="material-symbols-outlined text-sm">group</span>
+<span>全家</span>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 bg-tertiary-container text-tertiary rounded-full text-sm font-medium">
+<span class="material-symbols-outlined text-sm">celebration</span>
+<span>小明生日</span>
+</div>
+<button class="inline-flex items-center gap-1.5 px-3 py-1 border border-dashed border-outline-variant text-outline rounded-full text-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-sm">add</span>
+<span>添加参与人</span>
+</button>
+</div>
+</section>
+<!-- Ratings: Tactile Sliders/Chips -->
+<section class="bg-surface-container-high/40 p-6 rounded-2xl flex flex-col md:flex-row gap-8 justify-between">
+<div class="flex-1 space-y-3">
+<label class="text-sm font-bold text-tertiary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">favorite</span>
+                    好吃程度
+                </label>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-outline-variant">star</span>
+</div>
+</div>
+<div class="flex-1 space-y-3">
+<label class="text-sm font-bold text-tertiary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">psychology</span>
+                    难度
+                </label>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-lowest border border-outline-variant/20 rounded-lg text-xs font-medium text-secondary">非常简单</span>
+<span class="px-3 py-1 bg-secondary text-on-secondary rounded-lg text-xs font-medium">适中</span>
+<span class="px-3 py-1 bg-surface-container-lowest border border-outline-variant/20 rounded-lg text-xs font-medium text-secondary">很有挑战</span>
+</div>
+</div>
+</section>
+<!-- Photo Upload Grid -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h3 class="font-headline text-xl text-on-surface">光影瞬间</h3>
+<span class="text-xs font-medium text-outline">已选 3 / 9</span>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<div class="aspect-square bg-surface-container-highest rounded-xl overflow-hidden relative group">
+<img alt="红烧肉近景" class="w-full h-full object-cover" data-alt="Close up shot of braised pork belly with glossy sauce" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD83FqfZd8IDG4F51xYjlMfea93fjCXSkb8scdaeW4IXrVXBiWLM13ITUKcsO4539jBUASDKgi5H_Jl58eMOyktTBDNZ6snMNiX229W-_gAc6FWKufHZwXJ2IbDSVj7LDRNir36IFzDur-iY-VB2Hsw5PW9t0DbSpDXXFw2RhP6cpMeQaT57U-FqkIUKMIrwRrlfgHF8Y3B6PUz44VHTI8W5YNJqvtI5Cv3QAA7q3uId2kV6tvTLQOwMTolwK2hR9x-0S79d92NZt4"/>
+<button class="absolute top-2 right-2 bg-black/40 text-white rounded-full p-1 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<div class="aspect-square bg-surface-container-highest rounded-xl overflow-hidden relative group">
+<img alt="全家福聚餐" class="w-full h-full object-cover" data-alt="Family gathered around a dining table sharing food" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKbuuBXALEKf1n4nCO_efLdrQox0T-7-E5rpBa-LU4WxuOMgBC-WZLyZO2idUMHne-EpVtfGiAdzf8SMlI_3jZ2WpN33-UaTkDK-PMdyRRAa7JD8rQMc5UaZvlxH-5lo78X7Q2aZ4QQjWpXJsZ3xEdsUqQFQPzV5dlG9jNly_w8EJivy-beXKlXrFgV547JHE19rOAufcwrA2YrlFxNG36Gzr69hyRva8AY2cuLSxcpr3eKA1CCzvPUeo5Wvy6CNaXbHg-7ZipKWs"/>
+<button class="absolute top-2 right-2 bg-black/40 text-white rounded-full p-1 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<div class="aspect-square bg-surface-container-highest rounded-xl overflow-hidden relative group">
+<img alt="备菜细节" class="w-full h-full object-cover" data-alt="Fresh vegetables and ingredients laid out on a wooden cutting board" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr5clERyW47yTeTdH9GZqDvLQSoBze6CJApV-oEqIwIakkO6dSVL2nTjwCGGmiuXVAsp4LVhfzpS3IyQAZcQ7UgqOv4r50Z3W2iEhpMFiZV6OaBC6UbmSCZ2uBhWqX0SntaClR7xIzAGLPgAiYQdfbLzW8EB9I7JCEiaZO3cZseKw4XCy27aGZv1wvayYkyUgduM7xHuxRx3RdRpPDBm4b5buU9-9QzhHZSjpDkhMpiTX2-2f-zVzAcoiegsiNbtwnI1ip36VGzXU"/>
+<button class="absolute top-2 right-2 bg-black/40 text-white rounded-full p-1 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<button class="aspect-square bg-surface-container-low border-2 border-dashed border-outline-variant/30 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-surface-container-high transition-colors text-outline">
+<span class="material-symbols-outlined text-3xl">add_a_photo</span>
+<span class="text-[10px] font-bold tracking-widest uppercase">添加照片</span>
+</button>
+</div>
+</section>
+<!-- Final "Seal" Action -->
+<section class="pt-8 flex justify-center">
+<button class="group relative px-12 py-4 bg-primary text-on-primary rounded-full font-bold text-lg shadow-[0px_12px_32px_rgba(168,69,51,0.2)] hover:scale-105 active:scale-95 transition-all">
+<span class="relative z-10 flex items-center gap-2">
+<span class="material-symbols-outlined">auto_stories</span>
+                    封存这段食光
+                </span>
+<div class="absolute inset-0 bg-primary-dim rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</button>
+</section>
+</main>
+<!-- BottomNavBar (Suppressed for focused task: Record a Moment) -->
+<!-- As per instructions, navigation shell is suppressed for transactional/task-focused screens -->
+</body></html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>食光记 - 版本对比</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-primary-fixed": "#550801",
+                        "on-surface-variant": "#64655c",
+                        "on-surface": "#373831",
+                        "inverse-surface": "#0e0e0c",
+                        "on-tertiary-fixed": "#504738",
+                        "outline-variant": "#babaaf",
+                        "surface-container-highest": "#eae9dd",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#4f5e4f",
+                        "on-background": "#373831",
+                        "primary-dim": "#983a28",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#635949",
+                        "secondary-fixed": "#e4f5e2",
+                        "on-primary": "#ffffff",
+                        "error-container": "#f76a80",
+                        "tertiary": "#6e6353",
+                        "secondary-container": "#e4f5e2",
+                        "inverse-primary": "#f7816b",
+                        "on-primary-container": "#721e10",
+                        "error": "#b3374e",
+                        "surface-container-high": "#f0eee4",
+                        "on-error-container": "#68001f",
+                        "background": "#fffcf7",
+                        "surface-container": "#f6f4ec",
+                        "primary-fixed": "#ffac9c",
+                        "secondary-dim": "#4d5c4d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#feefda",
+                        "surface-variant": "#eae9dd",
+                        "tertiary-fixed": "#feefda",
+                        "surface-dim": "#e4e3d6",
+                        "surface-tint": "#a84533",
+                        "surface-container-low": "#fcf9f3",
+                        "error-dim": "#770326",
+                        "on-secondary-fixed": "#3d4c3d",
+                        "primary": "#a84533",
+                        "surface-bright": "#fffcf7",
+                        "on-secondary-fixed-variant": "#596859",
+                        "on-tertiary-fixed-variant": "#6e6353",
+                        "secondary": "#596859",
+                        "secondary-fixed-dim": "#d6e7d4",
+                        "tertiary-fixed-dim": "#f0e0cc",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#7e2718",
+                        "primary-fixed-dim": "#ff9783",
+                        "tertiary-dim": "#615747",
+                        "surface": "#fffcf7",
+                        "primary-container": "#ffac9c",
+                        "inverse-on-surface": "#9e9d98",
+                        "outline": "#818178"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif"],
+                        "body": ["Plus Jakarta Sans"],
+                        "label": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Noto Serif', serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#a84533] dark:text-[#d66853] hover:bg-[#fcf9f3] p-2 rounded-full transition-colors active:scale-95">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<h1 class="font-noto-serif text-2xl font-bold text-[#a84533] dark:text-[#d66853] tracking-tight">食光记</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium text-tertiary px-3 py-1 bg-surface-container rounded-full">版本对比</span>
+</div>
+</header>
+<main class="pt-24 px-4 md:px-8 max-w-6xl mx-auto">
+<!-- Summary of Changes Card -->
+<section class="mb-8 relative">
+<div class="bg-tertiary-container p-6 rounded-xl border-l-4 border-primary shadow-sm overflow-hidden transform -rotate-1">
+<div class="flex items-start gap-4">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<h2 class="text-on-tertiary-container font-headline text-xl mb-1">变更摘要</h2>
+<p class="text-on-tertiary-container/80 text-sm leading-relaxed">
+                            基于 2023年10月12日 的修改：本次调整优化了酸甜平衡感，新增了热带风味元素，并根据健康建议降低了整体含糖量。
+                        </p>
+</div>
+</div>
+<!-- Decorative Scrapbook Detail -->
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-8xl" data-icon="edit_note">edit_note</span>
+</div>
+</div>
+</section>
+<!-- Version Comparison Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+<!-- Version 1: The Original -->
+<div class="bg-surface-container-low rounded-xl p-6 relative">
+<div class="flex justify-between items-center mb-6">
+<div>
+<span class="text-xs uppercase tracking-widest text-outline font-bold">V1.0 原始版本</span>
+<h3 class="text-2xl text-on-surface-variant font-headline">外婆的菠萝咕咾肉</h3>
+</div>
+<span class="text-sm text-outline">2021/05/20</span>
+</div>
+<div class="space-y-6">
+<div class="aspect-video rounded-lg overflow-hidden bg-surface-dim">
+<img alt="Traditional sweet and sour pork" class="w-full h-full object-cover grayscale-[0.2]" data-alt="Traditional Chinese sweet and sour pork dish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwXg_PP84bi3jKXK7yQu2Hix34N8vL-BSNnbTjNrax6JN_ENUYpRXa9W4jgsH_Vs42BwlsKu6bFlkjmim3YCnCTQQ0zj2rHXqSaCFL8S7zBrp-nFLlvpxF0EK1zXDlnWKFcWaqSTgGEwGoW2lYUyqzUu-W2HbHkjYKoCkvkEH4Ph29oRV11YIAbNBSaTY2kl5CaSxAqI4N3dTdhhV0J6uemxLQ200ddGrZgvmo7ki1pCyYhtQgoQsgmGXa2tm_XB8wiDqWf8Wr9TU"/>
+</div>
+<div class="space-y-4">
+<h4 class="font-headline text-lg border-b border-outline-variant/30 pb-2">配料清单</h4>
+<ul class="space-y-3">
+<li class="flex justify-between items-center text-on-surface-variant">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> 猪里脊肉</span>
+<span class="font-headline italic">300g</span>
+</li>
+<li class="flex justify-between items-center text-on-surface-variant">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> 罐装菠萝</span>
+<span class="font-headline italic">150g</span>
+</li>
+<li class="flex justify-between items-center text-on-surface-variant bg-error/5 p-1 rounded">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-error" data-icon="trending_down">trending_down</span> 白砂糖</span>
+<span class="font-headline italic line-through decoration-error text-error">50g</span>
+</li>
+<li class="flex justify-between items-center text-on-surface-variant">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> 番茄酱</span>
+<span class="font-headline italic">4勺</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Version 2: The New Edition -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(55,56,49,0.06)] ring-2 ring-primary/20 relative">
+<!-- "Current Choice" Badge -->
+<div class="absolute -top-3 right-6 bg-primary text-on-primary px-4 py-1 rounded-full text-xs font-bold tracking-tighter shadow-sm">
+                    最新修订版
+                </div>
+<div class="flex justify-between items-center mb-6">
+<div>
+<span class="text-xs uppercase tracking-widest text-primary font-bold">V2.1 当前选定</span>
+<h3 class="text-2xl text-on-surface font-headline">新派清爽菠萝咕咾肉</h3>
+</div>
+<span class="text-sm text-outline">2023/10/12</span>
+</div>
+<div class="space-y-6">
+<div class="aspect-video rounded-lg overflow-hidden bg-surface-dim">
+<img alt="Modern healthy sweet and sour pork" class="w-full h-full object-cover" data-alt="Modern bright sweet and sour pork with fresh pineapple" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8nytdDYYZfnW3Aqzry7lBerjE5Vk8G-7cGDCtd_hJVb4k0z_mYMGNMM3tNXZQiOYNHwLor7kUMDF4AZRIymKoM1bLPUSzN0YbaFmE5skDK-pfkm7n2ox3yiax02q3sylbc-2Vv8nUvU1OiKAnQjq5crInxaaTqN0EqkR1wAKw1gj3iXCLGQsG3vLLgKXt-8huFbFaihIXtXTz9wFY1ShTCyuUI0zLjqlArooK-Cx-3Limc-EiGnHF5l56CEqiG0z5eBwGHODTt7w"/>
+</div>
+<div class="space-y-4">
+<h4 class="font-headline text-lg border-b border-primary/20 pb-2">配料清单</h4>
+<ul class="space-y-3">
+<li class="flex justify-between items-center">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-secondary" data-icon="check_circle">check_circle</span> 猪里脊肉</span>
+<span class="font-headline italic">300g</span>
+</li>
+<li class="flex justify-between items-center bg-secondary/10 p-1 rounded -mx-1">
+<span class="flex items-center gap-2 font-bold text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="add_circle">add_circle</span> 鲜切金钻凤梨
+                                </span>
+<span class="font-headline italic text-secondary">200g</span>
+</li>
+<li class="flex justify-between items-center bg-primary/10 p-1 rounded -mx-1">
+<span class="flex items-center gap-2 font-bold text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_downward">arrow_downward</span> 海藻糖 (代糖)
+                                </span>
+<span class="font-headline italic text-primary">20g</span>
+</li>
+<li class="flex justify-between items-center">
+<span class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-secondary" data-icon="check_circle">check_circle</span> 天然番茄膏</span>
+<span class="font-headline italic">3勺</span>
+</li>
+<li class="flex justify-between items-center bg-secondary/10 p-1 rounded -mx-1">
+<span class="flex items-center gap-2 font-bold text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="add_circle">add_circle</span> 彩椒块
+                                </span>
+<span class="font-headline italic text-secondary">50g</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Section -->
+<section class="mt-12 flex flex-col items-center gap-4">
+<button class="bg-primary hover:bg-primary-dim text-on-primary px-10 py-4 rounded-xl font-bold flex items-center gap-3 shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="auto_fix_high">auto_fix_high</span>
+                将 V2.1 应用为当前主版本
+            </button>
+<p class="text-outline text-xs italic">应用后，V1.0 将被移至“历史存档”中</p>
+</section>
+<!-- Asymmetric Detail: Family Tag -->
+<div class="mt-16 flex justify-end">
+<div class="bg-secondary-container text-on-secondary-container px-6 py-3 rounded-full flex items-center gap-2 transform rotate-2">
+<span class="material-symbols-outlined" data-icon="family_history">family_history</span>
+<span class="text-sm font-medium">来自“林家私厨”系列的第 3 次演进</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Suppressed based on Task Focus, but usually rendered for top destinations. Here we keep it as a 'Shell' reference) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-safe h-20 bg-[#fffcf7]/90 dark:bg-stone-900/90 backdrop-blur-xl z-50 border-t border-[#babaaf]/10 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#a84533] dark:text-[#d66853] bg-[#a84533]/5 rounded-xl px-3 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">食谱库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">计划</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">我的</span>
+</a>
+</nav>
+</body></html>

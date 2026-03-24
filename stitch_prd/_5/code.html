@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shiguangji | Timeline</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed": "#3d4c3d",
+              "secondary-fixed-dim": "#d6e7d4",
+              "secondary-fixed": "#e4f5e2",
+              "on-error": "#ffffff",
+              "error": "#b3374e",
+              "on-primary-fixed-variant": "#7e2718",
+              "primary": "#a84533",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "outline": "#818178",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "tertiary-container": "#feefda",
+              "on-surface": "#373831",
+              "on-tertiary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#e4e3d6",
+              "tertiary-dim": "#615747",
+              "surface-bright": "#fffcf7",
+              "inverse-primary": "#f7816b",
+              "on-tertiary-fixed": "#504738",
+              "primary-fixed-dim": "#ff9783",
+              "surface-container-lowest": "#ffffff",
+              "surface-tint": "#a84533",
+              "surface-variant": "#eae9dd",
+              "surface-container-low": "#fcf9f3",
+              "primary-fixed": "#ffac9c",
+              "on-surface-variant": "#64655c",
+              "surface": "#fffcf7",
+              "outline-variant": "#babaaf",
+              "surface-container-highest": "#eae9dd",
+              "on-secondary-fixed-variant": "#596859",
+              "on-error-container": "#68001f",
+              "secondary": "#596859",
+              "primary-container": "#ffac9c",
+              "primary-dim": "#983a28",
+              "on-background": "#373831",
+              "tertiary": "#6e6353",
+              "surface-container": "#f6f4ec",
+              "error-dim": "#770326",
+              "inverse-on-surface": "#9e9d98",
+              "surface-container-high": "#f0eee4",
+              "secondary-dim": "#4d5c4d",
+              "error-container": "#f76a80",
+              "tertiary-fixed": "#feefda",
+              "on-tertiary-container": "#635949",
+              "on-secondary-container": "#4f5e4f",
+              "on-primary": "#ffffff",
+              "background": "#fffcf7",
+              "secondary-container": "#e4f5e2",
+              "on-primary-container": "#721e10",
+              "inverse-surface": "#0e0e0c",
+              "on-primary-fixed": "#550801"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 100%;
+            background-color: #babaaf;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .timeline-line::before {
+                left: 2rem;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#a84533] dark:text-[#d66853] hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-2xl font-bold font-['Noto_Serif'] text-[#a84533] dark:text-[#d66853] tracking-tight">时光记</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center space-x-8 mr-6">
+<a class="font-['Plus_Jakarta_Sans'] text-sm font-medium text-[#6e6353] dark:text-stone-400 hover:text-[#a84533]" href="#">食谱</a>
+<a class="font-['Plus_Jakarta_Sans'] text-sm font-medium text-[#6e6353] dark:text-stone-400 hover:text-[#a84533]" href="#">发现</a>
+<a class="font-['Plus_Jakarta_Sans'] text-sm font-medium text-[#a84533] dark:text-[#d66853]" href="#">时光轴</a>
+<a class="font-['Plus_Jakarta_Sans'] text-sm font-medium text-[#6e6353] dark:text-stone-400 hover:text-[#a84533]" href="#">家庭</a>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="Family Member Profile Avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdemG_T93ueq4hjFnTMpL6hKI02C6YdNz13iV-DLgEyhTu6e8ee3OjDDhd6mAqg4Mt9mY6Q9shNpncQo8qKvZdF_UnFpeEZ6nSaTbp5KNHG020Ftw3qjjwmYJ8pS9Q_nRcGiNV2h6ufgntdjHDUW90fOpH6vPjXOuDBAyPjcanCATsYeqi9N0hwHMQ7XJrBxmlNjLjPoymNGL9NRmzCu2CywcyNo8NkBz-2P1GyxewCF5rL_LQFcMyF3pD8oUZi5gTGlNcauEkmsI"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-4 md:px-0 max-w-4xl mx-auto relative timeline-line">
+<!-- Timeline Header Section -->
+<div class="relative z-10 text-center mb-16 md:mb-24">
+<span class="inline-block px-4 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase mb-4">家庭厨房</span>
+<h2 class="font-headline text-4xl md:text-5xl text-on-surface font-bold tracking-tight mb-4">烹饪时光</h2>
+<p class="text-tertiary max-w-lg mx-auto italic font-headline">"记录在家庭餐桌上分享的香气与故事。"</p>
+</div>
+<!-- Timeline Entries -->
+<div class="space-y-24 relative z-10">
+<!-- Entry 1 -->
+<article class="flex flex-col md:flex-row items-start gap-8 md:gap-0">
+<div class="hidden md:flex w-1/2 flex-col items-end pr-12 text-right pt-4">
+<time class="font-headline text-2xl text-primary font-bold">10月 24</time>
+<p class="text-sm text-outline font-medium tracking-widest uppercase">2023</p>
+<div class="mt-4 flex items-center justify-end gap-2 text-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="location_on">location_on</span>
+<span class="text-xs font-medium uppercase tracking-tighter">Grandma's Kitchen</span>
+</div>
+</div>
+<!-- Timeline Hub -->
+<div class="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-4 border-primary bg-background shadow-[0_0_0_8px_rgba(168,69,51,0.1)] mt-6"></div>
+<div class="w-full md:w-1/2 pl-16 md:pl-12">
+<div class="md:hidden mb-4">
+<time class="font-headline text-xl text-primary font-bold">2023年10月24日</time>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(55,56,49,0.06)] group">
+<!-- Member Info -->
+<div class="flex items-center gap-3 mb-6">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of family member Aunt Elena" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOckJMc0Tif86_1bry8NVvRCTuOsxk1O85czofv5dTObYSHCh56Z5OiC03n8SAkBGDcqPO4oFwOJRfXk8RL-s2IwGwoqFcgSke2VK84GDaBvPtZ48NUBcomt6iRBzR4lZcZehW3BmNfw0ceY6QrpyGxSL1A-zupA6dLoFCTCU28TPRtVsxr5isj3-7dz1NMmAgRWRp6k7sVFGK27qU1FAKSAkVfh7YA4RYDCcoWZEc5Q0q7Sc8mJSy5NSBuRjC3O3emzfPPUM42JI"/>
+<div>
+<h4 class="text-sm font-bold text-on-surface">Aunt Elena</h4>
+<p class="text-[10px] text-outline uppercase tracking-wider">面点达人</p>
+</div>
+<div class="ml-auto flex items-center gap-1 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-[10px] font-bold rotate-[-2deg] shadow-sm"><span class="material-symbols-outlined text-xs" data-icon="military_tech">military_tech</span>传家时刻</div>
+</div>
+<!-- Content -->
+<a class="block group-hover:text-primary transition-colors" href="#">
+<h3 class="font-headline text-2xl font-bold mb-3">The Lost Almond Biscotti</h3>
+</a>
+<p class="text-on-surface-variant leading-relaxed text-sm mb-6">
+                            Finally perfected the crunch! I used the recipe found in the back of Great-Aunt Martha's 1948 diary. The secret was definitely the double-toasted almonds. The house smells like a Roman bakery this afternoon.
+                        </p>
+<!-- Photo Grid (Asymmetric) -->
+<div class="grid grid-cols-6 grid-rows-2 gap-2 h-64">
+<div class="col-span-4 row-span-2 overflow-hidden rounded-lg">
+<img class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" data-alt="Crunchy golden almond biscotti on a cooling rack" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV5LogxMHcMmhdGF4PLNdUdgkS6BHb-ON1ELPV9jKWr251AKXLAj2LMwaQUZ0RVK0a8_Rdh2EgCAvcPR2g3jCH2L_pC7ZOgMVCZ9i_VItnTwfQFZubKypv3kU-j1nz2gMeTyhuLF4A4x0ao7pcLl3r7OyS2oTfcum7ydLoe2Rt3Vp6WJ1Xuf3Oq6PclaQ6xnT1ChWsA75AWdOsRxZu0hYDZq-vcyVkuSJbFCy-49Qc9iWuMmv0rBuXBRW8M4sV_ZURGTh55F9pTjU"/>
+</div>
+<div class="col-span-2 row-span-1 overflow-hidden rounded-lg">
+<img class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" data-alt="Close up of sliced almonds on a rustic wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXJ8vTdHwndcD6VDPnTUDlDUfM8nru4NLwr4WWGHHgpxaAjciN1-Z-7vLmecxjoh4fO135pyUkbnosDcOqCLz4uO5TdsZGdx1RPBCzIcDmIcNeySZ2V6a4LucuGvaFX0QhdtrWuuTBoge9bXBknTD_RWa0ADQ_MdNyHRfsu5Js4_-h3pJSrLHCO15BjHQdr14RkkkRbuzySDVofaPAPU_Ewz61zJrAoNwGW8ToBn6vVRXxoyi4cwCimUwPLNnS-yK5O_iPmpb2zTY"/>
+</div>
+<div class="col-span-2 row-span-1 overflow-hidden rounded-lg">
+<img class="w-full h-full object-cover hover:scale-105 transition-transform duration-500" data-alt="Pouring hot coffee into a vintage ceramic mug" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1S_aRTQ77v94iygeLcu42JGBb7w2iAFqpXF4ZHsiSCI1n1DG7YQ45G9DRc5OeOVrZlBb3pVd2_HX3z1jbtWkrSTZwQRc1pfaxd-cuQip00RHSvuxw6zKB1dUdAmyJ2f6iyzafXebGoUMCMhSnHnMO4U2C0n9AxAIf3kyKhiaYZRLDWiZuRnFdJJkHAPmZodHsnvIKhObMiuCCS-lpHdWrXhtBL8zQawCm2Y9MERhil744S-txD6CU9KMPATh0eTCFrh1LaXyazXw"/>
+</div>
+</div>
+<!-- Interaction -->
+<div class="mt-6 pt-6 border-t border-outline-variant/15 flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-primary flex items-center justify-center text-[10px] text-white font-bold">❤️</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-secondary flex items-center justify-center text-[10px] text-white font-bold">✨</div>
+</div>
+<button class="text-xs font-bold text-primary flex items-center gap-1"><span class="material-symbols-outlined text-sm" data-icon="chat_bubble">chat_bubble</span>8条共有记忆</button>
+</div>
+</div>
+</div>
+</article>
+<!-- Entry 2 -->
+<article class="flex flex-col md:flex-row-reverse items-start gap-8 md:gap-0">
+<div class="hidden md:flex w-1/2 flex-col items-start pl-12 text-left pt-4">
+<time class="font-headline text-2xl text-primary font-bold">10月 19</time>
+<p class="text-sm text-outline font-medium tracking-widest uppercase">2023</p>
+</div>
+<!-- Timeline Hub -->
+<div class="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-4 border-primary bg-background shadow-[0_0_0_8px_rgba(168,69,51,0.1)] mt-6"></div>
+<div class="w-full md:w-1/2 pr-0 md:pr-12 pl-16 md:pl-0">
+<div class="md:hidden mb-4">
+<time class="font-headline text-xl text-primary font-bold">2023年10月19日</time>
+</div>
+<div class="bg-surface-container-low rounded-xl p-6 shadow-sm border-l-4 border-secondary group">
+<!-- Member Info -->
+<div class="flex items-center gap-3 mb-6">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of family member David" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCONS0ZIYqGjrB49-O51qDy9p6DSEe7tf6wvawThFQW1V5popabrqauNPMXtyv4x85S0QZU1yNVo8MlbnAFnu76VRJ-Swax38lzjvllfv4hMRGUH7e5XF-uO0QclRlcIAyAu1y73AUvvwAJJmPFaOiKFJGAK_izD6Yi64YdWhx2GBhwMI4px1M1U2uQ8mJsDIQ6kIqCElZLNF0UkVTUbi90ikgEKerOarpx689juBDjUXDwYewZXo3LZm2YudHT1H9ab-fF-CepmaM"/>
+<div>
+<h4 class="text-sm font-bold text-on-surface">David</h4>
+<p class="text-[10px] text-outline uppercase tracking-wider">周日酱料专家</p>
+</div>
+</div>
+<a class="block group-hover:text-primary transition-colors" href="#">
+<h3 class="font-headline text-2xl font-bold mb-3">Rainy Day Beef Stew</h3>
+</a>
+<p class="text-on-surface-variant leading-relaxed text-sm mb-6">
+                            The kids helped peel the carrots today. Messy, but memorable. We followed the 'slow &amp; low' method Grandma always talked about. Best paired with the heavy rain outside.
+                        </p>
+<!-- Single Large Photo -->
+<div class="overflow-hidden rounded-lg aspect-video mb-4">
+<img class="w-full h-full object-cover" data-alt="Hearty beef stew with thick gravy and vegetables in a clay pot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgXQ2BVWlkjz0A26f1NkcQNkSygVp19xe2eWdqQ8XQwy9_T268l7WIvp2yIyarPoCIyvH5NBQl7O-3mGpYnhcT8oQw9Cun9CKVHHuqBEJnxgsbYcwpmQoLhkvkRg-sgkK-DTPRiCwwTuXz_F6mw0SJ3aDxYIln32Ttq6i-EM107i0gr99c5UW1xfxMnBYyUCxvoX2bzkXjiZZkBh53vxRTh8rxfjM8inxG1KNiZafsFhE_Rkzt0Gvi8qj7umASsum8UqSUCW4AGYM"/>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-bold bg-surface-container-highest px-2 py-1 rounded text-on-surface-variant">#SlowCooking</span>
+<span class="text-[10px] font-bold bg-surface-container-highest px-2 py-1 rounded text-on-surface-variant">#FamilySunday</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Entry 3 -->
+<article class="flex flex-col md:flex-row items-start gap-8 md:gap-0">
+<div class="hidden md:flex w-1/2 flex-col items-end pr-12 text-right pt-4">
+<time class="font-headline text-2xl text-primary font-bold">10月 12</time>
+<p class="text-sm text-outline font-medium tracking-widest uppercase">2023</p>
+</div>
+<!-- Timeline Hub -->
+<div class="absolute left-8 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-4 border-primary bg-background shadow-[0_0_0_8px_rgba(168,69,51,0.1)] mt-6"></div>
+<div class="w-full md:w-1/2 pl-16 md:pl-12">
+<div class="md:hidden mb-4">
+<time class="font-headline text-xl text-primary font-bold">2023年10月12日</time>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(55,56,49,0.06)] group">
+<div class="flex items-center gap-3 mb-6">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of family member Mark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0_rE6j9fqWNiMh8P2Zn4G69wp1PYJwfD9v1hCjvdNRHXW8JfaBvnOdRDYewU4l94SeJs824HceK4tJJ8dw5nQrJfNtbquIXJ_9oDOjHCwEyEJp4s3dbIypoe_vP5CUX5EDxxHYaeRn2t_dtvL6E8Dp8f7ARc4Vk4AideXndtLSfmLx7s1lFSOTiczqWpTSKgXo5eSh5gjh8OMNG7Pp5CHnfK9_b6UTXBnBZCCj_jwab8GTfOtr5p8K0O2jKe35u1VfKKPVTmBB0g"/>
+<div>
+<h4 class="text-sm font-bold text-on-surface">Mark</h4>
+<p class="text-[10px] text-outline uppercase tracking-wider">烧烤大师</p>
+</div>
+<div class="ml-auto flex items-center gap-1 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-[10px] font-bold rotate-[1deg] shadow-sm"><span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>传家时刻</div>
+</div>
+<a class="block group-hover:text-primary transition-colors" href="#">
+<h3 class="font-headline text-2xl font-bold mb-3">Autumn Harvest Roasted Roots</h3>
+</a>
+<!-- Story Scrap -->
+<div class="bg-tertiary-fixed-dim/30 p-4 rounded-lg border-dashed border border-outline-variant mb-6 text-sm italic text-tertiary-dim font-headline">
+                            "The key is the maple glaze we made from the trees in the back lot last spring."
+                        </div>
+<!-- 2x2 Photo Grid -->
+<div class="grid grid-cols-2 gap-2 mb-4">
+<img class="w-full h-40 object-cover rounded-lg" data-alt="Roasted seasonal root vegetables with herbs" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDba87Aeapqay7bML5HEefVQz7mOhb6fNnXEs39bJgAFHcrD8ls2EDU3ZTVBIRuILLckH3sUZhvCgyE7OuDru5YKwLr1dft6mmADyycZpo3RTcsWC-7yOsG0Ax8rnY4CK4K30uBRm3x24Z4YTHIpzx0ShuMAXHZNEzthQOzYlTMXPM_QIq_mhyOaBHgzD_IC_HbljELYJZVyAmaIcUeVwnuW5rhUQU8ROT0H843LeNWk4klBd8j2MS6EIAcbMscA8Jf9pOSuh_gW5E"/>
+<img class="w-full h-40 object-cover rounded-lg" data-alt="Freshly harvested carrots and parsnips with soil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByk1boTDg9mTrONFUGG6XbQ4BFMXV1MroQ1FNKgZ5LN4rj731IlamaTx9uRmzDDkzmMBvQdI74UQF6fTvTXLAVJdqE00c_5UESwTzMjdDY0uxGD7DgYze9mykNjGJd_EXufFo8YysEnRQWYqjvgMH9TmKb_b2qdWl6Hg8GjP1ZB6wpbzYrUW84wkXfKML1lKAYF30N0Lmbz1jg_aI-zBHaI6ysiTzHeGgI53fRT-5vVPADxHTJKSOeA6q4tdagxq8moeYoMK_w_zU"/>
+<img class="w-full h-40 object-cover rounded-lg" data-alt="Wooden spoon stirring a maple glaze in a small pan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCv7gcuMjLy_VWNtGCQje649Xx4glQ99taG_r5J8KlqnJw4JpReppGFzNi56CYjUmhko4nnAOsJBZ-_BHoggZNkv0KW5uzDrV3XOLxksr6hM8qBvSjZfXkrAHLqir4kNSR5iBtc6OQgyPRA0csNQ42ACrRnKdsoJSVP1tDZ9KnOfBZwAMY26XuP1EGEty3iOoJp0x7oXiS0WMP4iqeHnbmoCqR-Z_dACctm2q1sD1vIu9R-vU0rCN4Mp6obgUEClWXezhJdtCto_ps"/>
+<img class="w-full h-40 object-cover rounded-lg" data-alt="Overhead view of a colorful harvest salad bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7M6wh7cxVs6aZK979ar2tqLCze8bbSqrUiEFpcxY-DdRAaSuoTZe8t2cPGolQ83s4vEk2FiicenEYvUQDKS5iCzaTXZnzLnVTneM4QYTVoM0hR7N2J6z_LGczoIJejmKwepLLOB9ivImXrLhxB1Pjw1AHFYUIimjSkEeo_s4aCZm2UvmDtBs1mVEgvnmQ65I2g_Kin6ndNYRb3fO4iHa_GH1enGexGGTgUoWplXpzdSdIqsrsAfEIQPZ4bxu9L_vOIF-a4uEyms8"/>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- End of Timeline Indicator -->
+<div class="mt-24 text-center pb-12 relative z-10">
+<div class="inline-flex flex-col items-center">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="book_5">book_5</span>
+<p class="font-headline text-lg text-tertiary">翻阅更多记忆</p>
+<div class="w-px h-16 bg-gradient-to-b from-outline-variant to-transparent mt-4"></div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed right-6 bottom-28 md:bottom-10 z-50 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-3xl" data-icon="add_a_photo">add_a_photo</span>
+</button>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md border-t border-[#babaaf]/15 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)] flex justify-around items-center h-20 pb-safe px-4">
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 hover:text-[#a84533]" href="#">
+<span class="material-symbols-outlined" data-icon="book_5">book_5</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium mt-1">食谱</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 hover:text-[#a84533]" href="#">
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium mt-1">发现</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#a84533] dark:text-[#d66853] scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu" style="font-variation-settings: 'FILL' 1;">history_edu</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium mt-1">时光轴</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400 hover:text-[#a84533]" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium mt-1">家庭</span>
+</a>
+</nav>
+</body></html>

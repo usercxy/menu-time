@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shiguangji | Family Collaboration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed": "#3d4c3d",
+              "secondary-fixed-dim": "#d6e7d4",
+              "secondary-fixed": "#e4f5e2",
+              "on-error": "#ffffff",
+              "error": "#b3374e",
+              "on-primary-fixed-variant": "#7e2718",
+              "primary": "#a84533",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "outline": "#818178",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "tertiary-container": "#feefda",
+              "on-surface": "#373831",
+              "on-tertiary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "surface-dim": "#e4e3d6",
+              "tertiary-dim": "#615747",
+              "surface-bright": "#fffcf7",
+              "inverse-primary": "#f7816b",
+              "on-tertiary-fixed": "#504738",
+              "primary-fixed-dim": "#ff9783",
+              "surface-container-lowest": "#ffffff",
+              "surface-tint": "#a84533",
+              "surface-variant": "#eae9dd",
+              "surface-container-low": "#fcf9f3",
+              "primary-fixed": "#ffac9c",
+              "on-surface-variant": "#64655c",
+              "surface": "#fffcf7",
+              "outline-variant": "#babaaf",
+              "surface-container-highest": "#eae9dd",
+              "on-secondary-fixed-variant": "#596859",
+              "on-error-container": "#68001f",
+              "secondary": "#596859",
+              "primary-container": "#ffac9c",
+              "primary-dim": "#983a28",
+              "on-background": "#373831",
+              "tertiary": "#6e6353",
+              "surface-container": "#f6f4ec",
+              "error-dim": "#770326",
+              "inverse-on-surface": "#9e9d98",
+              "surface-container-high": "#f0eee4",
+              "secondary-dim": "#4d5c4d",
+              "error-container": "#f76a80",
+              "tertiary-fixed": "#feefda",
+              "on-tertiary-container": "#635949",
+              "on-secondary-container": "#4f5e4f",
+              "on-primary": "#ffffff",
+              "background": "#fffcf7",
+              "secondary-container": "#e4f5e2",
+              "on-primary-container": "#721e10",
+              "inverse-surface": "#0e0e0c",
+              "on-primary-fixed": "#550801"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .heritage-frame {
+            position: relative;
+            padding: 8px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid rgba(186, 186, 175, 0.3);
+        }
+        .scalloped-edge {
+            mask-image: radial-gradient(circle at 10px 10px, transparent 10px, black 11px);
+            mask-size: 20px 20px;
+        }
+        .asymmetric-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 2rem;
+        }
+        @media (max-width: 768px) {
+            .asymmetric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container/30">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#a84533]">menu</span>
+<h1 class="text-2xl font-bold font-['Noto_Serif'] text-[#a84533] tracking-tight">Shiguangji</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img class="w-full h-full object-cover" data-alt="Family Curator Profile Portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhDaWSzeIhOC2gwSAk80PPYL1IdImgNqjA8jbjePGLUijqHAKAydBDpTU6a44nywYBBkqGWHoqLz4NBbjLkQDA4LUir9OCGLSFjDX5mgN3BcHLTcWDhjMK4-JQoiW7cF8bhK4CN8dPth7AhifyAWT6nBqY6k_42Fo9lwPK3jtZZl2dhfo8ZLEuUGpOgyW-zjB7IAd-p0mjOSXQhtCQI3v0o9Ckr0onblCjtSbKuHy7r9MyPXCOkVD7vV4lLuYMxhGkwxfGgCuo_9U"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-7xl mx-auto">
+<!-- Header Section -->
+<div class="mb-12">
+<h2 class="font-headline text-4xl font-bold text-on-surface mb-2">家庭协作</h2>
+<p class="text-on-surface-variant font-medium">共同守护这份传承。管理您的家庭成员。</p>
+</div>
+<div class="asymmetric-grid">
+<!-- Left Column: Member List -->
+<section class="space-y-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline text-xl text-primary flex items-center gap-2"><span class="material-symbols-outlined">group</span> 当前成员</h3>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">5 活跃</span>
+</div>
+<!-- Admin Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl flex items-center justify-between border-l-4 border-primary group hover:shadow-lg transition-all duration-300">
+<div class="flex items-center gap-5">
+<div class="heritage-frame transform -rotate-1 group-hover:rotate-0 transition-transform">
+<img class="w-16 h-16 object-cover" data-alt="Portrait of the Family Administrator" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD89UhTweer-n9aOQ9THyzN0r4s2XfanTSG2IdpeseJVx7jiCPzY_-crlxS-OCI_EeZjuA9JMven4koRh874icPKax68M0o2LfTH1nwaZMfj0nJpoTgy6hnxQGJhC_xkUobR8CwIdrBkVbuv1txmaPrN7QreaxnhlD5Ok3V-VpC349J3dkasd8OEZvgEwFTaLNUiZ94vENMIClhjaIrpkwHTUgNiK5kJyrRaVgXMja6xtT0KGVUkF12aIIx-0QDGi1hiOeGtAwBSR0"/>
+</div>
+<div>
+<p class="font-headline text-lg font-bold">Eleanor Chen</p>
+<p class="text-sm text-on-surface-variant">家庭管理员</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest bg-primary-container/20 px-2 py-1 rounded">Owner</span>
+</div>
+</div>
+<!-- Member Cards (Asymmetric Layout) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Member 1 -->
+<div class="bg-surface-container-low p-5 rounded-xl flex items-center gap-4 hover:bg-surface-container transition-colors">
+<div class="heritage-frame transform rotate-2">
+<img class="w-12 h-12 object-cover" data-alt="Family member avatar male" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaVtW9-s4qiXDc3enOif3G5tpyKwHU2eQaP5NP_P9KSI1z2eogVFpmNggvheFVaG4mMd3xgrSmkv4diJYLDqgOCOXs79bXlmMMYA8o1Cw4DIVXLhpAKPP1NM_wSSLWODPxNqHKGooPZcmmEyoD1mMYT5uCnK1Gfk7KZZw0U8BUzuLZq-5OE3HnE3LzqXs45CSXQbcT_Lzkd62LxYVkIPftiRebcxYopteAG-KNfBVN_YPGhp1yGILftG0PwHBQ7Rd7rSHXdTxYjJw"/>
+</div>
+<div class="flex-1">
+<p class="font-headline font-bold">Arthur Wei</p>
+<p class="text-xs text-on-surface-variant">档案管理员</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">more_vert</span>
+</div>
+<!-- Member 2 -->
+<div class="bg-surface-container-low p-5 rounded-xl flex items-center gap-4 hover:bg-surface-container transition-colors">
+<div class="heritage-frame transform -rotate-3">
+<img class="w-12 h-12 object-cover" data-alt="Family member avatar female" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4GhKG3Pea_7BIkoWIR3l-LSKXIaz4uVXOOuoM0r6BkZQ7ZPrAorn8qWC5dpEm2BVSXI-Vi-iWOWoIdjH4TWw4NzDx76akElNZw9vecoOpRR9PZeUWsc9GArQK-2R0gcrICSy9Oe5SUSjtPSvxlIpU8GMhZAxFSORSR2ox4FzXVG_vqQ1ds3ZrlMQdVNb5gCYzoLKsj2yHBBUgV8QPI_CRQ2aI2ntr4Z_KdNnjmujF54L1z2Znbd61xMtIR29DJXi9R6rXtM3PUW4"/>
+</div>
+<div class="flex-1">
+<p class="font-headline font-bold">Lydia Chen</p>
+<p class="text-xs text-on-surface-variant">贡献者</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">more_vert</span>
+</div>
+<!-- Member 3 -->
+<div class="bg-surface-container-low p-5 rounded-xl flex items-center gap-4 hover:bg-surface-container transition-colors">
+<div class="heritage-frame transform rotate-1">
+<img class="w-12 h-12 object-cover" data-alt="Family member avatar younger male" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAljxaQqmIKThKIKEh_b1LEbK_lYh-cyT9hw4c-J_SeDY0omY8WeF7AUYu47qCDJrsMGyI3itD3Ot5fhIg9ocd33f93dsPNEaWx5Qyx5eWjD4qZkTqCMdsnn-UZRi4dwazH_TIi35XuaU6iDmPh_vbiRYQSD62o3zyqmb6mOLzFWeBTkZ4D1Y2ba8scrxhfHsCkEVZlN3gPAm0hiNiuP95Jj3HYcoaFbNWj1GvKsRD6jJg8FyG5aFcDbd9H659yGSdQ9bnlnMmQpQo"/>
+</div>
+<div class="flex-1">
+<p class="font-headline font-bold">Marcus Chen</p>
+<p class="text-xs text-on-surface-variant">贡献者</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">more_vert</span>
+</div>
+<!-- Member 4 -->
+<div class="bg-surface-container-low p-5 rounded-xl flex items-center gap-4 hover:bg-surface-container transition-colors">
+<div class="heritage-frame transform -rotate-2">
+<img class="w-12 h-12 object-cover" data-alt="Family member avatar young female" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxn8hbxGJ89dDOOBf1JykNgFdrhK9Zft-M21jmZ7RcaM0V9SL2zHGVZJYbqivtkJe87oPGUac0w_yboX82K9M36ZKeb5UFjwX0T9eXaW19ZsVnEaxJ2KsBo7glzr-P6ci0uuJxJtWSUiF0_PLzEGR79GwV-fXPEw99hdNpDI-G1219Y90iyw6AzKc0YAumMF5DoqhGlaXeUWWrT7Emz_o86Rs_IvcAwHQ0MAvCpZqIYwhMfEszoA1hOUTwaD0iqPor21nkxtdNLaw"/>
+</div>
+<div class="flex-1">
+<p class="font-headline font-bold">Sophie Wei</p>
+<p class="text-xs text-on-surface-variant">观察员</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">more_vert</span>
+</div>
+</div>
+<!-- Role Permissions Overview -->
+<div class="mt-12 bg-tertiary-container p-6 rounded-xl relative overflow-hidden">
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-9xl">history_edu</span>
+</div>
+<h4 class="font-headline text-lg font-bold mb-4 text-on-tertiary-container">传承角色</h4>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-sm">shield</span>
+</div>
+<div>
+<p class="font-bold text-sm">管理员</p>
+<p class="text-xs text-on-tertiary-container/80">拥有对家谱、食谱及成员权限的完全控制。</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-sm">edit_note</span>
+</div>
+<div>
+<p class="font-bold text-sm">档案员</p>
+<p class="text-xs text-on-tertiary-container/80">可编辑食谱、添加照片并管理时光轴。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Invitation & Link Sharing -->
+<section class="space-y-6">
+<div class="sticky top-24">
+<div class="bg-surface-container-highest p-8 rounded-2xl shadow-sm">
+<h3 class="font-headline text-2xl font-bold mb-6 text-on-surface text-center">邀请新成员</h3>
+<!-- QR Code Area -->
+<div class="flex justify-center mb-8">
+<div class="p-4 bg-white rounded-2xl shadow-inner border border-outline-variant/20">
+<div class="w-48 h-48 bg-surface-container flex items-center justify-center rounded-lg border-2 border-dashed border-primary/30">
+<!-- Representative QR placeholder -->
+<div class="grid grid-cols-4 gap-1 opacity-40">
+<div class="w-8 h-8 bg-on-surface"></div><div class="w-8 h-8 bg-transparent"></div><div class="w-8 h-8 bg-on-surface"></div><div class="w-8 h-8 bg-on-surface"></div>
+<div class="w-8 h-8 bg-transparent"></div><div class="w-8 h-8 bg-on-surface"></div><div class="w-8 h-8 bg-transparent"></div><div class="w-8 h-8 bg-transparent"></div>
+<div class="w-8 h-8 bg-on-surface"></div><div class="w-8 h-8 bg-transparent"></div><div class="w-8 h-8 bg-on-surface"></div><div class="w-8 h-8 bg-on-surface"></div>
+<div class="w-8 h-8 bg-on-surface"></div><div class="w-8 h-8 bg-on-surface"></div><div class="w-8 h-8 bg-transparent"></div><div class="w-8 h-8 bg-on-surface"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<p class="text-xs text-center font-bold text-on-surface-variant uppercase tracking-widest">分享邀请链接</p>
+<div class="flex bg-surface-container-lowest rounded-xl p-2 border border-outline-variant/10">
+<input class="bg-transparent border-none text-sm flex-1 px-3 focus:ring-0 font-body" readonly="" type="text" value="shiguangji.app/join/f8a2-99m"/>
+<button class="bg-primary text-on-primary px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2"><span class="material-symbols-outlined text-sm">content_copy</span> 复制</button>
+</div>
+</div>
+<div class="mt-10 pt-8 border-t border-outline-variant/20">
+<div class="flex flex-col gap-3">
+<button class="w-full py-4 px-6 bg-primary text-on-primary rounded-xl font-bold text-sm flex items-center justify-center gap-3 shadow-md hover:bg-primary-dim transition-colors"><span class="material-symbols-outlined">mail</span> 发送邮件邀请</button>
+<button class="w-full py-4 px-6 bg-secondary text-on-secondary rounded-xl font-bold text-sm flex items-center justify-center gap-3 shadow-md hover:bg-secondary-dim transition-colors"><span class="material-symbols-outlined">share</span> 社交软件邀请</button>
+</div>
+</div>
+</div>
+<!-- Pinned Note Style Tip -->
+<div class="mt-6 bg-tertiary-container p-5 rounded-lg transform rotate-1 shadow-sm border-l-4 border-tertiary">
+<p class="text-xs leading-relaxed text-on-tertiary-container font-medium italic">“最好的食谱不仅仅是食材清单，更是餐桌旁共享的回忆。邀请晚辈开始记录香气背后的故事吧。”</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 bg-[#fffcf7]/80 backdrop-blur-md border-t border-[#babaaf]/15 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)]">
+<div class="flex justify-around items-center h-20 pb-safe px-4">
+<div class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400">
+<span class="material-symbols-outlined">book_5</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium">食谱</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400">
+<span class="material-symbols-outlined">auto_awesome</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium">发现</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-400">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium">时光轴</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#a84533] scale-110 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-medium">家庭</span>
+</div>
+</div>
+</nav>
+</body></html>

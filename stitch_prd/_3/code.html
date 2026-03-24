@@ -1,0 +1,187 @@
+<html lang="zh-CN"><head>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head><body class="bg-surface text-on-surface min-h-screen pb-32">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>食光记 - 购物清单</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D66853",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#1f1513",
+                        "surface": "#fffcf7",
+                        "on-surface": "#373831",
+                        "outline-variant": "#babaaf",
+                        "primary-dim": "#983a28",
+                        "surface-container-low": "#fcf9f3",
+                        "surface-container": "#f6f4ec",
+                        "surface-container-high": "#f0eee4",
+                        "surface-container-highest": "#eae9dd",
+                        "on-surface-variant": "#64655c",
+                        "tertiary": "#6e6353",
+                        "tertiary-container": "#feefda",
+                        "on-tertiary-fixed-variant": "#6e6353"
+                    },
+                    fontFamily: {
+                        "display": ["Noto Serif SC"],
+                        "body": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-noto-serif { font-family: 'Noto Serif SC', serif; }
+    </style>
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md shadow-[0px_12px_32px_rgba(55,56,49,0.06)] flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#D66853] cursor-pointer">arrow_back</span>
+<h1 class="font-noto-serif text-2xl font-bold text-[#D66853] dark:text-[#d66853]">本周购物清单</h1>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/20">
+<img alt="Family portrait icon" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCh09WrypeDIzjEzhNUIFCNdfhoUcT_eyxAiSnKiEze4UZHvQmWef_Q1mAflKFQEwC1-Y0vGGL6PWS-G9oBrg4atEdThXwSFB69lwfIrQLHM3ycw5-ThTJ-Y0N3glmS5m2k337GjOkqBCphl0H1iqV9DXSQnBqTjSq_rsPl6GgUIw3GTWwla0KclkW4WlsBbnPLu0i0ModzDKErPcvcbKVSKfD2_fHBR6oxVMvq52Syp2VwWG6WODzkfUwJVLHFb65lq-xDC2L6CYU"/>
+</div>
+</header>
+<main class="pt-24 px-6 max-w-2xl mx-auto pb-32">
+<div class="flex bg-surface-container-low p-1.5 rounded-2xl mb-8">
+<button class="flex-1 py-2.5 rounded-xl text-sm font-bold bg-[#D66853] text-white shadow-sm transition-all duration-300">
+                原料/菜品
+            </button>
+<button class="flex-1 py-2.5 rounded-xl text-sm font-medium text-on-surface-variant hover:bg-surface-container-high transition-colors">
+                调料
+            </button>
+</div>
+<div class="bg-surface-container p-6 rounded-[2rem] mb-8 flex items-center justify-between border-l-4 border-[#D66853]">
+<div>
+<p class="text-xs uppercase tracking-widest text-on-surface-variant font-bold mb-1">WEEKLY PLAN STATUS</p>
+<h2 class="font-noto-serif text-xl">待采购项：12 件</h2>
+</div>
+<div class="text-right">
+<span class="text-[#D66853] font-bold text-2xl font-noto-serif">35%</span>
+<p class="text-[10px] text-on-surface-variant">已完成</p>
+</div>
+</div>
+<div class="space-y-10">
+<section>
+<div class="flex items-center gap-3 mb-4">
+<span class="w-2 h-2 rounded-full bg-[#D66853]"></span>
+<h3 class="font-noto-serif text-lg tracking-tight">肉类</h3>
+<span class="text-xs text-on-surface-variant font-medium bg-surface-container-high px-2 py-0.5 rounded-full">3 项</span>
+</div>
+<div class="space-y-3">
+<label class="group flex items-center gap-4 bg-white p-5 rounded-2xl hover:bg-white transition-all cursor-pointer shadow-sm border border-transparent active:scale-[0.98]">
+<input class="w-6 h-6 rounded-lg border-outline text-[#D66853] focus:ring-[#D66853]/20" type="checkbox"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-lg">猪里脊</span>
+<span class="text-[#D66853] font-bold">500g</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">
+<span class="opacity-60">来自：</span>菠萝咕咾肉
+                            </p>
+</div>
+</label>
+<label class="group flex items-center gap-4 bg-white p-5 rounded-2xl hover:bg-white transition-all cursor-pointer shadow-sm border border-transparent active:scale-[0.98]">
+<input class="w-6 h-6 rounded-lg border-outline text-[#D66853] focus:ring-[#D66853]/20" type="checkbox"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-lg">鸡腿肉</span>
+<span class="text-[#D66853] font-bold">400g</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">
+<span class="opacity-60">来自：</span>照烧鸡腿饭
+                            </p>
+</div>
+</label>
+</div>
+</section>
+<section>
+<div class="flex items-center gap-3 mb-4">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<h3 class="font-noto-serif text-lg tracking-tight">蔬菜</h3>
+<span class="text-xs text-on-surface-variant font-medium bg-surface-container-high px-2 py-0.5 rounded-full">5 项</span>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<div class="flex flex-col gap-3">
+<label class="group flex items-center gap-4 bg-white p-5 rounded-2xl hover:bg-white transition-all cursor-pointer shadow-sm">
+<input class="w-6 h-6 rounded-lg border-outline text-[#D66853] focus:ring-[#D66853]/20" type="checkbox"/>
+<div class="flex-1">
+<div class="flex justify-between items-center">
+<span class="font-bold text-lg">青椒</span>
+<span class="text-[#D66853] font-bold">3 个</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-1">
+<span class="opacity-60">来自：</span>菠萝咕咾肉, 地三鲜
+                                </p>
+</div>
+</label>
+<label class="group flex items-center gap-4 bg-white p-5 rounded-2xl hover:bg-white transition-all cursor-pointer shadow-sm">
+<input checked="" class="w-6 h-6 rounded-lg border-outline text-[#D66853] focus:ring-[#D66853]/20" type="checkbox"/>
+<div class="flex-1 opacity-40 italic">
+<div class="flex justify-between items-center">
+<span class="font-bold text-lg line-through">西兰花</span>
+<span class="font-bold">1 颗</span>
+</div>
+<p class="text-xs mt-1">来自：蒜蓉西兰花</p>
+</div>
+</label>
+</div>
+</div>
+</section>
+</div>
+<div class="mt-12 bg-tertiary-container/30 p-8 rounded-[2.5rem] relative overflow-hidden border border-tertiary/10">
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl text-tertiary/10 rotate-12">restaurant_menu</span>
+<h4 class="font-noto-serif text-lg text-tertiary mb-2 italic">厨师的小贴士</h4>
+<p class="text-sm text-on-tertiary-fixed-variant leading-relaxed">
+                本周的菜谱以清新口感为主。挑选青椒时，选择皮薄肉厚的会更有嚼劲。里脊肉可以提前让摊主切成丁，省去备菜时间。
+            </p>
+</div>
+</main>
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-md z-40">
+<div class="flex gap-3 bg-white/80 backdrop-blur-xl p-3 rounded-[2rem] shadow-2xl border border-white/20">
+<button class="flex-1 flex items-center justify-center gap-2 bg-surface-container-highest text-on-surface py-4 rounded-2xl font-bold text-sm hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-xl">content_copy</span>
+                一键复制文本
+            </button>
+<button class="flex-1 flex items-center justify-center gap-2 bg-[#D66853] text-white py-4 rounded-2xl font-bold text-sm shadow-lg shadow-[#D66853]/20 hover:bg-primary-dim transition-colors">
+<span class="material-symbols-outlined text-xl">image</span>
+                生成清单图片
+            </button>
+</div>
+</div>
+<nav class="fixed bottom-0 w-full z-50 pb-safe rounded-t-[2rem] bg-[#fffcf7]/90 dark:bg-stone-900/90 backdrop-blur-xl border-t border-[#babaaf]/15 shadow-[0_-8px_24px_rgba(55,56,49,0.04)] flex justify-around items-center h-20 w-full px-4">
+<a class="flex flex-col items-center justify-center text-[#596859] dark:text-stone-400 opacity-80 hover:opacity-100 transition-opacity active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">home_app_logo</span>
+<span class="text-[11px] font-medium tracking-wide">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#596859] dark:text-stone-400 opacity-80 hover:opacity-100 transition-opacity active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-[11px] font-medium tracking-wide">食谱库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#D66853] dark:text-[#d66853] bg-[#D66853]/5 rounded-xl px-3 py-1 active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[11px] font-medium tracking-wide">计划</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#596859] dark:text-stone-400 opacity-80 hover:opacity-100 transition-opacity active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined">person_2</span>
+<span class="text-[11px] font-medium tracking-wide">我的</span>
+</a>
+</nav>
+<div class="fixed top-32 -left-8 w-24 h-8 bg-tertiary-container/40 -rotate-45 z-0 pointer-events-none"></div>
+</body></html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed": "#550801",
+              "on-surface-variant": "#64655c",
+              "on-surface": "#373831",
+              "inverse-surface": "#0e0e0c",
+              "on-tertiary-fixed": "#504738",
+              "outline-variant": "#babaaf",
+              "surface-container-highest": "#eae9dd",
+              "on-tertiary": "#ffffff",
+              "on-secondary-container": "#4f5e4f",
+              "on-background": "#373831",
+              "primary-dim": "#983a28",
+              "on-error": "#ffffff",
+              "on-tertiary-container": "#635949",
+              "secondary-fixed": "#e4f5e2",
+              "on-primary": "#ffffff",
+              "error-container": "#f76a80",
+              "tertiary": "#6e6353",
+              "secondary-container": "#e4f5e2",
+              "inverse-primary": "#f7816b",
+              "on-primary-container": "#721e10",
+              "error": "#b3374e",
+              "surface-container-high": "#f0eee4",
+              "on-error-container": "#68001f",
+              "background": "#fffcf7",
+              "surface-container": "#f6f4ec",
+              "primary-fixed": "#ffac9c",
+              "secondary-dim": "#4d5c4d",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#feefda",
+              "surface-variant": "#eae9dd",
+              "tertiary-fixed": "#feefda",
+              "surface-dim": "#e4e3d6",
+              "surface-tint": "#a84533",
+              "surface-container-low": "#fcf9f3",
+              "error-dim": "#770326",
+              "on-secondary-fixed": "#3d4c3d",
+              "primary": "#a84533",
+              "surface-bright": "#fffcf7",
+              "on-secondary-fixed-variant": "#596859",
+              "on-tertiary-fixed-variant": "#6e6353",
+              "secondary": "#596859",
+              "secondary-fixed-dim": "#d6e7d4",
+              "tertiary-fixed-dim": "#f0e0cc",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#7e2718",
+              "primary-fixed-dim": "#ff9783",
+              "tertiary-dim": "#615747",
+              "surface": "#fffcf7",
+              "primary-container": "#ffac9c",
+              "inverse-on-surface": "#9e9d98",
+              "outline": "#818178"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif SC"],
+              "body": ["Plus Jakarta Sans"],
+              "label": ["Plus Jakarta Sans"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-noto-serif { font-family: 'Noto Serif SC', serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen pb-32">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#fcf9f3] transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[#a84533]">menu</span>
+</button>
+<h1 class="font-noto-serif text-2xl font-bold text-[#a84533] tracking-tight">食光记</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#fcf9f3] transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined text-[#a84533]">share</span>
+</button>
+</header>
+<main class="pt-20 px-4 md:px-8 max-w-4xl mx-auto">
+<!-- Header Section -->
+<div class="mb-8 mt-4">
+<h2 class="font-headline text-3xl text-on-surface mb-2">购物清单</h2>
+<p class="font-body text-on-surface-variant text-sm tracking-wide">让每一顿家常菜，都从精心挑选的食材开始。</p>
+</div>
+<!-- Tabs Navigation -->
+<div class="flex gap-4 mb-8 bg-surface-container-low p-1.5 rounded-xl border border-outline-variant/10">
+<button class="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all bg-surface-container-lowest text-primary shadow-sm">
+                食材 (Ingredients)
+            </button>
+<button class="flex-1 py-2.5 rounded-lg text-sm font-medium transition-all text-on-surface-variant hover:bg-surface-container-high">
+                调料 (Seasonings)
+            </button>
+</div>
+<!-- Recipe Groups / Categories (Editorial Asymmetric Layout) -->
+<div class="space-y-10">
+<!-- Category Group 01 -->
+<section class="relative">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-1.5 h-6 bg-primary rounded-full"></div>
+<h3 class="font-headline text-xl text-on-surface">外婆的红烧肉</h3>
+</div>
+<span class="text-[10px] font-bold tracking-widest uppercase text-tertiary bg-tertiary-container px-2 py-0.5 rounded">Recipe</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Item Card -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:shadow-md transition-all border border-transparent hover:border-primary/5">
+<div class="flex items-center gap-4">
+<label class="relative flex items-center cursor-pointer">
+<input class="peer h-6 w-6 rounded-lg border-outline-variant text-primary focus:ring-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute opacity-0 peer-checked:opacity-100 text-white pointer-events-none text-sm left-1">check</span>
+</label>
+<div>
+<p class="font-medium text-on-surface group-has-[:checked]:line-through group-has-[:checked]:text-on-surface-variant transition-all">五花肉</p>
+<p class="text-xs text-on-surface-variant">500g, 肥瘦相间</p>
+</div>
+</div>
+<span class="text-primary font-noto-serif text-lg">01</span>
+</div>
+<!-- Item Card -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:shadow-md transition-all border border-transparent hover:border-primary/5">
+<div class="flex items-center gap-4">
+<label class="relative flex items-center cursor-pointer">
+<input class="peer h-6 w-6 rounded-lg border-outline-variant text-primary focus:ring-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute opacity-0 peer-checked:opacity-100 text-white pointer-events-none text-sm left-1">check</span>
+</label>
+<div>
+<p class="font-medium text-on-surface group-has-[:checked]:line-through group-has-[:checked]:text-on-surface-variant transition-all">鲜香菇</p>
+<p class="text-xs text-on-surface-variant">6-8 朵</p>
+</div>
+</div>
+<span class="text-primary font-noto-serif text-lg">02</span>
+</div>
+</div>
+</section>
+<!-- Category Group 02 (Asymmetric Shift) -->
+<section class="md:ml-12">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-1.5 h-6 bg-secondary rounded-full"></div>
+<h3 class="font-headline text-xl text-on-surface">清爽素食 (蔬果)</h3>
+</div>
+<span class="text-[10px] font-bold tracking-widest uppercase text-on-secondary-fixed-variant bg-secondary-container px-2 py-0.5 rounded">Category</span>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<!-- Item Card -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:shadow-md transition-all border border-transparent hover:border-primary/5">
+<div class="flex items-center gap-4">
+<label class="relative flex items-center cursor-pointer">
+<input checked="" class="peer h-6 w-6 rounded-lg border-outline-variant text-primary focus:ring-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute opacity-0 peer-checked:opacity-100 text-white pointer-events-none text-sm left-1">check</span>
+</label>
+<div>
+<p class="font-medium text-on-surface line-through text-on-surface-variant">有机小油菜</p>
+<p class="text-xs text-on-surface-variant">1 把, 约250g</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-secondary/40">eco</span>
+</div>
+<!-- Item Card -->
+<div class="group flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:shadow-md transition-all border border-transparent hover:border-primary/5">
+<div class="flex items-center gap-4">
+<label class="relative flex items-center cursor-pointer">
+<input class="peer h-6 w-6 rounded-lg border-outline-variant text-primary focus:ring-primary transition-all" type="checkbox"/>
+<span class="material-symbols-outlined absolute opacity-0 peer-checked:opacity-100 text-white pointer-events-none text-sm left-1">check</span>
+</label>
+<div>
+<p class="font-medium text-on-surface group-has-[:checked]:line-through group-has-[:checked]:text-on-surface-variant transition-all">圣女果</p>
+<p class="text-xs text-on-surface-variant">1 盒 (零食/沙拉用)</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary/40">shopping_basket</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Empty State / Add More Prompt -->
+<div class="mt-16 mb-12 flex flex-col items-center text-center p-8 bg-surface-container-low rounded-[2rem] border-2 border-dashed border-outline-variant/30">
+<div class="w-16 h-16 bg-surface-container-lowest rounded-full flex items-center justify-center mb-4 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl">post_add</span>
+</div>
+<h4 class="font-headline text-lg mb-1">还需要买点什么吗？</h4>
+<p class="text-sm text-on-surface-variant mb-6">点击下方添加新食材，或清除已购项。</p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-primary-dim transition-all shadow-lg active:scale-95">
+<span class="material-symbols-outlined text-sm">add</span> 添加食材
+                </button>
+<button class="bg-surface-container-highest text-on-surface px-6 py-3 rounded-xl font-semibold text-sm hover:bg-outline-variant/20 transition-all active:scale-95">
+                    清除已购
+                </button>
+</div>
+</div>
+</main>
+<!-- Share FAB Area -->
+<div class="fixed right-6 bottom-28 md:right-12 z-40">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-[0px_12px_32px_rgba(168,69,51,0.25)] flex items-center justify-center group active:scale-90 transition-all">
+<span class="material-symbols-outlined text-2xl group-hover:rotate-12 transition-transform">ios_share</span>
+</button>
+</div>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-safe h-20 bg-[#fffcf7]/90 backdrop-blur-xl z-50 border-t border-[#babaaf]/10 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)]">
+<a class="flex flex-col items-center justify-center text-[#6e6353] hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">食谱库</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#a84533] bg-[#a84533]/5 rounded-xl px-3 py-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">计划</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#6e6353] hover:text-[#a84533] transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">我的</span>
+</a>
+</nav>
+</body></html>

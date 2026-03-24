@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>食光记 - 首页</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-background": "#373831",
+                        "primary-dim": "#983a28",
+                        "surface-container": "#f6f4ec",
+                        "tertiary": "#6e6353",
+                        "primary-fixed": "#ffac9c",
+                        "surface": "#fffcf7",
+                        "on-surface-variant": "#64655c",
+                        "outline-variant": "#babaaf",
+                        "secondary": "#596859",
+                        "primary-container": "#ffac9c",
+                        "on-secondary-fixed-variant": "#596859",
+                        "surface-container-highest": "#eae9dd",
+                        "on-error-container": "#68001f",
+                        "on-tertiary-container": "#635949",
+                        "on-primary": "#ffffff",
+                        "background": "#fffcf7",
+                        "on-secondary-container": "#4f5e4f",
+                        "on-primary-container": "#721e10",
+                        "secondary-container": "#e4f5e2",
+                        "on-primary-fixed": "#550801",
+                        "inverse-surface": "#0e0e0c",
+                        "inverse-on-surface": "#9e9d98",
+                        "error-dim": "#770326",
+                        "secondary-dim": "#4d5c4d",
+                        "surface-container-high": "#f0eee4",
+                        "tertiary-fixed": "#feefda",
+                        "error-container": "#f76a80",
+                        "on-primary-fixed-variant": "#7e2718",
+                        "primary": "#a84533",
+                        "on-tertiary-fixed-variant": "#6e6353",
+                        "outline": "#818178",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#373831",
+                        "tertiary-container": "#feefda",
+                        "tertiary-fixed-dim": "#f0e0cc",
+                        "on-secondary-fixed": "#3d4c3d",
+                        "error": "#b3374e",
+                        "on-error": "#ffffff",
+                        "secondary-fixed": "#e4f5e2",
+                        "secondary-fixed-dim": "#d6e7d4",
+                        "primary-fixed-dim": "#ff9783",
+                        "on-tertiary-fixed": "#504738",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#fcf9f3",
+                        "surface-variant": "#eae9dd",
+                        "surface-tint": "#a84533",
+                        "surface-dim": "#e4e3d6",
+                        "on-secondary": "#ffffff",
+                        "surface-bright": "#fffcf7",
+                        "tertiary-dim": "#615747",
+                        "inverse-primary": "#f7816b"
+                    },
+                    fontFamily: {
+                        "headline": ["Noto Serif SC", "serif"],
+                        "body": ["Plus Jakarta Sans", "sans-serif"],
+                        "label": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrapbook-angle-1 { transform: rotate(-1.5deg); }
+        .scrapbook-angle-2 { transform: rotate(1.2deg); }
+        .font-noto-serif { font-family: 'Noto Serif SC', serif; }
+        .font-plus-jakarta { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#fffcf7]/80 dark:bg-stone-900/80 backdrop-blur-md flex justify-between items-center px-6 h-16 w-full">
+<div class="flex items-center gap-4">
+<button class="text-[#6e6353] dark:text-stone-400 hover:bg-[#fcf9f3] dark:hover:bg-stone-800 transition-colors p-2 rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-2xl font-bold text-[#a84533] dark:text-[#d66853] font-noto-serif tracking-tight">食光记</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="text-[#a84533] dark:text-[#d66853] hover:bg-[#fcf9f3] dark:hover:bg-stone-800 transition-colors p-2 rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</header>
+<main class="pt-20 pb-24 px-4 max-w-2xl mx-auto space-y-8">
+<!-- Weekly Menu Status Section -->
+<section class="relative overflow-hidden rounded-xl bg-surface-container-low p-6">
+<div class="relative z-10 flex justify-between items-end">
+<div class="space-y-1">
+<span class="text-secondary font-medium label-md uppercase tracking-wider">本周计划</span>
+<h2 class="text-3xl font-headline font-bold text-on-surface">已安排 3 顿餐食</h2>
+<p class="text-on-surface-variant text-sm">距离完成本周目标还差 2 顿</p>
+</div>
+<div class="bg-primary text-on-primary p-3 rounded-full flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -right-4 -top-4 opacity-10">
+<span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'wght' 100;">restaurant_menu</span>
+</div>
+</section>
+<!-- Latest Memories Feed Header -->
+<div class="flex items-baseline justify-between px-2">
+<h3 class="text-xl font-headline font-bold text-on-surface">时光锦囊</h3>
+<span class="text-primary font-medium text-sm underline underline-offset-4">查看全部</span>
+</div>
+<!-- Latest Memories Feed (Scrapbook Style) -->
+<div class="space-y-10">
+<!-- Memory Card 1 -->
+<article class="scrapbook-angle-1 transition-transform hover:rotate-0 duration-300">
+<div class="bg-surface-container-lowest p-4 shadow-[0px_12px_32px_rgba(55,56,49,0.06)] rounded-lg">
+<div class="relative aspect-[4/5] mb-6 overflow-hidden rounded-md">
+<img alt="Homemade cake" class="object-cover w-full h-full" data-alt="A fluffy homemade sponge cake on a wooden table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0rlpXH2nGgD6kwFb6rZu3aKsQCNJSGtGOzYF7vDatOJpsO4qkmlFTdVmUZSiilSpn2NH174o7PdMLrPJ1kRXYvSSlGXzIVRxJeMQnwrcgPgDVqSxsqgV_0GoHfJMkohWpfKz55V_n4oSyfryoaODj4G0sN2QxCOEg3j0adXMiexnICM8u0g7KWEATyQRN5vSUS4BayZuYF061ryz_pwh6Xw2SorKcASQoq2bEOya3zPzv4pI1-dhKQBDeb74UOlTL0mBOpSEBYm0"/>
+<div class="absolute top-3 right-3 bg-tertiary-container/90 backdrop-blur px-3 py-1 rounded-full scrapbook-angle-2">
+<span class="text-xs font-medium text-on-tertiary-container font-noto-serif">2023.10.24</span>
+</div>
+</div>
+<div class="px-2 space-y-3">
+<div class="flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary-dim/30"></span>
+<h4 class="text-lg font-headline font-bold text-on-surface">奶奶的生日蛋糕</h4>
+</div>
+<p class="text-on-surface-variant leading-relaxed text-sm italic">
+                            “第一次尝试古法海绵蛋糕，口感竟然如此蓬松！奶奶脸上的笑容比蛋糕还要甜。”
+                        </p>
+<div class="flex gap-2 pt-2">
+<span class="bg-secondary-container text-secondary text-[10px] px-2 py-0.5 rounded-full font-bold">#家传味道</span>
+<span class="bg-surface-container-highest text-tertiary text-[10px] px-2 py-0.5 rounded-full font-bold">#甜品</span>
+</div>
+</div>
+</div>
+</article>
+<!-- Memory Card 2 -->
+<article class="scrapbook-angle-2 transition-transform hover:rotate-0 duration-300 ml-4">
+<div class="bg-surface-container-lowest p-4 shadow-[0px_12px_32px_rgba(55,56,49,0.06)] rounded-lg">
+<div class="relative aspect-square mb-6 overflow-hidden rounded-md">
+<img alt="Fresh green salad" class="object-cover w-full h-full" data-alt="A vibrant green garden salad with colorful vegetables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZXGgie8jXbQTnOQbAXLjvzBoTPAD3JTywUN2o17sQ1bKsugMPe1vVe6vlfd7UpSOnoaLVPOrYq25BcVAMmNRSQJ3OYNrCUyGPKzH0iTa4348Cdrec4NBMR64ZIwEbIEyEDb5k4Shc35M47NcXHBjFwM0nhFpnom8wsg1hlPuV6Zay_bk83tHH50lQwMf9kA6wBi0QLAnhdmhk8A6Y9wlwvGT780p1ftr9R29iPQePE5603M2QAuqdfswoGwKUXPYsO20nzgZeP_Y"/>
+<div class="absolute top-3 right-3 bg-tertiary-container/90 backdrop-blur px-3 py-1 rounded-full -rotate-3">
+<span class="text-xs font-medium text-on-tertiary-container font-noto-serif">2023.10.21</span>
+</div>
+</div>
+<div class="px-2 space-y-3">
+<div class="flex items-center gap-2">
+<span class="w-8 h-[1px] bg-primary-dim/30"></span>
+<h4 class="text-lg font-headline font-bold text-on-surface">雨后初晴的田野沙拉</h4>
+</div>
+<p class="text-on-surface-variant leading-relaxed text-sm italic">
+                            “采摘了院子里最新鲜的薄荷和生菜，清脆的口感仿佛把整个秋天都装进了碗里。”
+                        </p>
+<div class="flex gap-2 pt-2">
+<span class="bg-secondary-container text-secondary text-[10px] px-2 py-0.5 rounded-full font-bold">#轻食</span>
+<span class="bg-surface-container-highest text-tertiary text-[10px] px-2 py-0.5 rounded-full font-bold">#自家园子</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-24 right-6 w-14 h-14 bg-primary text-on-primary rounded-full shadow-[0px_12px_32px_rgba(168,69,51,0.3)] flex items-center justify-center z-50 active:scale-90 transition-transform duration-200">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-safe h-20 bg-[#fffcf7]/90 dark:bg-stone-900/90 backdrop-blur-xl z-50 border-t border-[#babaaf]/10 shadow-[0px_-4px_16px_rgba(55,56,49,0.04)]">
+<!-- Home (Active) -->
+<a class="flex flex-col items-center justify-center text-[#a84533] dark:text-[#d66853] bg-[#a84533]/5 rounded-xl px-3 py-1 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">首页</span>
+</a>
+<!-- Recipes -->
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] dark:hover:text-[#d66853] transition-all" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">食谱库</span>
+</a>
+<!-- Planner -->
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] dark:hover:text-[#d66853] transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">计划</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-[#6e6353] dark:text-stone-500 hover:text-[#a84533] dark:hover:text-[#d66853] transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-plus-jakarta text-[11px] font-medium tracking-wide">我的</span>
+</a>
+</nav>
+</body></html>
