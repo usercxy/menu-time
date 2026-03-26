@@ -19,9 +19,10 @@
 ```text
 .
 ├─ prd.html                # PRD 导出稿
-├─ TODO.md                 # MVP 开发任务拆解
-├─ 需求文档.md              # 需求文档初版
-├─ 需求文档v2.md            # 需求文档迭代版
+├─ docs/                   # 项目文档
+│  ├─ 需求文档v2.md         # 需求文档迭代版
+│  ├─ frontend/            # 前端方案、路由、类型与 TODO
+│  └─ backend/             # 后端方案、接口、设计与 TODO
 └─ stitch_prd/             # 界面稿与页面原型
    ├─ home/
    ├─ recipe_library/
@@ -64,7 +65,7 @@ MVP 阶段默认约束：
 
 如果要从当前仓库继续往下推进，建议按下面顺序开展：
 
-1. 基于 `TODO.md` 冻结 MVP 范围。
+1. 基于 `docs/frontend/前端开发TODO.md` 和 `docs/backend/后端开发TODO.md` 冻结 MVP 范围。
 2. 确认数据模型与页面流转关系。
 3. 新建正式代码工程，例如 `app/`、`miniapp/` 或 `web/` 目录。
 4. 优先实现菜谱录入、版本管理、时光记录三条核心链路。
@@ -79,4 +80,3 @@ MVP 阶段默认约束：
 当前默认分支：
 
 - `main`
-
