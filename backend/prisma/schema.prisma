@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Household {
+  id             String          @id @default(uuid()) @db.Uuid
+  name           String          @db.VarChar(100)
+  status         String          @default("active") @db.VarChar(20)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  users          User[]
+  wechatAccounts WechatAccount[]
+  refreshTokens  RefreshToken[]
+
+  @@map("households")
+  @@index([status], map: "idx_households_status")
+}
+
+model User {
+  id             String          @id @default(uuid()) @db.Uuid
+  householdId    String          @map("household_id") @db.Uuid
+  email          String?         @db.VarChar(150)
+  nickname       String          @db.VarChar(50)
+  role           String          @default("admin") @db.VarChar(20)
+  status         String          @default("active") @db.VarChar(20)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  household      Household       @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  wechatAccounts WechatAccount[]
+  refreshTokens  RefreshToken[]
+
+  @@map("users")
+  @@index([householdId, status], map: "idx_users_household_status")
+}
+
+model WechatAccount {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  householdId String   @map("household_id") @db.Uuid
+  openId     String    @unique(map: "uq_wechat_accounts_open_id") @map("open_id") @db.VarChar(128)
+  unionId    String?   @map("union_id") @db.VarChar(128)
+  sessionKey String    @map("session_key") @db.VarChar(255)
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  household  Household @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("wechat_accounts")
+  @@index([householdId], map: "idx_wechat_accounts_household")
+  @@index([userId], map: "idx_wechat_accounts_user")
+}
+
+model RefreshToken {
+  id          String    @id @default(uuid()) @db.Uuid
+  tokenId     String    @unique(map: "uq_refresh_tokens_token_id") @map("token_id") @db.VarChar(64)
+  userId      String    @map("user_id") @db.Uuid
+  householdId String    @map("household_id") @db.Uuid
+  expiresAt   DateTime  @map("expires_at") @db.Timestamptz(6)
+  revokedAt   DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  household   Household @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+  @@index([userId, revokedAt], map: "idx_refresh_tokens_user_revoked")
+  @@index([expiresAt], map: "idx_refresh_tokens_expires_at")
+}
