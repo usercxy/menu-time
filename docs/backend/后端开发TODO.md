@@ -16,6 +16,40 @@
 - 每个阶段完成后，至少完成一次接口自测和一轮联调验证。
 - 表结构、接口路径、事务规则、工程分层约定以后端方案与三份补充文档为准，本清单主要负责“做什么、先做什么、做到什么程度算完成”。
 
+## 当前进度快照（2026-04-09）
+
+本次已按 `backend/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、Prisma schema、环境模板以及本地 `npm run typecheck` / `npm run lint` 结果，不含数据库 migration 实跑、接口集成测试和微信真链路验收。
+
+### 总体判断
+
+- 粗略完成度约为 **20% ~ 25%**。
+- **阶段 0** 已完成：工程骨架、环境校验、统一响应/错误、Prisma、日志、鉴权基础设施、健康检查都已落地。
+- **阶段 1** 部分完成：仅完成鉴权相关基础表 `households / users / wechat_accounts / refresh_tokens`，其余业务模型、migration、seed 尚未开始。
+- **阶段 2** 部分完成：微信登录、刷新、退出、当前会话 4 个接口已完成；分类/标签和家庭隔离查询注入尚未开始。
+- **阶段 3 ~ 10** 尚未进入实质开发，当前仅保留模块目录骨架或占位结构。
+
+### 验证记录
+
+- [x] `cd backend && npm install`
+- [x] `cd backend && npm run typecheck`
+- [x] `cd backend && npm run lint`
+
+### 当前阶段结论
+
+| 阶段 | 当前状态 | 说明 |
+| --- | --- | --- |
+| 阶段 0 | 已完成 | `src/app/api/v1`、`src/server` 分层、统一路由包装器、日志、错误处理、鉴权和健康检查均已存在 |
+| 阶段 1 | 部分完成 | 只有登录态相关 4 张表落在 Prisma schema，尚无 migration、seed 和业务域表 |
+| 阶段 2 | 部分完成 | 仅完成 auth 主链路，taxonomy 和 household 查询隔离还未实现 |
+| 阶段 3 | 未开始 | `recipes/` 目录只有 README，占位未进入业务实现 |
+| 阶段 4 | 未开始 | `moments/`、`media/` 目录只有 README，占位未进入业务实现 |
+| 阶段 5 | 未开始 | `plans/` 目录只有 README，占位未进入业务实现 |
+| 阶段 6 | 未开始 | `shopping/` 目录只有 README，占位未进入业务实现 |
+| 阶段 7 | 未开始 | `random/` 目录只有 README，占位未进入业务实现 |
+| 阶段 8 | 未开始 | 用户角色仍停留在 auth 基础字段，未扩展成员协作接口 |
+| 阶段 9 | 未开始 | 仅预留 pg-boss client/worker 骨架，未接入真实任务、Sentry 和审计日志 |
+| 阶段 10 | 未开始 | 仍未见导出、推荐、节气、营养等扩展预留字段或接口 |
+
 ## 默认约束
 
 - [ ] MVP 以单家庭、单管理员优先，但所有核心数据表统一保留 `household_id`。
@@ -37,25 +71,25 @@
 
 搭好后端工程骨架、配置体系、运行时约定和基础中间件，为后续业务开发提供稳定底座。
 
-- [ ] 初始化 Next.js 工程，采用 App Router，并建立 `app/api/v1` 路由结构。
-- [ ] 建立 `src/server/modules`、`src/server/lib`、`src/server/db` 的后端目录骨架。
-- [ ] 统一模块模板，约定 `service / repository / schema / mapper / types` 文件职责。
-- [ ] 配置 TypeScript、ESLint、路径别名、环境变量加载方式。
-- [ ] 建立 `env` 分层约定，区分本地开发、测试、生产所需变量。
-- [ ] 建立 `env` 模块并在启动阶段完成环境变量校验，禁止业务代码零散读取 `process.env`。
-- [ ] 接入 Prisma Client、数据库连接管理和基础事务封装。
-- [ ] 建立统一 API 响应格式、统一错误格式和错误码枚举。
-- [ ] 冻结分页列表统一结构为 `PageResult<T>`，包含 `items / page / pageSize / total / hasMore`。
-- [ ] 建立 Route Handler 包装器，统一处理 `requestId`、会话获取、参数校验和错误转换。
-- [ ] 增加请求级 `requestId` 注入和日志上下文透传。
-- [ ] 接入 Pino 结构化日志，并定义基础日志字段。
-- [ ] 建立全局错误处理和业务异常包装。
-- [ ] 接入微信登录链路，完成 `code2Session`、`openid` 映射、token 签发与刷新。
-- [ ] 如需兼容后续 Web 管理端，再单独评估 Auth.js，不作为当前小程序主鉴权依赖。
-- [ ] 封装当前 token 解析与 `household_id` 上下文获取 helper，避免业务代码重复解析。
-- [ ] 预留对象存储适配层，抽象上传签名、资源登记和 URL 生成能力。
-- [ ] 预留 pg-boss 任务队列初始化和 worker 启动结构。
-- [ ] 增加 `/api/health` 健康检查接口。
+- [x] 初始化 Next.js 工程，采用 App Router，并建立 `app/api/v1` 路由结构。
+- [x] 建立 `src/server/modules`、`src/server/lib`、`src/server/db` 的后端目录骨架。
+- [x] 统一模块模板，约定 `service / repository / schema / mapper / types` 文件职责。
+- [x] 配置 TypeScript、ESLint、路径别名、环境变量加载方式。
+- [x] 建立 `env` 分层约定，区分本地开发、测试、生产所需变量。
+- [x] 建立 `env` 模块并在启动阶段完成环境变量校验，禁止业务代码零散读取 `process.env`。
+- [x] 接入 Prisma Client、数据库连接管理和基础事务封装。
+- [x] 建立统一 API 响应格式、统一错误格式和错误码枚举。
+- [x] 冻结分页列表统一结构为 `PageResult<T>`，包含 `items / page / pageSize / total / hasMore`。
+- [x] 建立 Route Handler 包装器，统一处理 `requestId`、会话获取、参数校验和错误转换。
+- [x] 增加请求级 `requestId` 注入和日志上下文透传。
+- [x] 接入 Pino 结构化日志，并定义基础日志字段。
+- [x] 建立全局错误处理和业务异常包装。
+- [x] 接入微信登录链路，完成 `code2Session`、`openid` 映射、token 签发与刷新。
+- [x] 如需兼容后续 Web 管理端，再单独评估 Auth.js，不作为当前小程序主鉴权依赖。
+- [x] 封装当前 token 解析与 `household_id` 上下文获取 helper，避免业务代码重复解析。
+- [x] 预留对象存储适配层，抽象上传签名、资源登记和 URL 生成能力。
+- [x] 预留 pg-boss 任务队列初始化和 worker 启动结构。
+- [x] 增加 `/api/health` 健康检查接口。
 
 **完成标准**
 
@@ -69,7 +103,7 @@
 
 将技术方案中的核心实体完整落到 Prisma schema 和迁移文件中，固定后端主数据结构。
 
-- [ ] 定义 `households`、`users` 表及其 Prisma 模型。
+- [x] 定义 `households`、`users` 表及其 Prisma 模型。
 - [ ] 定义 `categories`、`tags` 表及软删除字段。
 - [ ] 定义 `media_assets` 统一媒体资源表。
 - [ ] 定义 `recipes` 主表，包含 `current_version_id`、封面信息、统计字段。
@@ -99,11 +133,11 @@
 
 完成最基础的身份识别、家庭隔离和主数据管理接口，为菜谱录入和筛选提供前置能力。
 
-- [ ] 实现 `POST /api/v1/auth/wechat-login` 接口。
-- [ ] 实现 `POST /api/v1/auth/refresh` 接口。
-- [ ] 实现退出登录接口。
-- [ ] 实现当前登录会话查询接口。
-- [ ] 为所有受保护 API 接入鉴权中间逻辑。
+- [x] 实现 `POST /api/v1/auth/wechat-login` 接口。
+- [x] 实现 `POST /api/v1/auth/refresh` 接口。
+- [x] 实现退出登录接口。
+- [x] 实现当前登录会话查询接口。
+- [x] 为所有受保护 API 接入鉴权中间逻辑。
 - [ ] 在数据查询层统一注入 `household_id` 范围限制。
 - [ ] 实现分类列表接口，支持排序输出。
 - [ ] 实现分类新建接口，校验家庭内名称唯一。

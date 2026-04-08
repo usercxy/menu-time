@@ -1,0 +1,12 @@
+{
+  "extends": ["taro/react"],
+  "ignorePatterns": ["dist", "node_modules"],
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "jsx-quotes": "off",
+    "react/jsx-curly-brace-presence": "off",
+    "react/jsx-tag-spacing": "off"
+  }
+}

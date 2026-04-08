@@ -1,0 +1,22 @@
+.root {
+  padding: 32px 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 12px 32px rgba(55, 56, 49, 0.06);
+  text-align: center;
+}
+
+.title {
+  display: block;
+  font-size: 28px;
+  font-weight: 700;
+  color: #373831;
+}
+
+.description {
+  display: block;
+  margin-top: 10px;
+  color: #64655c;
+  font-size: 22px;
+  line-height: 1.6;
+}

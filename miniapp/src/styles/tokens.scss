@@ -1,0 +1,53 @@
+:root {
+  /* Surface & Background */
+  --color-surface: #fffcf7;
+  --color-background: #fffcf7;
+  --color-on-background: #373831;
+  --color-on-surface: #373831;
+  --color-surface-variant: #eae9dd;
+  --color-on-surface-variant: #64655c;
+  
+  /* Containers */
+  --color-surface-container: #f6f4ec;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #fcf9f3;
+  --color-surface-container-high: #f0eee4;
+  --color-surface-container-highest: #eae9dd;
+  
+  /* Brand Colors */
+  --color-primary: #a84533;
+  --color-on-primary: #ffffff;
+  --color-primary-dim: #983a28;
+  --color-primary-container: #ffac9c;
+  --color-on-primary-container: #721e10;
+  --color-primary-fixed: #ffac9c;
+  --color-primary-fixed-dim: #ff9783;
+  --color-secondary: #596859;
+  --color-on-secondary: #ffffff;
+  --color-secondary-dim: #4d5c4d;
+  --color-secondary-container: #e4f5e2;
+  --color-on-secondary-container: #4f5e4f;
+  --color-tertiary: #6e6353;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-dim: #615747;
+  --color-tertiary-container: #feefda;
+  --color-on-tertiary-container: #635949;
+  
+  /* Outline & Others */
+  --color-outline: #818178;
+  --color-outline-variant: #babaaf;
+  --color-error: #b3374e;
+  --color-on-error: #ffffff;
+  
+  /* Shadows */
+  --shadow-soft: 0 12px 32px rgba(55, 56, 49, 0.06);
+  --shadow-floating: 0 18px 42px rgba(96, 69, 39, 0.12);
+  --shadow-scrapbook: 0px 12px 32px rgba(55, 56, 49, 0.06);
+  
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-card: 24px;
+  --radius-pill: 999px;
+}

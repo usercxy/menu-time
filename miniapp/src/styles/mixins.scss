@@ -1,0 +1,28 @@
+@mixin linen-card {
+  background: var(--color-surface-container-lowest);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
+}
+
+@mixin scrapbook-card {
+  background: var(--color-surface-container-lowest);
+  padding: 32px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-scrapbook);
+}
+
+@mixin section-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--color-on-surface);
+  font-family: "Noto Serif SC", serif;
+}
+
+@mixin headline {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+}
+
+@mixin body-font {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}

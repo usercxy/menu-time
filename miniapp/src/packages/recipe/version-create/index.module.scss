@@ -1,0 +1,214 @@
+.heroCard,
+.sectionCard {
+  padding: 36px 32px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-soft);
+}
+
+.heroCard {
+  background:
+    linear-gradient(135deg, rgba(168, 69, 51, 0.12), rgba(254, 239, 218, 0.4)),
+    rgba(255, 255, 255, 0.94);
+}
+
+.heroEyebrow {
+  display: block;
+  color: var(--color-secondary);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  display: block;
+  margin-top: 12px;
+  color: var(--color-primary);
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.heroDescription {
+  display: block;
+  margin-top: 10px;
+  color: var(--color-on-surface-variant);
+  font-size: 24px;
+  line-height: 1.7;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 26px;
+}
+
+.sectionHint {
+  color: var(--color-on-surface-variant);
+  font-size: 22px;
+}
+
+.sourceMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sourceBadge {
+  align-self: flex-start;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: rgba(89, 104, 89, 0.12);
+  color: var(--color-secondary);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.fieldStack {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.fieldBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fieldLabel {
+  color: var(--color-on-surface);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.textInput,
+.inlineInput,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px 26px;
+  border-radius: 22px;
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+  font-size: 26px;
+  line-height: 1.6;
+}
+
+.textarea {
+  min-height: 156px;
+}
+
+.chipList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.filterChip {
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: var(--color-surface-container-high);
+  color: var(--color-on-surface-variant);
+  font-size: 24px;
+}
+
+.filterChipActive {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 10px 24px rgba(168, 69, 51, 0.18);
+}
+
+.helpText {
+  color: var(--color-tertiary);
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+.rowHeader,
+.stepHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.rowAction,
+.repeaterAction {
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(168, 69, 51, 0.08);
+  color: var(--color-primary);
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.repeaterStack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.repeaterCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px;
+  border-radius: 24px;
+  background: var(--color-surface-container-low);
+}
+
+.repeaterIndex {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(168, 69, 51, 0.12);
+  color: var(--color-primary);
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inlineInput {
+  flex: 1;
+  padding: 18px 20px;
+  background: #fff;
+}
+
+.stepCard {
+  padding: 22px;
+  border-radius: 24px;
+  background: var(--color-surface-container-low);
+}
+
+.stepTitle {
+  color: var(--color-on-surface);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.errorText {
+  display: block;
+  padding: 20px 24px;
+  border-radius: 20px;
+  background: rgba(179, 55, 78, 0.1);
+  color: var(--color-error);
+  font-size: 22px;
+}
+
+.footerActions {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 16px;
+}
+
+.submitButton {
+  width: 100%;
+}
+
+.submitButtonDisabled {
+  opacity: 0.72;
+}

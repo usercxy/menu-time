@@ -1,0 +1,197 @@
+.calendarSection {
+  margin-bottom: 32px;
+}
+
+.calendarTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 0 8px;
+}
+
+.weekLabel {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--color-tertiary);
+  padding: 8px 24px;
+  background: var(--color-surface-container);
+  border-radius: 999px;
+}
+
+.dateList {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.dateItem {
+  flex-shrink: 0;
+  width: 112px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  background: var(--color-surface-container-high);
+  color: var(--color-on-surface-variant);
+  
+  &--active {
+    background: var(--color-primary);
+    color: var(--color-on-primary);
+    box-shadow: 0 16px 32px rgba(168, 69, 51, 0.2);
+  }
+}
+
+.dayName {
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.6;
+}
+
+.dayDate {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.randomSection {
+  margin-bottom: 48px;
+}
+
+.randomButton {
+  width: 100%;
+  padding: 40px;
+  background: var(--color-tertiary-container);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--color-tertiary-fixed-dim);
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.randomInfo {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.randomIcon {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: rgba(110, 99, 83, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.randomText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.randomTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-on-tertiary-container);
+}
+
+.randomSubtitle {
+  font-size: 24px;
+  color: var(--color-on-tertiary-container);
+  opacity: 0.7;
+}
+
+.arrowButton {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--color-on-tertiary-container);
+  color: var(--color-on-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.mealHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 8px;
+  margin-bottom: 24px;
+}
+
+.mealGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+.mealCard {
+  background: var(--color-surface-container-lowest);
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  height: 256px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(186, 186, 175, 0.1);
+}
+
+.mealCoverWrap {
+  width: 33.333%;
+  position: relative;
+}
+
+.mealTypeBadge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 4px 16px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.mealInfo {
+  flex: 1;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.mealTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-on-surface);
+  display: block;
+}
+
+.mealNote {
+  font-size: 24px;
+  color: var(--color-on-surface-variant);
+  margin-top: 8px;
+  display: block;
+}
+
+.mealEdit {
+  align-self: flex-end;
+  color: var(--color-primary-dim);
+  font-size: 32px;
+}

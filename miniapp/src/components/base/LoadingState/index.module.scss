@@ -1,0 +1,37 @@
+.root {
+  padding: 32px 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 32px rgba(55, 56, 49, 0.06);
+  text-align: center;
+}
+
+.dotRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(168, 69, 51, 0.22);
+}
+
+.title {
+  display: block;
+  margin-top: 14px;
+  font-size: 28px;
+  font-weight: 700;
+  color: #373831;
+}
+
+.description {
+  display: block;
+  margin-top: 10px;
+  color: #64655c;
+  font-size: 22px;
+  line-height: 1.6;
+}

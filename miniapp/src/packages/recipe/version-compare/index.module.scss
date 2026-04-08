@@ -1,0 +1,134 @@
+.summaryCard,
+.columnCard,
+.versionBadgeCard,
+.loadingCard {
+  padding: 32px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-soft);
+}
+
+.summaryCard {
+  background:
+    linear-gradient(135deg, rgba(168, 69, 51, 0.12), rgba(254, 239, 218, 0.42)),
+    rgba(255, 255, 255, 0.94);
+}
+
+.summaryEyebrow {
+  display: block;
+  color: var(--color-secondary);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.summaryText {
+  display: block;
+  margin-top: 12px;
+  color: var(--color-on-surface);
+  font-size: 30px;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.metricCard {
+  padding: 20px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.metricLabel {
+  display: block;
+  color: var(--color-on-surface-variant);
+  font-size: 20px;
+}
+
+.metricValue {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-primary);
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.tagSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.summaryMeta {
+  color: var(--color-tertiary);
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+.compareHeader {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.versionSide {
+  display: block;
+  color: var(--color-on-surface-variant);
+  font-size: 20px;
+}
+
+.versionName {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-primary);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.diffGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.detailBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.blockTitle {
+  color: var(--color-on-surface);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.blockBody,
+.listItem {
+  color: var(--color-on-surface-variant);
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.footerActions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.primaryAction {
+  width: 100%;
+}
+
+.primaryActionDisabled {
+  opacity: 0.72;
+}

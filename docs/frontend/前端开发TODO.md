@@ -4,12 +4,12 @@
 
 这是一份面向前端开发的实施清单，基于以下文档整理：
 
-- [前端技术方案](D:/AI/Menu%20Time/docs/frontend/前端技术方案.md)
-- [页面路由与跳转图](D:/AI/Menu%20Time/docs/frontend/页面路由与跳转图.md)
-- [接口类型定义与Mock数据清单](D:/AI/Menu%20Time/docs/frontend/接口类型定义与Mock数据清单.md)
-- [需求文档v2](D:/AI/Menu%20Time/docs/需求文档v2.md)
-- [后端开发TODO](D:/AI/Menu%20Time/docs/backend/后端开发TODO.md)
-- [API 接口清单](D:/AI/Menu%20Time/docs/backend/API%20接口清单.md)
+- [前端技术方案](./前端技术方案.md)
+- [页面路由与跳转图](./页面路由与跳转图.md)
+- [接口类型定义与Mock数据清单](./接口类型定义与Mock数据清单.md)
+- [需求文档v2](../需求文档v2.md)
+- [后端开发TODO](../backend/后端开发TODO.md)
+- [API 接口清单](../backend/API%20接口清单.md)
 
 目标是把前端技术方案进一步拆成可执行、可验收、可联调的任务列表，并尽量和后端阶段保持一致，方便并行开发与阶段联调。
 
@@ -17,6 +17,38 @@
 
 - 前端可以先基于 mock 和类型骨架推进页面与交互，不必完全阻塞在后端实现上。
 - 真接口联调顺序以“后端阶段完成一个能力域，前端就立即接入并关闭 mock”为主，避免长期双轨。
+
+## 当前进度快照（2026-04-09）
+
+本次已按 `miniapp/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、类型检查和构建结果，不含真机复测。
+
+### 总体判断
+
+- 粗略完成度约为 **65% ~ 70%**。
+- **阶段 0** 基本完成：工程、路由、请求层、类型层、mock、Provider、基础组件已落地。
+- **阶段 1** 已完成：登录初始化、session 管理、分类/标签字典、管理页和通用空/错/加载态组件都已落地。
+- **阶段 2** 已完成：菜谱库分页/筛选/视图切换、mock 菜谱创建、基础信息编辑、详情三段式 Tab、版本创建与对比主链路已跑通。
+- **阶段 3 ~ 7** 仍以预留路由和占位页为主，尚未进入真实业务交互阶段。
+
+### 验证记录
+
+- [x] `cd miniapp && npm run typecheck`
+- [x] `cd miniapp && npm run build:weapp`
+- [x] `cd miniapp && npm run lint`
+- [x] `cd miniapp && npm run stylelint`
+
+### 当前阶段结论
+
+| 阶段 | 当前状态 | 说明 |
+| --- | --- | --- |
+| 阶段 0 | 已完成 | 工程骨架、分包、请求层、类型层、mock、基础组件都已存在 |
+| 阶段 1 | 已完成 | 登录、session、分类/标签字典、管理页和通用状态组件已就绪 |
+| 阶段 2 | 已完成 | 菜谱库分页/视图切换、创建/编辑、详情 Tab、版本链路和跳转失效策略已补齐 |
+| 阶段 3 | 未开始 | 仅保留 `moment-edit` 占位页 |
+| 阶段 4 | 部分完成 | 首页和点菜台已接当前周 mock 数据，但周切换与增删改查未开始 |
+| 阶段 5 | 未开始 | 仅有购物清单入口和占位页 |
+| 阶段 6 | 未开始 | 仅有随机点菜入口和占位页 |
+| 阶段 7 | 未开始 | 仅有 `EmptyState` / `ConfirmDialog` 等基础组件，未进入收尾阶段 |
 
 ## 默认约束
 
@@ -58,18 +90,24 @@
 
 搭好小程序前端工程骨架、分包结构、请求层、类型层与 mock 体系，让后续业务开发可以并行推进。
 
-- [ ] 初始化 Taro 工程，建立 `miniapp/` 目录骨架。
-- [ ] 配置 TypeScript、ESLint、Prettier、Stylelint、路径别名。
-- [ ] 建立 `app.config.ts`、主包和三个分包结构：`recipe / planner / profile`。
-- [ ] 建立全局样式入口：`tokens.scss`、`mixins.scss`、`reset.scss`。
-- [ ] 建立全局路由常量与统一跳转工具。
-- [ ] 建立请求层封装，支持统一 header、错误处理、`requestId` 透出。
-- [ ] 建立 token 存储、注入、刷新和登出清理的基础能力。
-- [ ] 建立 `services/types` 目录，落首批通用类型和 `PageResult<T>`。
-- [ ] 建立 `mocks/` 目录和 mock 切换机制。
-- [ ] 建立 Query Client、Zustand store 和基础 Provider。
-- [ ] 建立基础通用组件骨架：`PageContainer`、`TopNavBar`、`EmptyState`、`ConfirmDialog`。
-- [ ] 配置真机调试、环境变量和开发环境 API 地址。
+- [x] 初始化 Taro 工程，建立 `miniapp/` 目录骨架。
+- [x] 配置 TypeScript、ESLint、Prettier、Stylelint、路径别名。
+- [x] 建立 `app.config.ts`、主包和三个分包结构：`recipe / planner / profile`。
+- [x] 建立全局样式入口：`tokens.scss`、`mixins.scss`、`reset.scss`。
+- [x] 建立全局路由常量与统一跳转工具。
+- [x] 建立请求层封装，支持统一 header、错误处理、`requestId` 透出。
+- [x] 建立 token 存储、注入、刷新和登出清理的基础能力。
+- [x] 建立 `services/types` 目录，落首批通用类型和 `PageResult<T>`。
+- [x] 建立 `mocks/` 目录和 mock 切换机制。
+- [x] 建立 Query Client、Zustand store 和基础 Provider。
+- [x] 建立基础通用组件骨架：`PageContainer`、`TopNavBar`、`EmptyState`、`ConfirmDialog`。
+- [x] 配置真机调试、环境变量和开发环境 API 地址。
+
+**当前代码状态（2026-04-09）**
+
+- `miniapp/src/app.config.ts`、`src/constants/routes.ts`、`src/utils/navigation.ts` 已完成主包/分包和统一跳转配置。
+- `src/services/request/client.ts`、`src/services/types/`、`src/mocks/`、`src/providers/AppProviders.tsx`、`src/store/session.ts` 已构成阶段 0 底座。
+- 代码层面已通过 `npm run typecheck` 与 `npm run build:weapp`；真机展示本次未复测，因此“完成标准”中的真机项仍视为待验证。
 
 **与后端协同**
 
@@ -92,18 +130,26 @@
 
 完成登录态初始化、全局会话管理和基础字典能力，并搭出首页、菜谱库、点菜台、我的的页面壳层。
 
-- [ ] 接入 `wx.login`，完成前端登录初始化流程。
-- [ ] 对接 `POST /api/v1/auth/wechat-login`、`POST /api/v1/auth/refresh`、`GET /api/v1/auth/session`。
-- [ ] 实现登录态恢复、token 过期刷新和失败回退策略。
-- [ ] 建立全局 `session` store 与 `useSessionQuery`。
-- [ ] 对接分类列表接口。
-- [ ] 对接标签列表接口。
-- [ ] 完成首页、菜谱库、点菜台、我的四个 tab 页壳层。
-- [ ] 完成“我的”页到分类管理、标签管理、设置页的导航。
-- [ ] 实现分类管理页基础列表与表单弹层。
-- [ ] 实现标签管理页基础列表与表单弹层。
-- [ ] 实现通用空态、加载态、错误态组件。
-- [ ] 完成列表筛选区和搜索区基础交互框架。
+- [x] 接入 `wx.login`，完成前端登录初始化流程。
+- [x] 对接 `POST /api/v1/auth/wechat-login`、`POST /api/v1/auth/refresh`、`GET /api/v1/auth/session`。
+- [x] 实现登录态恢复、token 过期刷新和失败回退策略。
+- [x] 建立全局 `session` store 与 `useSessionQuery`。
+- [x] 对接分类列表接口。
+- [x] 对接标签列表接口。
+- [x] 完成首页、菜谱库、点菜台、我的四个 tab 页壳层。
+- [x] 完成“我的”页到分类管理、标签管理、设置页的导航。
+- [x] 实现分类管理页基础列表与表单弹层。
+- [x] 实现标签管理页基础列表与表单弹层。
+- [x] 实现通用空态、加载态、错误态组件。
+- [x] 完成列表筛选区和搜索区基础交互框架。
+
+**当前代码状态（2026-04-09）**
+
+- `src/features/auth/bootstrap.tsx`、`src/features/auth/query.ts`、`src/store/session.ts`、`src/services/modules/auth.ts` 已形成启动登录、session 查询、token 恢复与 401 刷新重试基础链路。
+- `AppProviders` 启动时会优先恢复本地 token；若无 token，则在微信环境自动触发 `wx.login -> wechat-login`。
+- `src/components/base/EmptyState`、`src/components/base/LoadingState`、`src/components/base/ErrorState` 已补齐通用空/载入/错误态组件。
+- `src/pages/recipe-library/index.tsx` 已接分类筛选、标签筛选、分页和视图切换，分类/标签字典都已消费到菜谱库 UI。
+- `src/packages/profile/category-manage/index.tsx`、`src/packages/profile/tag-manage/index.tsx` 已补齐基础列表、新建/编辑弹层，并通过 mock 写接口打通保存后刷新。
 
 **与后端协同**
 
@@ -127,22 +173,31 @@
 
 打通菜谱库、菜谱创建、菜谱详情、新建版本、版本对比的前端主链路。
 
-- [ ] 实现菜谱库列表页。
-- [ ] 支持菜名搜索、分类筛选、标签筛选。
-- [ ] 对接菜谱列表分页。
-- [ ] 实现菜谱卡片组件与网格/列表展示切换。
-- [ ] 实现新建菜谱页。
-- [ ] 完成菜谱创建表单：名称、分类、标签、版本名、主料、步骤、小贴士。
-- [ ] 支持“选择现有分类/标签 + 临时新建”交互。
-- [ ] 实现编辑菜谱基础信息页。
-- [ ] 实现菜谱详情页顶部信息区与三 Tab 骨架。
-- [ ] 对接菜谱详情接口。
-- [ ] 对接版本列表接口。
-- [ ] 实现新建版本页，并默认回填源版本内容。
-- [ ] 对接版本详情接口。
-- [ ] 实现版本对比页，并展示差异摘要。
-- [ ] 对接“设为当前版本”操作。
-- [ ] 完成创建、更新、切换版本后的缓存失效和返回跳转。
+- [x] 实现菜谱库列表页。
+- [x] 支持菜名搜索、分类筛选、标签筛选。
+- [x] 对接菜谱列表分页。
+- [x] 实现菜谱卡片组件与网格/列表展示切换。
+- [x] 实现新建菜谱页。
+- [x] 完成菜谱创建表单：名称、分类、标签、版本名、主料、步骤、小贴士。
+- [x] 支持“选择现有分类/标签 + 临时新建”交互。
+- [x] 实现编辑菜谱基础信息页。
+- [x] 实现菜谱详情页顶部信息区与三 Tab 骨架。
+- [x] 对接菜谱详情接口。
+- [x] 对接版本列表接口。
+- [x] 实现新建版本页，并默认回填源版本内容。
+- [x] 对接版本详情接口。
+- [x] 实现版本对比页，并展示差异摘要。
+- [x] 对接“设为当前版本”操作。
+- [x] 完成创建、更新、切换版本后的缓存失效和返回跳转。
+
+**当前代码状态（2026-04-09）**
+
+- `src/pages/recipe-library/index.tsx` 已实现列表查询、搜索框、分类筛选、标签筛选、分页和本地视图切换；`src/components/recipe/RecipeCard` 已作为菜谱卡片展示组件落地。
+- `src/packages/recipe/edit/index.tsx` 已实现 mock 可用的新建菜谱表单，支持名称、分类、标签、版本名、主料、步骤、小贴士输入，并在保存后跳转详情页。
+- `src/packages/recipe/edit/index.tsx` 现已支持编辑模式，能够读取现有菜谱并通过 `PATCH /api/v1/recipes/:id` 更新基础信息。
+- `src/packages/recipe/version-create/index.tsx` 已实现基于来源版本回填的 mock 新建版本页，支持修改版本名、分类、标签、主料、步骤、小贴士并发布后回跳详情页。
+- `src/packages/recipe/detail/index.tsx` 已补齐顶部信息区、操作区和“做法 / 版本 / 时光轴”三 Tab 骨架，并在版本页中发起对比。
+- `src/packages/recipe/version-compare/index.tsx` 已实现差异摘要、双栏版本内容展示，并接上“设为当前版本”的 mock 操作。
 
 **与后端协同**
 
@@ -182,6 +237,11 @@
 - [ ] 完成上传失败、超张数、表单校验、保存成功回跳处理。
 - [ ] 新增时光记录后刷新首页和菜谱详情缓存。
 
+**当前代码状态（2026-04-09）**
+
+- `src/packages/recipe/moment-edit/index.tsx` 仍为占位页，图片上传、评分、日期、参与人输入尚未开始。
+- 首页当前“时光锦囊”区域实际消费的是菜谱 mock 列表，不是 `GET /api/v1/moments/latest` 的首页动态流。
+
 **与后端协同**
 
 - 对应后端阶段 4。
@@ -218,6 +278,12 @@
 - [ ] 首页展示“本周已规划 X 道菜”摘要并跳转点菜台。
 - [ ] 处理空周菜单、空餐次、周切换中的加载态和错误态。
 
+**当前代码状态（2026-04-09）**
+
+- `src/pages/home/index.tsx` 和 `src/pages/meal-planner/index.tsx` 已接入 `mealPlanService.getCurrentWeekPlan()` 的 mock 数据。
+- 点菜台页面已有展示型周视图和今日餐单，但周切换、按周查询、增删改查、排序都还没开始。
+- 当前已预留前往随机点菜和购物清单的入口，但尚未形成从菜谱详情加入周菜单的链路。
+
 **与后端协同**
 
 - 对应后端阶段 5。
@@ -250,6 +316,11 @@
 - [ ] 对接复制文本接口并接入剪贴板。
 - [ ] 对接分享图接口并实现处理中状态。
 - [ ] 处理“无菜单不可生成清单”“已有清单版本更新”等提示。
+
+**当前代码状态（2026-04-09）**
+
+- `src/packages/planner/shopping-list/index.tsx` 仍是占位页。
+- 点菜台页面已有购物清单入口，但还没有“生成清单”的业务动作和接口接入。
 
 **与后端协同**
 
@@ -284,6 +355,11 @@
 - [ ] 对空候选场景展示“放宽条件”提示。
 - [ ] 接入震动反馈和结果过渡动画。
 
+**当前代码状态（2026-04-09）**
+
+- `src/packages/planner/random-pick/index.tsx` 仍是占位页。
+- 点菜台页面已提供随机点菜入口，但随机 session、结果卡片、接受/跳过流程尚未开始实现。
+
 **与后端协同**
 
 - 对应后端阶段 7。
@@ -316,6 +392,11 @@
 - [ ] 真机验证安全区、导航栏、图片上传、剪贴板、震动反馈。
 - [ ] 准备演示数据和上线前走查清单。
 
+**当前代码状态（2026-04-08）**
+
+- 已有 `EmptyState`、`ConfirmDialog` 和基础页面容器，但还没有系统性覆盖到所有页面的空态、错误态和加载态。
+- token 401 刷新重试已在请求层实现，但权限差异、网络失败兜底、真机专项验证仍未开始。
+
 **与后端协同**
 
 - 对应后端阶段 8-9。
@@ -331,6 +412,13 @@
 - 能完成一次完整真机业务闭环演示。
 
 ## Test Plan
+
+### 当前构建与规范校验
+
+- [x] `cd miniapp && npm run typecheck`
+- [x] `cd miniapp && npm run build:weapp`
+- [x] `cd miniapp && npm run lint`
+- [x] `cd miniapp && npm run stylelint`
 
 ### 核心链路测试
 

@@ -1,0 +1,234 @@
+.heroCard,
+.sectionCard {
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: var(--shadow-soft);
+}
+
+.heroCard {
+  position: relative;
+}
+
+.heroImage {
+  width: 100%;
+  height: 460px;
+}
+
+.heroOverlay {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: -92px;
+  position: relative;
+  z-index: 1;
+  padding: 0 24px 24px;
+}
+
+.heroOverlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.24) 0%, rgba(255, 252, 247, 0.96) 38%);
+  backdrop-filter: blur(14px);
+}
+
+.heroTitle {
+  color: var(--color-on-surface);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1.3;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.heroDescription,
+.sectionHint,
+.slotSubtitle,
+.tipText,
+.stepContent {
+  color: var(--color-on-surface-variant);
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.heroMetaWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.heroPill,
+.heroPillSoft,
+.currentBadge,
+.compareAction,
+.tabItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.heroPill {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.heroPillSoft {
+  background: rgba(89, 104, 89, 0.12);
+  color: var(--color-secondary);
+}
+
+.statRow {
+  display: flex;
+  gap: 12px;
+}
+
+.statCard {
+  flex: 1;
+  padding: 18px 12px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.82);
+  text-align: center;
+}
+
+.statValue {
+  color: var(--color-primary);
+  font-size: 34px;
+  font-weight: 700;
+}
+
+.statLabel {
+  display: block;
+  margin-top: 6px;
+  color: var(--color-tertiary);
+  font-size: 20px;
+}
+
+.actionGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.actionCard,
+.slotCard,
+.versionRow,
+.stepCard {
+  display: flex;
+  gap: 16px;
+  padding: 22px 24px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-soft);
+}
+
+.actionCard,
+.versionRow {
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actionMeta,
+.versionMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.actionTitle,
+.slotTitle {
+  color: var(--color-on-surface);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.actionSubtitle,
+.inlineLink {
+  color: var(--color-on-surface-variant);
+  font-size: 22px;
+}
+
+.inlineLink {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.tabBar {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow-soft);
+}
+
+.tabItem {
+  flex: 1;
+  color: var(--color-on-surface-variant);
+}
+
+.tabItemActive {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.sectionCard {
+  padding: 32px;
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.stackList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.slotCard {
+  flex-direction: column;
+}
+
+.stepCard {
+  align-items: flex-start;
+}
+
+.stepIndex {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(168, 69, 51, 0.1);
+  color: var(--color-primary);
+  font-size: 24px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.tipText {
+  display: block;
+  margin-top: 18px;
+}
+
+.currentBadge {
+  background: rgba(89, 104, 89, 0.12);
+  color: var(--color-secondary);
+}
+
+.compareAction {
+  background: rgba(168, 69, 51, 0.08);
+  color: var(--color-primary);
+}

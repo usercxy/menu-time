@@ -1,0 +1,210 @@
+.filterHero,
+.filterSection,
+.resultSummaryCard {
+  padding: 32px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-soft);
+}
+
+.filterHero {
+  background:
+    radial-gradient(circle at top right, rgba(168, 69, 51, 0.14), transparent 36%),
+    linear-gradient(180deg, rgba(255, 249, 243, 0.96) 0%, rgba(255, 255, 255, 0.92) 100%);
+}
+
+.filterHeroTitle {
+  display: block;
+  margin-top: 14px;
+  color: var(--color-on-surface);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.45;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.filterSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.summaryPill,
+.clearAction,
+.paginationAction,
+.viewToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.summaryPill {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--color-secondary);
+}
+
+.clearAction {
+  background: rgba(168, 69, 51, 0.08);
+  color: var(--color-primary);
+}
+
+.searchSection {
+  margin-top: -8px;
+}
+
+.searchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 96px;
+  padding: 0 32px;
+  border-radius: 24px;
+  background: var(--color-surface-container);
+}
+
+.searchIcon {
+  font-size: 32px;
+  color: var(--color-outline);
+}
+
+.searchInput {
+  flex: 1;
+  margin-left: 20px;
+  background: transparent;
+  color: var(--color-on-surface);
+  font-size: 28px;
+}
+
+.filterHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.filterHint,
+.tagSectionLabel,
+.resultSummaryDescription {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-on-surface-variant);
+  font-size: 22px;
+}
+
+.viewSwitch {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.viewToggle {
+  background: rgba(89, 104, 89, 0.1);
+  color: var(--color-secondary);
+}
+
+.viewToggleActive {
+  background: var(--color-secondary);
+  color: #fff;
+}
+
+.categoryNav {
+  display: flex;
+  gap: 24px;
+  margin: 24px -32px 0;
+  padding: 0 32px 30px;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.categoryNav::-webkit-scrollbar {
+  display: none;
+}
+
+.categoryTab,
+.tagChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+}
+
+.categoryTab {
+  padding: 16px 40px;
+  background: var(--color-surface-container-high);
+  color: var(--color-on-surface-variant);
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.categoryTabActive {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  box-shadow: 0 8px 16px rgba(168, 69, 51, 0.2);
+}
+
+.tagSection {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.tagWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.tagChip {
+  padding: 14px 24px;
+  background: rgba(89, 104, 89, 0.1);
+  color: var(--color-secondary);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.tagChipActive {
+  background: var(--color-secondary);
+  color: #fff;
+  box-shadow: 0 8px 16px rgba(89, 104, 89, 0.2);
+}
+
+.resultSummaryTitle {
+  display: block;
+  color: var(--color-on-surface);
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.recipeGridList,
+.recipeGridCompact {
+  display: grid;
+  gap: 24px;
+}
+
+.recipeGridList {
+  grid-template-columns: 1fr;
+}
+
+.recipeGridCompact {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.paginationBar {
+  display: flex;
+  gap: 14px;
+}
+
+.paginationAction {
+  flex: 1;
+  background: rgba(168, 69, 51, 0.08);
+  color: var(--color-primary);
+}
+
+.paginationActionDisabled {
+  opacity: 0.42;
+}
