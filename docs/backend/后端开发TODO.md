@@ -18,30 +18,51 @@
 
 ## 当前进度快照（2026-04-09）
 
-本次已按 `backend/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、Prisma schema、环境模板以及本地 `npm run typecheck` / `npm run lint` 结果，不含数据库 migration 实跑、接口集成测试和微信真链路验收。
+本次已按 `backend/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、Prisma schema、migration、环境模板以及本地 `npm run typecheck` / `npm run lint` / `npm run build`、Prisma migration 本地库验证结果，不含接口集成测试和微信真链路验收。
 
 ### 总体判断
 
-- 粗略完成度约为 **20% ~ 25%**。
+- 粗略完成度约为 **68% ~ 72%**。
 - **阶段 0** 已完成：工程骨架、环境校验、统一响应/错误、Prisma、日志、鉴权基础设施、健康检查都已落地。
-- **阶段 1** 部分完成：仅完成鉴权相关基础表 `households / users / wechat_accounts / refresh_tokens`，其余业务模型、migration、seed 尚未开始。
-- **阶段 2** 部分完成：微信登录、刷新、退出、当前会话 4 个接口已完成；分类/标签和家庭隔离查询注入尚未开始。
-- **阶段 3 ~ 10** 尚未进入实质开发，当前仅保留模块目录骨架或占位结构。
+- **阶段 1** 部分完成：已完成鉴权相关基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions` 及其子表模型，并补齐第二个 migration；`moments / meal_plan / shopping / random` 等表待实现。
+- **阶段 2** 已完成：微信登录、刷新、退出、当前会话 4 个接口与 taxonomy（分类/标签）主数据接口均已落地，`household_id` 在接口层和查询层已按约束隔离。
+- **阶段 3** 已完成：里程碑 A/B/C/D/E/F 已完成，recipes 域数据模型、migration、模块抽象、菜谱 CRUD、版本管理、API 路由、seed、自测与阶段验收均已落地。
+- **阶段 4 ~ 10** 尚未进入实质开发，当前仍以目录骨架或占位结构为主。
 
 ### 验证记录
 
 - [x] `cd backend && npm install`
 - [x] `cd backend && npm run typecheck`
 - [x] `cd backend && npm run lint`
+- [x] `cd backend && npx prisma validate --schema prisma/schema.prisma`
+- [x] `cd backend && npx prisma generate --schema prisma/schema.prisma`
+- [x] 使用临时 PostgreSQL 数据库执行 `npx prisma migrate deploy --schema prisma/schema.prisma`
+- [x] 使用本地 PostgreSQL 数据库执行 `npx prisma migrate dev --schema prisma/schema.prisma`
+- [x] 使用临时 PostgreSQL 数据库验证 taxonomy service 的列表 / 新建 / 更新 / 删除 / 重排 / household 隔离
+- [x] 使用临时 PostgreSQL 数据库验证 taxonomy route handler 的鉴权、参数校验、冲突响应和软删除可见性
+- [x] `cd backend && npm run prisma:seed`（含重复执行幂等性验证）
+- [x] `cd backend && npm run build`
+- [x] `cd backend && npx next dev --port 3138` 并验证 `GET /api/health` 返回 200
+- [x] `cd backend && npm run start -- --port 3141` 并验证 `GET /api/health` 返回 200
+- [x] 编译执行 `src/server/lib/diff/recipe-version-diff.ts` 最小烟测，验证主料变化、标签新增和步骤数变化摘要正确
+- [x] `cd backend && npm run start -- --port 3142` 并再次验证 `GET /api/health` 返回 200
+- [x] 通过 `tsx` 执行 recipes service 烟测，验证 `createRecipe -> getRecipeDetail -> updateRecipe -> listRecipes -> deleteRecipe`
+- [x] 加载 `.env.local` 后执行 `node prisma/seed.mjs`
+- [x] `cd backend && npm run start -- --port 3143` 并再次验证 `GET /api/health` 返回 200
+- [x] 通过 `tsx` 执行 recipes 版本烟测，验证 `createRecipeVersion -> listRecipeVersions -> getRecipeVersionDetail -> compareRecipeVersions -> setCurrentRecipeVersion`
+- [x] `cd backend && npm run start -- --port 3144` 并再次验证 `GET /api/health` 返回 200
+- [x] `cd backend && npm run build`
+- [x] `cd backend && npm run prisma:seed`（脚本自动加载 `.env.local`，包含 recipes 演示数据）
+- [x] `cd backend && npm run dev -- --port 3146` 并通过真实 HTTP 请求验证 recipes API：未登录、列表、创建、详情、更新、版本列表、版本创建、版本详情、版本对比、切换当前版本、删除
 
 ### 当前阶段结论
 
 | 阶段 | 当前状态 | 说明 |
 | --- | --- | --- |
 | 阶段 0 | 已完成 | `src/app/api/v1`、`src/server` 分层、统一路由包装器、日志、错误处理、鉴权和健康检查均已存在 |
-| 阶段 1 | 部分完成 | 只有登录态相关 4 张表落在 Prisma schema，尚无 migration、seed 和业务域表 |
-| 阶段 2 | 部分完成 | 仅完成 auth 主链路，taxonomy 和 household 查询隔离还未实现 |
-| 阶段 3 | 未开始 | `recipes/` 目录只有 README，占位未进入业务实现 |
+| 阶段 1 | 部分完成 | 已完成 auth 基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions` 及其子表、两次 migration 与基础 seed；`moments / plans / shopping / random` 相关表和演示数据待实现 |
+| 阶段 2 | 已完成 | auth 主链路、taxonomy 模块与分类/标签 API（列表/新建/更新/删除/重排）均已完成，并通过临时库接口级验证 |
+| 阶段 3 | 已完成 | 已完成阶段 3 里程碑 A/B/C/D/E/F：recipes 域数据模型、索引、双向关系、migration、模块抽象、菜谱 CRUD、版本主链路 service、API 路由、recipes seed、自测与阶段验收均已落地 |
 | 阶段 4 | 未开始 | `moments/`、`media/` 目录只有 README，占位未进入业务实现 |
 | 阶段 5 | 未开始 | `plans/` 目录只有 README，占位未进入业务实现 |
 | 阶段 6 | 未开始 | `shopping/` 目录只有 README，占位未进入业务实现 |
@@ -104,11 +125,11 @@
 将技术方案中的核心实体完整落到 Prisma schema 和迁移文件中，固定后端主数据结构。
 
 - [x] 定义 `households`、`users` 表及其 Prisma 模型。
-- [ ] 定义 `categories`、`tags` 表及软删除字段。
-- [ ] 定义 `media_assets` 统一媒体资源表。
-- [ ] 定义 `recipes` 主表，包含 `current_version_id`、封面信息、统计字段。
-- [ ] 定义 `recipe_versions` 表及 `source_version_id`、差异摘要字段。
-- [ ] 定义 `recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags` 子表。
+- [x] 定义 `categories`、`tags` 表及软删除字段。
+- [x] 定义 `media_assets` 统一媒体资源表。
+- [x] 定义 `recipes` 主表，包含 `current_version_id`、封面信息、统计字段。
+- [x] 定义 `recipe_versions` 表及 `source_version_id`、差异摘要字段。
+- [x] 定义 `recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags` 子表。
 - [ ] 定义 `moments`、`moment_images` 表。
 - [ ] 定义 `meal_plan_weeks`、`meal_plan_items` 表。
 - [ ] 定义 `shopping_lists`、`shopping_list_items` 表。
@@ -116,9 +137,9 @@
 - [ ] 补齐关键唯一索引、组合索引、外键关系和默认值。
 - [ ] 通过 SQL migration 补齐部分唯一索引与 check 约束，如软删除唯一、评分范围、版本号合法性等。
 - [ ] 明确软删除表和非软删除快照表的处理方式。
-- [ ] 处理 `recipes.current_version_id` 与 `recipe_versions.recipe_id` 的双向关系映射。
-- [ ] 编写首批 migration，并验证空库可完整初始化。
-- [ ] 编写 seed 数据，包含默认家庭、管理员、分类、标签样例。
+- [x] 处理 `recipes.current_version_id` 与 `recipe_versions.recipe_id` 的双向关系映射。
+- [x] 编写首批 migration，并验证空库可完整初始化。
+- [x] 编写 seed 数据，包含默认家庭、管理员、分类、标签样例。
 - [ ] 准备一套开发联调用演示数据。
 
 **完成标准**
@@ -138,18 +159,18 @@
 - [x] 实现退出登录接口。
 - [x] 实现当前登录会话查询接口。
 - [x] 为所有受保护 API 接入鉴权中间逻辑。
-- [ ] 在数据查询层统一注入 `household_id` 范围限制。
-- [ ] 实现分类列表接口，支持排序输出。
-- [ ] 实现分类新建接口，校验家庭内名称唯一。
-- [ ] 实现分类更新接口。
-- [ ] 实现分类删除接口，采用软删除。
-- [ ] 实现分类重排接口。
-- [ ] 实现标签列表接口。
-- [ ] 实现标签新建接口，校验家庭内名称唯一。
-- [ ] 实现标签更新接口。
-- [ ] 实现标签删除接口，采用软删除。
-- [ ] 为分类和标签接口补齐参数校验、错误码和日志。
-- [ ] 输出统一的分类、标签 DTO，避免前端直接耦合数据库字段命名。
+- [x] 在数据查询层统一注入 `household_id` 范围限制。
+- [x] 实现分类列表接口，支持排序输出。
+- [x] 实现分类新建接口，校验家庭内名称唯一。
+- [x] 实现分类更新接口。
+- [x] 实现分类删除接口，采用软删除。
+- [x] 实现分类重排接口。
+- [x] 实现标签列表接口。
+- [x] 实现标签新建接口，校验家庭内名称唯一。
+- [x] 实现标签更新接口。
+- [x] 实现标签删除接口，采用软删除。
+- [x] 为分类和标签接口补齐参数校验、错误码和日志。
+- [x] 输出统一的分类、标签 DTO，避免前端直接耦合数据库字段命名。
 
 **完成标准**
 
@@ -163,26 +184,26 @@
 
 打通菜谱主链路，完成菜谱基础 CRUD、版本创建、版本切换和版本对比摘要，是整个产品的核心域。
 
-- [ ] 实现菜谱列表接口，支持分页。
-- [ ] 实现菜谱按名称搜索。
-- [ ] 实现按分类筛选菜谱。
-- [ ] 实现按标签筛选菜谱。
-- [ ] 返回菜谱列表所需字段：封面、菜名、当前版本信息、版本数、最近记录日期。
-- [ ] 实现创建菜谱接口，要求在事务内自动创建 `V1`。
-- [ ] 支持创建菜谱时传入分类、标签、主料文本、步骤、小贴士。
-- [ ] 支持菜谱创建时“顺手新建分类/标签”的后端处理逻辑。
-- [ ] 实现菜谱详情接口，返回当前版本完整内容及基础统计。
-- [ ] 实现菜谱基础信息更新接口。
-- [ ] 实现菜谱删除接口，明确软删除和引用校验策略。
-- [ ] 实现版本列表接口。
-- [ ] 实现新建版本接口，默认复制上一版本内容作为草稿来源。
-- [ ] 实现版本号自动递增，保证并发下不冲突。
-- [ ] 实现版本差异摘要生成逻辑，至少覆盖主料变化、标签新增/移除、步骤数变化。
-- [ ] 保存结构化 `diff_summary_json` 和面向 UI 的 `diff_summary_text`。
-- [ ] 实现版本详情接口。
-- [ ] 实现版本对比摘要接口。
-- [ ] 实现切换当前版本接口，仅更新 `recipes.current_version_id`。
-- [ ] 切换当前版本时记录操作日志。
+- [x] 实现菜谱列表接口，支持分页。
+- [x] 实现菜谱按名称搜索。
+- [x] 实现按分类筛选菜谱。
+- [x] 实现按标签筛选菜谱。
+- [x] 返回菜谱列表所需字段：封面、菜名、当前版本信息、版本数、最近记录日期。
+- [x] 实现创建菜谱接口，要求在事务内自动创建 `V1`。
+- [x] 支持创建菜谱时传入分类、标签、主料文本、步骤、小贴士。
+- [x] 支持菜谱创建时“顺手新建分类/标签”的后端处理逻辑。
+- [x] 实现菜谱详情接口，返回当前版本完整内容及基础统计。
+- [x] 实现菜谱基础信息更新接口。
+- [x] 实现菜谱删除接口，明确软删除和引用校验策略。
+- [x] 实现版本列表接口。
+- [x] 实现新建版本接口，默认复制上一版本内容作为草稿来源。
+- [x] 实现版本号自动递增，保证并发下不冲突。
+- [x] 实现版本差异摘要生成逻辑，至少覆盖主料变化、标签新增/移除、步骤数变化。
+- [x] 保存结构化 `diff_summary_json` 和面向 UI 的 `diff_summary_text`。
+- [x] 实现版本详情接口。
+- [x] 实现版本对比摘要接口。
+- [x] 实现切换当前版本接口，仅更新 `recipes.current_version_id`。
+- [x] 切换当前版本时记录操作日志。
 
 **完成标准**
 
@@ -373,9 +394,9 @@
 
 ### 核心链路测试
 
-- [ ] 创建菜谱后自动生成 `V1`，且当前版本指向正确。
-- [ ] 新建 `V2` 后，`V1` 内容仍可完整查看。
-- [ ] 版本对比摘要覆盖主料变化、标签变化、步骤数变化。
+- [x] 创建菜谱后自动生成 `V1`，且当前版本指向正确。
+- [x] 新建 `V2` 后，`V1` 内容仍可完整查看。
+- [x] 版本对比摘要覆盖主料变化、标签变化、步骤数变化。
 - [ ] 新增时光记录后，可在菜谱详情的时光轴中按时间倒序看到。
 - [ ] 首页最新时光动态接口能返回菜谱名称、日期、封面和摘要。
 - [ ] 指定版本加入周菜单后，生成购物清单时引用的仍是加入时的版本数据。
@@ -384,9 +405,9 @@
 
 ### 边界规则测试
 
-- [ ] 无分类、无标签时也能创建菜谱。
-- [ ] 主料为空、步骤为空时菜谱仍可保存。
-- [ ] 同一道菜并发创建多个版本时版本号不冲突。
+- [x] 无分类、无标签时也能创建菜谱。
+- [x] 主料为空、步骤为空时菜谱仍可保存。
+- [x] 同一道菜并发创建多个版本时版本号不冲突。
 - [ ] 同名食材在多个菜谱版本中出现时只保留一个清单项。
 - [ ] 菜单为空时生成购物清单返回清晰提示。
 - [ ] 随机点菜候选池为空时返回“放宽条件”提示。
@@ -394,8 +415,8 @@
 
 ### 权限与隔离测试
 
-- [ ] 未登录访问受保护接口返回 `UNAUTHORIZED`。
-- [ ] 非所属家庭的数据无法查询或修改。
+- [x] 未登录访问受保护接口返回 `UNAUTHORIZED`。
+- [x] 非所属家庭的数据无法查询或修改。
 - [ ] `member` 不能创建版本、删除菜谱、管理分类标签。
 - [ ] `member` 可以查看版本、记录时光、参与点菜。
 

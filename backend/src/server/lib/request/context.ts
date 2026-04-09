@@ -2,6 +2,8 @@ import "server-only";
 
 import { AsyncLocalStorage } from "node:async_hooks";
 
+import { AppError, errorCodes } from "@/server/lib/errors";
+
 export type RequestContext = {
   requestId: string;
   userId?: string;
@@ -30,4 +32,17 @@ export function assignRequestContext(partial: Partial<RequestContext>) {
   }
 
   Object.assign(current, partial);
+}
+
+export function requireRequestHouseholdId() {
+  const householdId = getRequestContext()?.householdId;
+
+  if (!householdId) {
+    throw new AppError("缺少家庭上下文", {
+      code: errorCodes.UNAUTHORIZED,
+      statusCode: 401,
+    });
+  }
+
+  return householdId;
 }

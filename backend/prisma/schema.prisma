@@ -12,46 +12,203 @@ model Household {
   name           String          @db.VarChar(100)
   status         String          @default("active") @db.VarChar(20)
   createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  categories     Category[]
+  mediaAssets    MediaAsset[]
+  recipes        Recipe[]
+  recipeVersions RecipeVersion[]
   users          User[]
   wechatAccounts WechatAccount[]
   refreshTokens  RefreshToken[]
+  tags           Tag[]
 
-  @@map("households")
   @@index([status], map: "idx_households_status")
+  @@map("households")
+}
+
+model Category {
+  id             String          @id @default(uuid()) @db.Uuid
+  householdId    String          @map("household_id") @db.Uuid
+  name           String          @db.VarChar(50)
+  sortOrder      Int             @default(0) @map("sort_order")
+  color          String?         @db.VarChar(20)
+  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt      DateTime?       @map("deleted_at") @db.Timestamptz(6)
+  household      Household       @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  recipeVersions RecipeVersion[]
+
+  @@index([householdId, sortOrder], map: "idx_categories_household_sort")
+  @@map("categories")
+}
+
+model Tag {
+  id                String             @id @default(uuid()) @db.Uuid
+  householdId       String             @map("household_id") @db.Uuid
+  name              String             @db.VarChar(50)
+  sortOrder         Int                @default(0) @map("sort_order")
+  createdAt         DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt         DateTime?          @map("deleted_at") @db.Timestamptz(6)
+  household         Household          @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  recipeVersionTags RecipeVersionTag[]
+
+  @@index([householdId, sortOrder], map: "idx_tags_household_sort")
+  @@map("tags")
 }
 
 model User {
-  id             String          @id @default(uuid()) @db.Uuid
-  householdId    String          @map("household_id") @db.Uuid
-  email          String?         @db.VarChar(150)
-  nickname       String          @db.VarChar(50)
-  role           String          @default("admin") @db.VarChar(20)
-  status         String          @default("active") @db.VarChar(20)
-  createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt      DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
-  household      Household       @relation(fields: [householdId], references: [id], onDelete: Restrict)
-  wechatAccounts WechatAccount[]
-  refreshTokens  RefreshToken[]
+  id                    String          @id @default(uuid()) @db.Uuid
+  householdId           String          @map("household_id") @db.Uuid
+  email                 String?         @db.VarChar(150)
+  nickname              String          @db.VarChar(50)
+  role                  String          @default("admin") @db.VarChar(20)
+  status                String          @default("active") @db.VarChar(20)
+  createdAt             DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdMediaAssets    MediaAsset[]    @relation("MediaAssetCreatedBy")
+  createdRecipes        Recipe[]        @relation("RecipeCreatedBy")
+  createdRecipeVersions RecipeVersion[] @relation("RecipeVersionCreatedBy")
+  household             Household       @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  wechatAccounts        WechatAccount[]
+  refreshTokens         RefreshToken[]
 
-  @@map("users")
   @@index([householdId, status], map: "idx_users_household_status")
+  @@map("users")
+}
+
+model MediaAsset {
+  id           String    @id @default(uuid()) @db.Uuid
+  householdId  String    @map("household_id") @db.Uuid
+  assetKey     String    @unique(map: "uq_media_assets_asset_key") @map("asset_key") @db.VarChar(255)
+  assetUrl     String    @map("asset_url") @db.VarChar(500)
+  mimeType     String    @map("mime_type") @db.VarChar(100)
+  sizeBytes    BigInt    @default(0) @map("size_bytes") @db.BigInt
+  width        Int?
+  height       Int?
+  purpose      String    @db.VarChar(30)
+  createdById  String    @map("created_by") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  household    Household @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  createdBy    User      @relation("MediaAssetCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  coverRecipes Recipe[]  @relation("RecipeCoverImage")
+
+  @@index([householdId, purpose, createdAt(sort: Desc)], map: "idx_media_assets_household_purpose")
+  @@map("media_assets")
+}
+
+model Recipe {
+  id               String          @id @default(uuid()) @db.Uuid
+  householdId      String          @map("household_id") @db.Uuid
+  name             String          @db.VarChar(120)
+  slug             String?         @db.VarChar(160)
+  currentVersionId String?         @unique(map: "uq_recipes_current_version_id") @map("current_version_id") @db.Uuid
+  coverImageId     String?         @map("cover_image_id") @db.Uuid
+  coverSource      String          @default("none") @map("cover_source") @db.VarChar(20)
+  latestMomentAt   DateTime?       @map("latest_moment_at") @db.Timestamptz(6)
+  latestCookedAt   DateTime?       @map("latest_cooked_at") @db.Date
+  versionCount     Int             @default(0) @map("version_count")
+  momentCount      Int             @default(0) @map("moment_count")
+  status           String          @default("active") @db.VarChar(20)
+  createdById      String          @map("created_by") @db.Uuid
+  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?       @map("deleted_at") @db.Timestamptz(6)
+  household        Household       @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  currentVersion   RecipeVersion?  @relation("RecipeCurrentVersion", fields: [currentVersionId], references: [id], onDelete: SetNull)
+  coverImage       MediaAsset?     @relation("RecipeCoverImage", fields: [coverImageId], references: [id], onDelete: SetNull)
+  createdBy        User            @relation("RecipeCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  versions         RecipeVersion[] @relation("RecipeVersions")
+
+  @@index([householdId, updatedAt(sort: Desc)], map: "idx_recipes_household_updated")
+  @@index([householdId, latestMomentAt(sort: Desc)], map: "idx_recipes_household_latest_moment")
+  @@map("recipes")
+}
+
+model RecipeVersion {
+  id               String                    @id @default(uuid()) @db.Uuid
+  recipeId         String                    @map("recipe_id") @db.Uuid
+  householdId      String                    @map("household_id") @db.Uuid
+  versionNumber    Int                       @map("version_number")
+  versionName      String?                   @map("version_name") @db.VarChar(100)
+  categoryId       String?                   @map("category_id") @db.Uuid
+  ingredientsText  String?                   @map("ingredients_text")
+  tips             String?
+  diffSummaryText  String?                   @map("diff_summary_text")
+  diffSummaryJson  Json?                     @map("diff_summary_json")
+  sourceVersionId  String?                   @map("source_version_id") @db.Uuid
+  isMajor          Boolean                   @default(false) @map("is_major")
+  createdById      String                    @map("created_by") @db.Uuid
+  createdAt        DateTime                  @default(now()) @map("created_at") @db.Timestamptz(6)
+  recipe           Recipe                    @relation("RecipeVersions", fields: [recipeId], references: [id], onDelete: Cascade)
+  household        Household                 @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  category         Category?                 @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  createdBy        User                      @relation("RecipeVersionCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  currentForRecipe Recipe?                   @relation("RecipeCurrentVersion")
+  sourceVersion    RecipeVersion?            @relation("RecipeVersionSource", fields: [sourceVersionId], references: [id], onDelete: SetNull)
+  derivedVersions  RecipeVersion[]           @relation("RecipeVersionSource")
+  steps            RecipeVersionStep[]
+  ingredients      RecipeVersionIngredient[]
+  tagLinks         RecipeVersionTag[]
+
+  @@unique([recipeId, versionNumber], map: "uq_recipe_versions_recipe_version")
+  @@index([recipeId, createdAt(sort: Desc)], map: "idx_recipe_versions_recipe_created")
+  @@map("recipe_versions")
+}
+
+model RecipeVersionStep {
+  id              String        @id @default(uuid()) @db.Uuid
+  recipeVersionId String        @map("recipe_version_id") @db.Uuid
+  sortOrder       Int           @default(0) @map("sort_order")
+  content         String
+  recipeVersion   RecipeVersion @relation(fields: [recipeVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([recipeVersionId, sortOrder], map: "uq_recipe_version_steps_order")
+  @@map("recipe_version_steps")
+}
+
+model RecipeVersionIngredient {
+  id              String        @id @default(uuid()) @db.Uuid
+  recipeVersionId String        @map("recipe_version_id") @db.Uuid
+  sortOrder       Int           @default(0) @map("sort_order")
+  rawText         String        @map("raw_text") @db.VarChar(200)
+  normalizedName  String?       @map("normalized_name") @db.VarChar(100)
+  amountText      String?       @map("amount_text") @db.VarChar(50)
+  unit            String?       @db.VarChar(20)
+  isSeasoning     Boolean       @default(false) @map("is_seasoning")
+  parseSource     String        @default("manual") @map("parse_source") @db.VarChar(20)
+  recipeVersion   RecipeVersion @relation(fields: [recipeVersionId], references: [id], onDelete: Cascade)
+
+  @@index([recipeVersionId, sortOrder], map: "idx_recipe_version_ingredients_version_sort")
+  @@index([normalizedName], map: "idx_recipe_version_ingredients_normalized")
+  @@map("recipe_version_ingredients")
+}
+
+model RecipeVersionTag {
+  recipeVersionId String        @map("recipe_version_id") @db.Uuid
+  tagId           String        @map("tag_id") @db.Uuid
+  recipeVersion   RecipeVersion @relation(fields: [recipeVersionId], references: [id], onDelete: Cascade)
+  tag             Tag           @relation(fields: [tagId], references: [id], onDelete: Restrict)
+
+  @@id([recipeVersionId, tagId])
+  @@index([tagId], map: "idx_recipe_version_tags_tag_id")
+  @@map("recipe_version_tags")
 }
 
 model WechatAccount {
-  id         String    @id @default(uuid()) @db.Uuid
-  userId     String    @map("user_id") @db.Uuid
-  householdId String   @map("household_id") @db.Uuid
-  openId     String    @unique(map: "uq_wechat_accounts_open_id") @map("open_id") @db.VarChar(128)
-  unionId    String?   @map("union_id") @db.VarChar(128)
-  sessionKey String    @map("session_key") @db.VarChar(255)
-  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt  DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
-  household  Household @relation(fields: [householdId], references: [id], onDelete: Restrict)
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @map("user_id") @db.Uuid
+  householdId String    @map("household_id") @db.Uuid
+  openId      String    @unique(map: "uq_wechat_accounts_open_id") @map("open_id") @db.VarChar(128)
+  unionId     String?   @map("union_id") @db.VarChar(128)
+  sessionKey  String    @map("session_key") @db.VarChar(255)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+  household   Household @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("wechat_accounts")
   @@index([householdId], map: "idx_wechat_accounts_household")
   @@index([userId], map: "idx_wechat_accounts_user")
+  @@map("wechat_accounts")
 }
 
 model RefreshToken {
@@ -65,7 +222,7 @@ model RefreshToken {
   household   Household @relation(fields: [householdId], references: [id], onDelete: Restrict)
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("refresh_tokens")
   @@index([userId, revokedAt], map: "idx_refresh_tokens_user_revoked")
   @@index([expiresAt], map: "idx_refresh_tokens_expires_at")
+  @@map("refresh_tokens")
 }
