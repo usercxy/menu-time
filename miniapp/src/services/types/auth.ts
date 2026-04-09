@@ -1,30 +1,32 @@
 export type UserRole = 'admin' | 'member'
 
-export interface SessionUserDTO {
-  id: string
+export interface SessionDTO {
+  userId: string
+  householdId: string
+  householdName: string
   nickname: string
   role: UserRole
-  householdId: string
-}
-
-export interface SessionDTO {
-  user: SessionUserDTO
 }
 
 export interface TokenBundleDTO {
   accessToken: string
   refreshToken: string
-  expiresIn: number
+  accessTokenExpiresIn: number
+  refreshTokenExpiresIn: number
 }
 
 export interface WechatLoginPayload {
   code: string
+  nickname?: string
 }
 
-export interface WechatLoginDTO extends TokenBundleDTO {
-  user: SessionUserDTO
+export interface AuthResultDTO {
+  session: SessionDTO
+  tokens: TokenBundleDTO
 }
 
 export interface RefreshTokenPayload {
   refreshToken: string
 }
+
+export type WechatLoginDTO = AuthResultDTO

@@ -3,19 +3,19 @@ import type { SessionDTO, TokenBundleDTO, WechatLoginDTO } from '@/services/type
 export const mockTokenBundle: TokenBundleDTO = {
   accessToken: 'mock-access-token',
   refreshToken: 'mock-refresh-token',
-  expiresIn: 60 * 60 * 24
+  accessTokenExpiresIn: 60 * 60,
+  refreshTokenExpiresIn: 60 * 60 * 24 * 30
 }
 
 export const mockSession: SessionDTO = {
-  user: {
-    id: 'user_001',
-    nickname: '林深见鹿',
-    role: 'admin',
-    householdId: 'household_lin'
-  }
+  userId: 'user_001',
+  householdId: 'household_lin',
+  householdName: '林家小馆',
+  nickname: '林深见鹿',
+  role: 'admin'
 }
 
 export const mockWechatLogin: WechatLoginDTO = {
-  ...mockTokenBundle,
-  user: mockSession.user
+  session: mockSession,
+  tokens: mockTokenBundle
 }

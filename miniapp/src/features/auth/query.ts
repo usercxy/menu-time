@@ -9,7 +9,7 @@ import { getTokenBundle, setTokenBundle } from '@/utils/token-storage'
 export const sessionQueryKey = ['auth', 'session'] as const
 
 export function ensureMockTokenBundle() {
-  if (envConfig.enableMock && !getTokenBundle()) {
+  if (envConfig.isMockScopeEnabled('auth') && !getTokenBundle()) {
     setTokenBundle(mockTokenBundle)
   }
 }
@@ -23,7 +23,8 @@ export function useSessionQuery() {
   const query = useQuery({
     queryKey: sessionQueryKey,
     queryFn: authService.getSession,
-    enabled: envConfig.enableMock || Boolean(tokenBundle?.accessToken || getTokenBundle()?.accessToken),
+    enabled:
+      envConfig.isMockScopeEnabled('auth') || Boolean(tokenBundle?.accessToken || getTokenBundle()?.accessToken),
     staleTime: 5 * 60_000
   })
 

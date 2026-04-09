@@ -1,8 +1,8 @@
 import { request } from '@/services/request/client'
 import type {
+  AuthResultDTO,
   RefreshTokenPayload,
   SessionDTO,
-  TokenBundleDTO,
   WechatLoginDTO,
   WechatLoginPayload
 } from '@/services/types/auth'
@@ -24,7 +24,7 @@ export const authService = {
     return response.data
   },
   async refresh(payload: RefreshTokenPayload) {
-    const response = await request<TokenBundleDTO>({
+    const response = await request<AuthResultDTO>({
       url: '/api/v1/auth/refresh',
       method: 'POST',
       auth: false,

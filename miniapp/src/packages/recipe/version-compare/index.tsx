@@ -10,12 +10,20 @@ import { redirectToRoute } from '@/utils/navigation'
 import { routes } from '@/constants/routes'
 import styles from './index.module.scss'
 
+const EMPTY_VERSIONS: { id: string; versionNumber: number; isCurrent: boolean }[] = []
+
 export default function VersionComparePage() {
   const router = useRouter()
   const recipeId = router.params.recipeId || ''
-  const baseVersionId = router.params.base || ''
-  const targetVersionId = router.params.target || ''
-  const hasParams = Boolean(recipeId && baseVersionId && targetVersionId)
+  const baseVersionNumber = Number(router.params.base || '')
+  const targetVersionNumber = Number(router.params.target || '')
+  const hasParams = Boolean(
+    recipeId &&
+      Number.isInteger(baseVersionNumber) &&
+      Number.isInteger(targetVersionNumber) &&
+      baseVersionNumber > 0 &&
+      targetVersionNumber > 0
+  )
 
   const detailQuery = useQuery({
     queryKey: ['recipe-detail', recipeId],
@@ -23,18 +31,8 @@ export default function VersionComparePage() {
     enabled: hasParams
   })
   const compareQuery = useQuery({
-    queryKey: ['recipe-compare', recipeId, baseVersionId, targetVersionId],
-    queryFn: () => recipeService.compareRecipeVersions(recipeId, baseVersionId, targetVersionId),
-    enabled: hasParams
-  })
-  const baseVersionQuery = useQuery({
-    queryKey: ['recipe-version-detail', recipeId, baseVersionId],
-    queryFn: () => recipeService.getRecipeVersionDetail(recipeId, baseVersionId),
-    enabled: hasParams
-  })
-  const targetVersionQuery = useQuery({
-    queryKey: ['recipe-version-detail', recipeId, targetVersionId],
-    queryFn: () => recipeService.getRecipeVersionDetail(recipeId, targetVersionId),
+    queryKey: ['recipe-compare', recipeId, baseVersionNumber, targetVersionNumber],
+    queryFn: () => recipeService.compareRecipeVersions(recipeId, baseVersionNumber, targetVersionNumber),
     enabled: hasParams
   })
   const versionsQuery = useQuery({
@@ -43,10 +41,28 @@ export default function VersionComparePage() {
     enabled: hasParams
   })
 
-  const currentVersion = useMemo(
-    () => versionsQuery.data?.find((version) => version.isCurrent) || null,
-    [versionsQuery.data]
+  const versions = versionsQuery.data?.items ?? EMPTY_VERSIONS
+  const currentVersion = useMemo(() => versions.find((version) => version.isCurrent) || null, [versions])
+  const baseVersionMeta = useMemo(
+    () => versions.find((version) => version.versionNumber === baseVersionNumber) || null,
+    [baseVersionNumber, versions]
   )
+  const targetVersionMeta = useMemo(
+    () => versions.find((version) => version.versionNumber === targetVersionNumber) || null,
+    [targetVersionNumber, versions]
+  )
+  const baseVersionId = compareQuery.data?.baseVersion.id || baseVersionMeta?.id || ''
+  const targetVersionId = compareQuery.data?.targetVersion.id || targetVersionMeta?.id || ''
+  const baseVersionQuery = useQuery({
+    queryKey: ['recipe-version-detail', recipeId, baseVersionId],
+    queryFn: () => recipeService.getRecipeVersionDetail(recipeId, baseVersionId),
+    enabled: hasParams && Boolean(baseVersionId)
+  })
+  const targetVersionQuery = useQuery({
+    queryKey: ['recipe-version-detail', recipeId, targetVersionId],
+    queryFn: () => recipeService.getRecipeVersionDetail(recipeId, targetVersionId),
+    enabled: hasParams && Boolean(targetVersionId)
+  })
 
   const setCurrentMutation = useMutation({
     mutationFn: () => recipeService.setCurrentRecipeVersion(recipeId, targetVersionId),
@@ -81,7 +97,7 @@ export default function VersionComparePage() {
   const compare = compareQuery.data
   const baseVersion = baseVersionQuery.data
   const targetVersion = targetVersionQuery.data
-  const isTargetCurrent = currentVersion?.id === targetVersionId
+  const isTargetCurrent = currentVersion?.versionNumber === targetVersionNumber
 
   return (
     <PageContainer title="版本对比" subtitle={`${recipeName} · 看看这次改了什么`} showBack>
@@ -226,7 +242,11 @@ export default function VersionComparePage() {
             </View>
           </View>
         </View>
-      ) : detailQuery.isLoading || compareQuery.isLoading || baseVersionQuery.isLoading || targetVersionQuery.isLoading ? (
+      ) : detailQuery.isLoading ||
+        compareQuery.isLoading ||
+        versionsQuery.isLoading ||
+        baseVersionQuery.isLoading ||
+        targetVersionQuery.isLoading ? (
         <View className={styles.loadingCard}>
           <Text className={styles.summaryMeta}>正在整理两个版本的差异...</Text>
         </View>

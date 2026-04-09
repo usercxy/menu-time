@@ -60,15 +60,16 @@ export default function RecipeEditPage() {
   })
 
   const hydrateForm = (detail: RecipeDetailDTO) => {
+    const currentVersion = detail.currentVersion
     setName(detail.name)
-    setVersionName(detail.currentVersion.versionName || `V${detail.currentVersion.versionNumber}`)
-    setSelectedCategoryId(detail.currentVersion.category?.id || null)
-    setSelectedTagIds(detail.currentVersion.tags.map((tag) => tag.id))
+    setVersionName(currentVersion?.versionName || (currentVersion ? `V${currentVersion.versionNumber}` : ''))
+    setSelectedCategoryId(currentVersion?.category?.id || null)
+    setSelectedTagIds(currentVersion?.tags.map((tag) => tag.id) || [])
     setNewCategoryName('')
     setNewTagNamesInput('')
-    setIngredients(detail.ingredients.length ? detail.ingredients.map((item) => item.rawText) : [''])
-    setSteps(detail.steps.length ? detail.steps.map((item) => item.content) : [''])
-    setTips(detail.tips || '')
+    setIngredients(currentVersion?.ingredients.length ? currentVersion.ingredients.map((item) => item.rawText) : [''])
+    setSteps(currentVersion?.steps.length ? currentVersion.steps.map((item) => item.content) : [''])
+    setTips(currentVersion?.tips || '')
     setFormError('')
   }
 
@@ -323,21 +324,21 @@ export default function RecipeEditPage() {
                     <Text className={styles.previewStatLabel}>版本数</Text>
                   </View>
                   <View className={styles.previewStat}>
-                    <Text className={styles.previewStatValue}>{detail.ingredients.length}</Text>
+                    <Text className={styles.previewStatValue}>{detail.currentVersion?.ingredients.length || 0}</Text>
                     <Text className={styles.previewStatLabel}>主料行数</Text>
                   </View>
                   <View className={styles.previewStat}>
-                    <Text className={styles.previewStatValue}>{detail.steps.length}</Text>
+                    <Text className={styles.previewStatValue}>{detail.currentVersion?.steps.length || 0}</Text>
                     <Text className={styles.previewStatLabel}>步骤数</Text>
                   </View>
                 </View>
                 <View className={styles.chipList}>
-                  {detail.currentVersion.category ? (
+                  {detail.currentVersion?.category ? (
                     <View className={styles.filterChip}>
                       <Text>{detail.currentVersion.category.name}</Text>
                     </View>
                   ) : null}
-                  {detail.currentVersion.tags.map((tag) => (
+                  {(detail.currentVersion?.tags || []).map((tag) => (
                     <View className={styles.filterChip} key={tag.id}>
                       <Text>#{tag.name}</Text>
                     </View>

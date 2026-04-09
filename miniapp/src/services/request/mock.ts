@@ -45,7 +45,7 @@ interface MockRoute {
 const routes: MockRoute[] = [
   { method: 'GET', matcher: /^\/api\/v1\/auth\/session$/, handler: () => mockSession },
   { method: 'POST', matcher: /^\/api\/v1\/auth\/wechat-login$/, handler: () => mockWechatLogin },
-  { method: 'POST', matcher: /^\/api\/v1\/auth\/refresh$/, handler: () => mockTokenBundle },
+  { method: 'POST', matcher: /^\/api\/v1\/auth\/refresh$/, handler: () => ({ session: mockSession, tokens: mockTokenBundle }) },
   { method: 'POST', matcher: /^\/api\/v1\/auth\/logout$/, handler: () => ({ success: true }) },
   { method: 'GET', matcher: /^\/api\/v1\/categories$/, handler: () => getMockCategories() },
   {
@@ -97,20 +97,20 @@ const routes: MockRoute[] = [
     matcher: /^\/api\/v1\/recipes\/[^/]+\/compare$/,
     handler: ({ url, data }) => {
       const segments = url.split('/')
-      const payload = (data || {}) as { base?: string; target?: string }
+      const payload = (data || {}) as { base?: number; target?: number }
       return getMockRecipeCompare(
         segments[4] || 'recipe_braised_pork',
-        payload.base || '',
-        payload.target || ''
+        payload.base || 1,
+        payload.target || 1
       )
     }
   },
   {
     method: 'GET',
     matcher: /^\/api\/v1\/recipes\/[^/]+\/versions$/,
-    handler: ({ url }) => {
+    handler: ({ url, data }) => {
       const segments = url.split('/')
-      return getMockRecipeVersions(segments[4] || 'recipe_braised_pork')
+      return getMockRecipeVersions(segments[4] || 'recipe_braised_pork', (data || {}) as { page?: number; pageSize?: number })
     }
   },
   {
@@ -157,7 +157,7 @@ export interface MockResponse<T> {
 }
 
 export async function resolveMockResponse<T>(context: MockContext): Promise<MockResponse<T> | null> {
-  if (!envConfig.enableMock) {
+  if (!envConfig.enableMock || !envConfig.shouldMockPath(context.url)) {
     return null
   }
 

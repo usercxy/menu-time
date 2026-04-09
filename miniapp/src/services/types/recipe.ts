@@ -47,7 +47,7 @@ export interface RecipeListItemDTO {
   id: string
   name: string
   coverImageUrl?: string
-  currentVersion: RecipeVersionBriefDTO
+  currentVersion: RecipeVersionBriefDTO | null
   versionCount: number
   momentCount: number
   latestMomentAt?: string
@@ -57,7 +57,7 @@ export interface RecipeListItemDTO {
 export interface GetRecipesQuery extends PaginationQuery {
   keyword?: string
   categoryId?: string
-  tagId?: string
+  tagIds?: string[]
 }
 
 export interface CreateRecipePayload {
@@ -129,14 +129,16 @@ export interface CompareVersionsDTO {
 export interface RecipeDetailDTO {
   id: string
   name: string
-  story: string
+  slug?: string | null
   coverImageUrl?: string
+  coverSource?: string
   versionCount: number
   momentCount: number
-  currentVersion: RecipeVersionDetailDTO
-  ingredients: IngredientLineDTO[]
-  steps: RecipeStepDTO[]
-  tips?: string
+  latestMomentAt?: string | null
+  latestCookedAt?: string | null
+  status?: 'active' | 'archived' | string
+  currentVersion: RecipeVersionDetailDTO | null
 }
 
 export type RecipeListResultDTO = PageResult<RecipeListItemDTO>
+export type RecipeVersionListResultDTO = PageResult<RecipeVersionListItemDTO>

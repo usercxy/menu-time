@@ -8,8 +8,14 @@ export type RecipeVersionComparableStep = {
   content: string;
 };
 
+export type RecipeVersionComparableIngredient = {
+  sortOrder?: number;
+  rawText: string;
+};
+
 export type RecipeVersionComparableSnapshot = {
   ingredientsText?: string | null;
+  ingredients?: RecipeVersionComparableIngredient[];
   tags?: RecipeVersionComparableTag[];
   steps?: RecipeVersionComparableStep[];
 };
@@ -36,8 +42,25 @@ function normalizeTagNames(tags?: RecipeVersionComparableTag[]) {
   );
 }
 
+function normalizeIngredients(ingredients?: RecipeVersionComparableIngredient[]) {
+  return (ingredients ?? [])
+    .map((ingredient) => ingredient.rawText.trim())
+    .filter(Boolean)
+    .join("\n");
+}
+
 function normalizeSteps(steps?: RecipeVersionComparableStep[]) {
-  return (steps ?? []).filter((step) => step.content.trim().length > 0);
+  return (steps ?? [])
+    .map((step) => ({
+      sortOrder: step.sortOrder ?? 0,
+      content: step.content.trim(),
+    }))
+    .filter((step) => step.content.length > 0)
+    .sort(
+      (left, right) =>
+        left.sortOrder - right.sortOrder ||
+        left.content.localeCompare(right.content, "zh-CN"),
+    );
 }
 
 export function buildRecipeVersionDiffSummary(input: {
@@ -46,7 +69,11 @@ export function buildRecipeVersionDiffSummary(input: {
 }): RecipeVersionDiffSummaryJson {
   const baseIngredientsText = normalizeText(input.base?.ingredientsText);
   const targetIngredientsText = normalizeText(input.target.ingredientsText);
-  const ingredientsChanged = baseIngredientsText !== targetIngredientsText;
+  const baseIngredientsList = normalizeIngredients(input.base?.ingredients);
+  const targetIngredientsList = normalizeIngredients(input.target.ingredients);
+  const ingredientsChanged =
+    baseIngredientsText !== targetIngredientsText ||
+    baseIngredientsList !== targetIngredientsList;
 
   const baseTagNames = normalizeTagNames(input.base?.tags);
   const targetTagNames = normalizeTagNames(input.target.tags);
@@ -55,6 +82,9 @@ export function buildRecipeVersionDiffSummary(input: {
 
   const stepCountBefore = normalizeSteps(input.base?.steps).length;
   const stepCountAfter = normalizeSteps(input.target.steps).length;
+  const stepContentChanged =
+    JSON.stringify(normalizeSteps(input.base?.steps)) !==
+    JSON.stringify(normalizeSteps(input.target.steps));
 
   const summaryParts: string[] = [];
 
@@ -72,10 +102,12 @@ export function buildRecipeVersionDiffSummary(input: {
 
   if (stepCountBefore !== stepCountAfter) {
     summaryParts.push(`步骤数由 ${stepCountBefore} 步调整为 ${stepCountAfter} 步`);
+  } else if (stepContentChanged) {
+    summaryParts.push("步骤内容有调整");
   }
 
   const summary =
-    summaryParts.length > 0 ? summaryParts.join("；") : "未检测到主料、标签和步骤数变化";
+    summaryParts.length > 0 ? summaryParts.join("；") : "未检测到主料、标签和步骤变化";
 
   return {
     ingredientsChanged,

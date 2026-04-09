@@ -338,11 +338,13 @@ export async function resolveRecipeTaxonomyReferences(
 
 export function buildRecipeVersionComparableSnapshot(input: {
   ingredientsText?: string | null;
+  ingredients?: RecipeIngredientWriteInput[];
   steps?: RecipeStepWriteInput[];
   tagDtos?: { id: string; name: string }[];
 }): RecipeVersionComparableSnapshot {
   return {
     ingredientsText: normalizeText(input.ingredientsText),
+    ingredients: input.ingredients ?? [],
     steps: input.steps ?? [],
     tags: input.tagDtos ?? [],
   };
@@ -420,6 +422,7 @@ export function buildRecipeVersionWriteInput(input: {
   const ingredients = normalizeRecipeIngredients(input.data.ingredients);
   const comparableSnapshot = buildRecipeVersionComparableSnapshot({
     ingredientsText: input.data.ingredientsText,
+    ingredients,
     steps,
     tagDtos: input.taxonomy.tagDtos,
   });

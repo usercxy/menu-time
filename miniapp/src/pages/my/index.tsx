@@ -29,7 +29,7 @@ export default function MyPage() {
             </View>
           </View>
           <View>
-            <Text className={styles.nickName}>{sessionQuery.data?.user.nickname || '林深见鹿'}</Text>
+            <Text className={styles.nickName}>{sessionQuery.data?.nickname || '林深见鹿'}</Text>
             <Text className={styles.motto}>传承家味，留存食光</Text>
             <View className={styles.familyBadge}>
               <Text>👨‍👩‍👧‍👦 林氏家族核心成员</Text>

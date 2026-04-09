@@ -37,11 +37,10 @@ export default function RecipeDetailPage() {
   })
 
   const detail = detailQuery.data
-  const versions = versionsQuery.data || []
-  const currentVersionLabel = detail
-    ? `V${detail.currentVersion.versionNumber}${
-        detail.currentVersion.versionName ? ` · ${detail.currentVersion.versionName}` : ''
-      }`
+  const currentVersion = detail?.currentVersion
+  const versions = versionsQuery.data?.items || []
+  const currentVersionLabel = currentVersion
+    ? `V${currentVersion.versionNumber}${currentVersion.versionName ? ` · ${currentVersion.versionName}` : ''}`
     : '当前版本'
 
   const tabs = useMemo(
@@ -81,17 +80,19 @@ export default function RecipeDetailPage() {
           <View className={styles.heroOverlay}>
             <Text className="eyebrow">Recipe Archive</Text>
             <Text className={styles.heroTitle}>{detail.name}</Text>
-            <Text className={styles.heroDescription}>{detail.story}</Text>
+            <Text className={styles.heroDescription}>
+              {currentVersion?.diffSummaryText || detail.slug || '把这道菜的版本和回忆整理成册。'}
+            </Text>
             <View className={styles.heroMetaWrap}>
               <View className={styles.heroPill}>
                 <Text>{currentVersionLabel}</Text>
               </View>
-              {detail.currentVersion.category ? (
+              {currentVersion?.category ? (
                 <View className={styles.heroPillSoft}>
-                  <Text>{detail.currentVersion.category.name}</Text>
+                  <Text>{currentVersion.category.name}</Text>
                 </View>
               ) : null}
-              {detail.currentVersion.tags.map((tag) => (
+              {(currentVersion?.tags || []).map((tag) => (
                 <View className={styles.heroPillSoft} key={tag.id}>
                   <Text>#{tag.name}</Text>
                 </View>
@@ -107,7 +108,7 @@ export default function RecipeDetailPage() {
                 <Text className={styles.statLabel}>食光记录</Text>
               </View>
               <View className={styles.statCard}>
-                <Text className={styles.statValue}>{detail.steps.length}</Text>
+                <Text className={styles.statValue}>{currentVersion?.steps.length || 0}</Text>
                 <Text className={styles.statLabel}>做法步骤</Text>
               </View>
             </View>
@@ -125,10 +126,12 @@ export default function RecipeDetailPage() {
           <View
             className={styles.actionCard}
             onClick={() =>
-              navigateToRoute(routes.versionCreate, {
-                recipeId,
-                sourceVersionId: detail.currentVersion.id
-              })
+              currentVersion
+                ? navigateToRoute(routes.versionCreate, {
+                    recipeId,
+                    sourceVersionId: currentVersion.id
+                  })
+                : undefined
             }
           >
             <View className={styles.actionMeta}>
@@ -166,7 +169,7 @@ export default function RecipeDetailPage() {
                 <Text className={styles.sectionHint}>当前展示的是当前版本的食材拆解。</Text>
               </View>
               <View className={styles.stackList}>
-                {detail.ingredients.map((ingredient) => (
+                {(currentVersion?.ingredients || []).map((ingredient) => (
                   <View className={styles.slotCard} key={ingredient.rawText}>
                     <Text className={styles.slotTitle}>{ingredient.normalizedName || ingredient.rawText}</Text>
                     <Text className={styles.slotSubtitle}>{ingredient.rawText}</Text>
@@ -181,7 +184,7 @@ export default function RecipeDetailPage() {
                 <Text className={styles.sectionHint}>步骤顺序跟随当前版本内容。</Text>
               </View>
               <View className={styles.stackList}>
-                {detail.steps.map((step) => (
+                {(currentVersion?.steps || []).map((step) => (
                   <View className={styles.stepCard} key={step.sortOrder}>
                     <View className={styles.stepIndex}>
                       <Text>{step.sortOrder}</Text>
@@ -192,10 +195,10 @@ export default function RecipeDetailPage() {
               </View>
             </View>
 
-            {detail.tips ? (
+            {currentVersion?.tips ? (
               <View className={styles.sectionCard}>
                 <Text className="section-title">小贴士</Text>
-                <Text className={styles.tipText}>{detail.tips}</Text>
+                <Text className={styles.tipText}>{currentVersion.tips}</Text>
               </View>
             ) : null}
           </View>
@@ -240,8 +243,8 @@ export default function RecipeDetailPage() {
                         onClick={() =>
                           navigateToRoute(routes.versionCompare, {
                             recipeId,
-                            base: version.id,
-                            target: detail.currentVersion.id
+                            base: String(version.versionNumber),
+                            target: String(currentVersion?.versionNumber || 0)
                           })
                         }
                       >

@@ -60,7 +60,7 @@ export default function RecipeLibraryPage() {
       recipeService.getRecipes({
         keyword,
         categoryId: activeCategory || undefined,
-        tagId: activeTag || undefined,
+        tagIds: activeTag ? [activeTag] : undefined,
         page,
         pageSize: PAGE_SIZE
       })

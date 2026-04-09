@@ -12,10 +12,10 @@ import type {
   RecipeListItemDTO,
   RecipeStepDTO,
   RecipeTagDTO,
+  RecipeVersionListResultDTO,
   UpdateRecipePayload,
   VersionDiffSummaryDTO,
-  RecipeVersionDetailDTO,
-  RecipeVersionListItemDTO
+  RecipeVersionDetailDTO
 } from '@/services/types/recipe'
 import { mockCategories, mockTags } from './taxonomy.mock'
 
@@ -25,7 +25,6 @@ const DEFAULT_COVER_URL =
 interface MockRecipeRecord {
   id: string
   name: string
-  story: string
   coverImageUrl?: string
   momentCount: number
   latestCookedAt?: string
@@ -53,7 +52,6 @@ const recipeStore: MockRecipeRecord[] = [
   {
     id: 'recipe_braised_pork',
     name: '外婆的红烧肉',
-    story: '把时间炖到发亮，把一家人的惦念慢慢收进锅里。',
     coverImageUrl:
       'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
     momentCount: 12,
@@ -106,7 +104,6 @@ const recipeStore: MockRecipeRecord[] = [
   {
     id: 'recipe_mushroom_soup',
     name: '奶油蘑菇汤',
-    story: '周中忙完之后，用一锅顺滑的汤给自己留一点轻松时刻。',
     coverImageUrl:
       'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80',
     momentCount: 4,
@@ -133,7 +130,6 @@ const recipeStore: MockRecipeRecord[] = [
   {
     id: 'recipe_salad',
     name: '雨后田野沙拉',
-    story: '想吃轻一点的时候，就把冰箱里新鲜的颜色都装进碗里。',
     coverImageUrl:
       'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1200&q=80',
     momentCount: 9,
@@ -263,14 +259,15 @@ function buildRecipeDetail(recipe: MockRecipeRecord): RecipeDetailDTO {
   return {
     id: recipe.id,
     name: recipe.name,
-    story: recipe.story,
+    slug: null,
     coverImageUrl: recipe.coverImageUrl,
+    coverSource: 'none',
     versionCount: recipe.versions.length,
     momentCount: recipe.momentCount,
-    currentVersion,
-    ingredients: currentVersion.ingredients,
-    steps: currentVersion.steps,
-    tips: currentVersion.tips
+    latestCookedAt: recipe.latestCookedAt || null,
+    latestMomentAt: null,
+    status: 'active',
+    currentVersion
   }
 }
 
@@ -316,9 +313,9 @@ export function getMockRecipeList(query: GetRecipesQuery = {}): PageResult<Recip
     .map(buildRecipeListItem)
     .filter((recipe) => {
       const matchesKeyword = keyword ? recipe.name.toLowerCase().includes(keyword) : true
-      const matchesCategory = query.categoryId ? recipe.currentVersion.category?.id === query.categoryId : true
-      const matchesTag = query.tagId
-        ? recipe.currentVersion.tags.some((tag) => tag.id === query.tagId)
+      const matchesCategory = query.categoryId ? recipe.currentVersion?.category?.id === query.categoryId : true
+      const matchesTag = query.tagIds?.length
+        ? query.tagIds.some((tagId) => recipe.currentVersion?.tags.some((tag) => tag.id === tagId))
         : true
       return matchesKeyword && matchesCategory && matchesTag
     })
@@ -341,9 +338,12 @@ export function getMockRecipeDetail(id: string) {
   return buildRecipeDetail(recipe)
 }
 
-export function getMockRecipeVersions(recipeId: string): RecipeVersionListItemDTO[] {
+export function getMockRecipeVersions(
+  recipeId: string,
+  query: { page?: number; pageSize?: number } = {}
+): RecipeVersionListResultDTO {
   const recipe = findRecipe(recipeId) || recipeStore[0]
-  return [...recipe.versions]
+  const items = [...recipe.versions]
     .sort((a, b) => b.versionNumber - a.versionNumber)
     .map((version) => ({
       id: version.id,
@@ -353,6 +353,18 @@ export function getMockRecipeVersions(recipeId: string): RecipeVersionListItemDT
       diffSummaryText: version.diffSummaryText,
       createdAt: version.createdAt || new Date().toISOString()
     }))
+  const page = Math.max(query.page || 1, 1)
+  const pageSize = Math.max(query.pageSize || items.length || 20, 1)
+  const startIndex = (page - 1) * pageSize
+  const pagedItems = items.slice(startIndex, startIndex + pageSize)
+
+  return {
+    items: pagedItems,
+    page,
+    pageSize,
+    total: items.length,
+    hasMore: startIndex + pagedItems.length < items.length
+  }
 }
 
 export function getMockRecipeVersionDetail(recipeId: string, versionId: string) {
@@ -362,14 +374,14 @@ export function getMockRecipeVersionDetail(recipeId: string, versionId: string) 
 
 export function getMockRecipeCompare(
   recipeId: string,
-  baseVersionId: string,
-  targetVersionId: string
+  baseVersionNumber: number,
+  targetVersionNumber: number
 ): CompareVersionsDTO {
   const recipe = findRecipe(recipeId) || recipeStore[0]
   const baseVersion =
-    recipe.versions.find((version) => version.id === baseVersionId) || recipe.versions[0]
+    recipe.versions.find((version) => version.versionNumber === baseVersionNumber) || recipe.versions[0]
   const targetVersion =
-    recipe.versions.find((version) => version.id === targetVersionId) || getCurrentVersion(recipe)
+    recipe.versions.find((version) => version.versionNumber === targetVersionNumber) || getCurrentVersion(recipe)
   const summaryJson = buildVersionDiffSummaryData(baseVersion, targetVersion)
 
   return {
@@ -413,7 +425,6 @@ export function createMockRecipe(payload: CreateRecipePayload): CreateRecipeResu
   recipeStore.unshift({
     id: recipeId,
     name: payload.name.trim(),
-    story: `第一次把「${payload.name.trim()}」认真记下来，留给下一次更从容地复刻。`,
     coverImageUrl: DEFAULT_COVER_URL,
     momentCount: 0,
     currentVersionId,
@@ -436,7 +447,6 @@ export function updateMockRecipe(recipeId: string, payload: UpdateRecipePayload)
 
   if (payload.name?.trim()) {
     recipe.name = payload.name.trim()
-    recipe.story = `把「${recipe.name}」的基础档案重新整理了一遍，方便后面继续打磨版本和记录食光。`
   }
 
   return { success: true as const }

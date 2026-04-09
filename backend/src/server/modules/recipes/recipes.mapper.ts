@@ -190,11 +190,15 @@ export function mapRecipeDetailDto(record: RecipeDetailRecord): RecipeDetailDto 
 export function mapRecipeVersionToComparableSnapshot(
   record: Pick<
     RecipeVersionDetailRecord,
-    "ingredientsText" | "steps" | "tagLinks"
+    "ingredientsText" | "ingredients" | "steps" | "tagLinks"
   >,
 ): RecipeVersionComparableSnapshot {
   return {
     ingredientsText: record.ingredientsText,
+    ingredients: record.ingredients.map((ingredient) => ({
+      sortOrder: ingredient.sortOrder,
+      rawText: ingredient.rawText,
+    })),
     steps: record.steps.map((step) => ({
       sortOrder: step.sortOrder,
       content: step.content,

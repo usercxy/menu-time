@@ -85,6 +85,7 @@ npm run build
 ## 已提供的接口
 
 - `GET /api/health`
+- `GET /api/openapi`
 - `POST /api/v1/auth/wechat-login`
 - `POST /api/v1/auth/refresh`
 - `POST /api/v1/auth/logout`
@@ -108,6 +109,11 @@ npm run build
 - `GET /api/v1/recipes/:id/versions/:versionId`
 - `POST /api/v1/recipes/:id/versions/:versionId/set-current`
 - `GET /api/v1/recipes/:id/compare`
+
+文档入口：
+
+- Swagger UI：`/docs`
+- OpenAPI JSON：`/api/openapi`
 
 说明：
 

@@ -2,14 +2,9 @@ import { useEffect, useRef } from 'react'
 import Taro from '@tarojs/taro'
 import { envConfig } from '@/constants/env'
 import { mockTokenBundle } from '@/mocks/session.mock'
-import type { SessionDTO } from '@/services/types/auth'
 import { authService } from '@/services/modules/auth'
 import { useSessionStore } from '@/store/session'
 import { clearTokenBundle, getTokenBundle, setTokenBundle } from '@/utils/token-storage'
-
-function toSession(user: SessionDTO['user']): SessionDTO {
-  return { user }
-}
 
 export function useAuthBootstrap() {
   const hasBootstrapped = useRef(false)
@@ -30,7 +25,7 @@ export function useAuthBootstrap() {
       return
     }
 
-    if (envConfig.enableMock) {
+    if (envConfig.isMockScopeEnabled('auth')) {
       setTokenBundle(mockTokenBundle)
       setStoredTokenBundle(mockTokenBundle)
       return
@@ -56,15 +51,11 @@ export function useAuthBootstrap() {
           return
         }
 
-        const tokenBundle = {
-          accessToken: loginPayload.accessToken,
-          refreshToken: loginPayload.refreshToken,
-          expiresIn: loginPayload.expiresIn
-        }
+        const tokenBundle = loginPayload.tokens
 
         setTokenBundle(tokenBundle)
         setStoredTokenBundle(tokenBundle)
-        setSession(toSession(loginPayload.user))
+        setSession(loginPayload.session)
       } catch (error) {
         if (cancelled) {
           return

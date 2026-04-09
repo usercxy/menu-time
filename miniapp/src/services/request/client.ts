@@ -1,7 +1,8 @@
 import Taro from '@tarojs/taro'
 import { REQUEST_ID_HEADER, envConfig } from '@/constants/env'
+import { useSessionStore } from '@/store/session'
 import type { ApiFailure, ApiResponse } from '@/services/types/api'
-import type { RefreshTokenPayload, TokenBundleDTO } from '@/services/types/auth'
+import type { AuthResultDTO, RefreshTokenPayload, TokenBundleDTO } from '@/services/types/auth'
 import { clearTokenBundle, getTokenBundle, setTokenBundle } from '@/utils/token-storage'
 import { resolveMockResponse } from './mock'
 
@@ -113,10 +114,11 @@ async function refreshAccessToken() {
 
   const refreshToken = getTokenBundle()?.refreshToken
   if (!refreshToken) {
+    useSessionStore.getState().clearSession()
     return null
   }
 
-  refreshPromise = rawRequest<TokenBundleDTO>({
+  refreshPromise = rawRequest<AuthResultDTO>({
     url: '/api/v1/auth/refresh',
     method: 'POST',
     auth: false,
@@ -126,11 +128,13 @@ async function refreshAccessToken() {
     } satisfies RefreshTokenPayload
   })
     .then((result) => {
-      setTokenBundle(result.data)
-      return result.data
+      setTokenBundle(result.data.tokens)
+      useSessionStore.getState().setTokenBundle(result.data.tokens)
+      return result.data.tokens
     })
     .catch(() => {
       clearTokenBundle()
+      useSessionStore.getState().clearSession()
       return null
     })
     .finally(() => {
@@ -159,6 +163,7 @@ export async function request<TData>(options: RequestOptions): Promise<RequestRe
       }
 
       clearTokenBundle()
+      useSessionStore.getState().clearSession()
     }
 
     throw error

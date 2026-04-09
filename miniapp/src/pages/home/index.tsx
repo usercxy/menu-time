@@ -19,7 +19,7 @@ export default function HomePage() {
   })
 
   return (
-    <PageContainer title="食光记" subtitle={`欢迎回来，${sessionQuery.data?.user.nickname || '主厨'}`}>
+    <PageContainer title="食光记" subtitle={`欢迎回来，${sessionQuery.data?.nickname || '主厨'}`}>
       <View className="page-stack">
         {/* Weekly Menu Status Section */}
         <View className="hero-card" onClick={() => navigateToRoute(routes.mealPlanner)}>
@@ -106,14 +106,14 @@ export default function HomePage() {
                 </View>
                 
                 <Text className="muted-text" style={{ fontSize: '26px', fontStyle: 'italic' }}>
-                  “{recipe.currentVersion.versionName || '这道菜的味道，值得被时光铭记。'}”
+                  “{recipe.currentVersion?.versionName || '这道菜的味道，值得被时光铭记。'}”
                 </Text>
                 
                 <View className="chip-row">
                   <View className="chip">
-                    <Text>#{recipe.currentVersion.category?.name || '未分类'}</Text>
+                    <Text>#{recipe.currentVersion?.category?.name || '未分类'}</Text>
                   </View>
-                  {recipe.currentVersion.tags.slice(0, 1).map((tag) => (
+                  {(recipe.currentVersion?.tags || []).slice(0, 1).map((tag) => (
                     <View className="chip chip--soft" key={tag.id}>
                       <Text>#{tag.name}</Text>
                     </View>

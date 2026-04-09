@@ -9,15 +9,19 @@ import type {
   RecipeDetailDTO,
   UpdateRecipePayload,
   RecipeVersionDetailDTO,
-  RecipeVersionListItemDTO,
-  RecipeListResultDTO
+  RecipeListResultDTO,
+  RecipeVersionListResultDTO
 } from '@/services/types/recipe'
 
 export const recipeService = {
   async getRecipes(query: GetRecipesQuery = {}) {
+    const normalizedQuery = {
+      ...query,
+      tagIds: query.tagIds?.length ? query.tagIds.join(',') : undefined
+    }
     const response = await request<RecipeListResultDTO>({
       url: '/api/v1/recipes',
-      data: query
+      data: normalizedQuery
     })
     return response.data
   },
@@ -42,9 +46,10 @@ export const recipeService = {
       data: payload
     })
   },
-  async getRecipeVersions(recipeId: string) {
-    const response = await request<RecipeVersionListItemDTO[]>({
-      url: `/api/v1/recipes/${recipeId}/versions`
+  async getRecipeVersions(recipeId: string, query: { page?: number; pageSize?: number } = {}) {
+    const response = await request<RecipeVersionListResultDTO>({
+      url: `/api/v1/recipes/${recipeId}/versions`,
+      data: query
     })
     return response.data
   },
@@ -62,12 +67,12 @@ export const recipeService = {
     })
     return response.data
   },
-  async compareRecipeVersions(recipeId: string, baseVersionId: string, targetVersionId: string) {
+  async compareRecipeVersions(recipeId: string, baseVersionNumber: number, targetVersionNumber: number) {
     const response = await request<CompareVersionsDTO>({
       url: `/api/v1/recipes/${recipeId}/compare`,
       data: {
-        base: baseVersionId,
-        target: targetVersionId
+        base: baseVersionNumber,
+        target: targetVersionNumber
       }
     })
     return response.data
