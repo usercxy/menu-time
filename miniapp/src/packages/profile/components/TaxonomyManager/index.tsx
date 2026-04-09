@@ -248,14 +248,21 @@ export function TaxonomyManager<TItem extends TaxonomyManagerItem>({
             </View>
 
             <View className={styles.fieldBlock}>
-              <Text className={styles.fieldLabel}>{fieldLabel}</Text>
-              <Input
-                className={styles.textInput}
-                placeholder={namePlaceholder}
-                value={draftName}
-                maxlength={nameMaxLength}
-                onInput={(event) => setDraftName(event.detail.value)}
-              />
+              <View className={styles.labelRow}>
+                <Text className={styles.fieldLabel}>{fieldLabel}</Text>
+                <Text className={styles.requiredBadge}>必填</Text>
+              </View>
+              <View className={styles.inputShell}>
+                <Input
+                  className={styles.textInput}
+                  placeholder={namePlaceholder}
+                  placeholderClass={styles.inputPlaceholder}
+                  value={draftName}
+                  maxlength={nameMaxLength}
+                  cursorSpacing={96}
+                  onInput={(event) => setDraftName(event.detail.value)}
+                />
+              </View>
             </View>
 
             {enableColor ? (

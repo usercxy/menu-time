@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { Image, Text, View } from '@tarojs/components'
 import { useRouter } from '@tarojs/taro'
 import { EmptyState } from '@/components/base/EmptyState'
@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/base/ErrorState'
 import { LoadingState } from '@/components/base/LoadingState'
 import { PageContainer } from '@/components/base/PageContainer'
 import { routes } from '@/constants/routes'
+import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
 import { recipeService } from '@/services/modules/recipe'
 import { navigateToRoute } from '@/utils/navigation'
 import styles from './index.module.scss'
@@ -35,6 +36,8 @@ export default function RecipeDetailPage() {
     queryFn: () => recipeService.getRecipeVersions(recipeId),
     enabled: activeTab === 'versions'
   })
+
+  usePageShowRefetch([detailQuery, activeTab === 'versions' ? versionsQuery : null])
 
   const detail = detailQuery.data
   const currentVersion = detail?.currentVersion

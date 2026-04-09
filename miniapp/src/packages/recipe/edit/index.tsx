@@ -1,33 +1,21 @@
 import { useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Input, Text, Textarea, View } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
-import { z } from 'zod'
 import { EmptyState } from '@/components/base/EmptyState'
 import { LoadingState } from '@/components/base/LoadingState'
 import { PageContainer } from '@/components/base/PageContainer'
 import { routes } from '@/constants/routes'
+import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
+import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
 import { queryClient } from '@/utils/query-client'
+import { buildOptimisticRecipeDetail, buildOptimisticRecipeVersions } from '@/utils/recipe-cache'
 import { recipeService } from '@/services/modules/recipe'
 import { taxonomyService } from '@/services/modules/taxonomy'
 import { redirectToRoute } from '@/utils/navigation'
+import { validateCreateRecipeForm } from '@/utils/recipe-form'
 import type { RecipeDetailDTO } from '@/services/types/recipe'
 import styles from './index.module.scss'
-
-const recipeFormSchema = z.object({
-  name: z.string().trim().min(1, '请输入菜谱名称'),
-  versionName: z.string().trim().max(20, '版本名最多 20 个字').optional(),
-  newCategoryName: z.string().trim().optional(),
-  newTagNamesInput: z.string().trim().optional(),
-  tips: z.string().trim().optional()
-})
-
-function splitTagNames(value: string) {
-  return value
-    .split(/[，,]/)
-    .map((item) => item.trim())
-    .filter(Boolean)
-}
 
 export default function RecipeEditPage() {
   const router = useRouter()
@@ -59,6 +47,8 @@ export default function RecipeEditPage() {
     queryFn: taxonomyService.getTags
   })
 
+  usePageShowRefetch([detailQuery, categoriesQuery, tagsQuery])
+
   const hydrateForm = (detail: RecipeDetailDTO) => {
     const currentVersion = detail.currentVersion
     setName(detail.name)
@@ -89,7 +79,16 @@ export default function RecipeEditPage() {
 
   const createMutation = useMutation({
     mutationFn: recipeService.createRecipe,
-    onSuccess: async (result) => {
+    onSuccess: async (result, payload) => {
+      queryClient.setQueryData(
+        ['recipe-detail', result.recipeId],
+        buildOptimisticRecipeDetail(payload, result, categoriesQuery.data || [], tagsQuery.data || [])
+      )
+      queryClient.setQueryData(
+        ['recipe-versions', result.recipeId],
+        buildOptimisticRecipeVersions(payload, result, categoriesQuery.data || [], tagsQuery.data || [])
+      )
+
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['recipes'] }),
         queryClient.invalidateQueries({ queryKey: ['meal-plan', 'current-week'] })
@@ -168,16 +167,20 @@ export default function RecipeEditPage() {
   }
 
   const handleSubmit = async () => {
-    const parsed = recipeFormSchema.safeParse({
+    const parsed = validateCreateRecipeForm({
       name,
       versionName,
+      selectedCategoryId,
       newCategoryName,
+      selectedTagIds,
       newTagNamesInput,
+      ingredients,
+      steps,
       tips
     })
 
     if (!parsed.success) {
-      setFormError(parsed.error.issues[0]?.message || '请检查表单内容')
+      setFormError(parsed.message || '请检查表单内容')
       return
     }
 
@@ -185,25 +188,12 @@ export default function RecipeEditPage() {
 
     if (isEditMode) {
       await updateMutation.mutateAsync({
-        name: parsed.data.name.trim()
+        name: parsed.data.name
       })
       return
     }
 
-    await createMutation.mutateAsync({
-      name: parsed.data.name.trim(),
-      categoryId: selectedCategoryId,
-      newCategoryName: parsed.data.newCategoryName || null,
-      tagIds: selectedTagIds,
-      newTagNames: splitTagNames(parsed.data.newTagNamesInput || ''),
-      versionName: parsed.data.versionName || '',
-      ingredients: ingredients.map((rawText) => ({ rawText })),
-      steps: steps.map((content, index) => ({
-        sortOrder: index + 1,
-        content
-      })),
-      tips: parsed.data.tips || ''
-    })
+    await createMutation.mutateAsync(parsed.data)
   }
 
   const submitPending = isEditMode ? updateMutation.isPending : createMutation.isPending
@@ -252,14 +242,22 @@ export default function RecipeEditPage() {
 
           <View className={styles.fieldStack}>
             <View className={styles.fieldBlock}>
-              <Text className={styles.fieldLabel}>菜谱名</Text>
-              <Input
-                className={styles.textInput}
-                placeholder="例如：番茄炖牛腩"
-                value={name}
-                maxlength={24}
-                onInput={(event) => setName(event.detail.value)}
-              />
+              <View className={styles.labelRow}>
+                <Text className={styles.fieldLabel}>菜谱名</Text>
+                <Text className={styles.requiredBadge}>必填</Text>
+              </View>
+              <View className={styles.inputShell}>
+                <Input
+                  className={styles.textInput}
+                  placeholder="例如：番茄炖牛腩"
+                  placeholderClass={styles.inputPlaceholder}
+                  value={name}
+                  maxlength={24}
+                  cursorSpacing={96}
+                  onInput={(event) => setName(event.detail.value)}
+                />
+              </View>
+              <Text className={styles.helpText}>必填，建议写清主食材或这道菜最有记忆点的做法。</Text>
             </View>
 
             {!isEditMode ? (
@@ -281,13 +279,17 @@ export default function RecipeEditPage() {
                       </View>
                     ))}
                   </View>
-                  <Input
-                    className={styles.textInput}
-                    placeholder="没有合适的分类？可临时输入新分类"
-                    value={newCategoryName}
-                    maxlength={12}
-                    onInput={(event) => setNewCategoryName(event.detail.value)}
-                  />
+                  <View className={styles.inputShell}>
+                    <Input
+                      className={styles.textInput}
+                      placeholder="没有合适的分类？可临时输入新分类"
+                      placeholderClass={styles.inputPlaceholder}
+                      value={newCategoryName}
+                      maxlength={12}
+                      cursorSpacing={96}
+                      onInput={(event) => setNewCategoryName(event.detail.value)}
+                    />
+                  </View>
                   {selectedCategory ? (
                     <Text className={styles.helpText}>当前已选分类：{selectedCategory.name}</Text>
                   ) : null}
@@ -306,12 +308,16 @@ export default function RecipeEditPage() {
                       </View>
                     ))}
                   </View>
-                  <Input
-                    className={styles.textInput}
-                    placeholder="临时新标签，多个标签用逗号分隔"
-                    value={newTagNamesInput}
-                    onInput={(event) => setNewTagNamesInput(event.detail.value)}
-                  />
+                  <View className={styles.inputShell}>
+                    <Input
+                      className={styles.textInput}
+                      placeholder="临时新标签，多个标签用逗号分隔"
+                      placeholderClass={styles.inputPlaceholder}
+                      value={newTagNamesInput}
+                      cursorSpacing={96}
+                      onInput={(event) => setNewTagNamesInput(event.detail.value)}
+                    />
+                  </View>
                   <Text className={styles.helpText}>已选 {selectedTagIds.length} 个标签</Text>
                 </View>
               </>
@@ -362,13 +368,17 @@ export default function RecipeEditPage() {
             <View className={styles.fieldStack}>
               <View className={styles.fieldBlock}>
                 <Text className={styles.fieldLabel}>版本名</Text>
-                <Input
-                  className={styles.textInput}
-                  placeholder="例如：家常版 / 少油版"
-                  value={versionName}
-                  maxlength={20}
-                  onInput={(event) => setVersionName(event.detail.value)}
-                />
+                <View className={styles.inputShell}>
+                  <Input
+                    className={styles.textInput}
+                    placeholder="例如：家常版 / 少油版"
+                    placeholderClass={styles.inputPlaceholder}
+                    value={versionName}
+                    maxlength={20}
+                    cursorSpacing={96}
+                    onInput={(event) => setVersionName(event.detail.value)}
+                  />
+                </View>
               </View>
 
               <View className={styles.fieldBlock}>
@@ -382,12 +392,16 @@ export default function RecipeEditPage() {
                   {ingredients.map((ingredient, index) => (
                     <View className={styles.repeaterCard} key={`ingredient-${index}`}>
                       <Text className={styles.repeaterIndex}>{index + 1}</Text>
-                      <Input
-                        className={styles.inlineInput}
-                        placeholder="例如：牛腩 500g"
-                        value={ingredient}
-                        onInput={(event) => updateListItem(setIngredients, index, event.detail.value)}
-                      />
+                      <View className={`${styles.inputShell} ${styles.inlineInputShell}`}>
+                        <Input
+                          className={styles.inlineInput}
+                          placeholder="例如：牛腩 500g"
+                          placeholderClass={styles.inputPlaceholder}
+                          value={ingredient}
+                          cursorSpacing={96}
+                          onInput={(event) => updateListItem(setIngredients, index, event.detail.value)}
+                        />
+                      </View>
                       <View className={styles.repeaterAction} onClick={() => removeListItem(setIngredients, index)}>
                         <Text>删除</Text>
                       </View>
@@ -412,14 +426,18 @@ export default function RecipeEditPage() {
                           <Text>删除</Text>
                         </View>
                       </View>
-                      <Textarea
-                        className={styles.textarea}
-                        placeholder="例如：牛腩焯水后小火慢炖 40 分钟"
-                        value={step}
-                        maxlength={200}
-                        autoHeight
-                        onInput={(event) => updateListItem(setSteps, index, event.detail.value)}
-                      />
+                      <View className={`${styles.inputShell} ${styles.textareaShell}`}>
+                        <Textarea
+                          className={styles.textarea}
+                          placeholder="例如：牛腩焯水后小火慢炖 40 分钟"
+                          placeholderClass={styles.textareaPlaceholder}
+                          value={step}
+                          maxlength={200}
+                          autoHeight
+                          cursorSpacing={96}
+                          onInput={(event) => updateListItem(setSteps, index, event.detail.value)}
+                        />
+                      </View>
                     </View>
                   ))}
                 </View>
@@ -427,14 +445,18 @@ export default function RecipeEditPage() {
 
               <View className={styles.fieldBlock}>
                 <Text className={styles.fieldLabel}>小贴士</Text>
-                <Textarea
-                  className={styles.textarea}
-                  placeholder="记录火候、替换食材或失败经验，下次会更稳。"
-                  value={tips}
-                  maxlength={240}
-                  autoHeight
-                  onInput={(event) => setTips(event.detail.value)}
-                />
+                <View className={`${styles.inputShell} ${styles.textareaShell}`}>
+                  <Textarea
+                    className={styles.textarea}
+                    placeholder="记录火候、替换食材或失败经验，下次会更稳。"
+                    placeholderClass={styles.textareaPlaceholder}
+                    value={tips}
+                    maxlength={240}
+                    autoHeight
+                    cursorSpacing={96}
+                    onInput={(event) => setTips(event.detail.value)}
+                  />
+                </View>
               </View>
             </View>
           </View>

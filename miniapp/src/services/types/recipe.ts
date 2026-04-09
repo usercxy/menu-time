@@ -62,8 +62,8 @@ export interface GetRecipesQuery extends PaginationQuery {
 
 export interface CreateRecipePayload {
   name: string
-  categoryId?: string | null
-  newCategoryName?: string | null
+  categoryId?: string
+  newCategoryName?: string
   tagIds: string[]
   newTagNames?: string[]
   versionName?: string
@@ -87,8 +87,8 @@ export interface UpdateRecipePayload {
 export interface CreateVersionPayload {
   sourceVersionId: string
   versionName?: string
-  categoryId?: string | null
-  newCategoryName?: string | null
+  categoryId?: string
+  newCategoryName?: string
   tagIds: string[]
   newTagNames?: string[]
   ingredients: IngredientLineDTO[]

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { Image, Text, View, ScrollView } from '@tarojs/components'
 import { routes } from '@/constants/routes'
 import { PageContainer } from '@/components/base/PageContainer'

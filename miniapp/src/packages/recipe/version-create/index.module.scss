@@ -1,3 +1,5 @@
+@use '../../../styles/mixins' as mixins;
+
 .heroCard,
 .sectionCard {
   padding: 36px 32px;
@@ -83,21 +85,46 @@
   font-weight: 700;
 }
 
+.labelRow {
+  @include mixins.form-label-row;
+}
+
+.requiredBadge {
+  @include mixins.form-required-badge;
+}
+
+.inputShell {
+  @include mixins.form-input-shell;
+}
+
 .textInput,
-.inlineInput,
-.textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 24px 26px;
-  border-radius: 22px;
-  background: var(--color-surface-container-low);
-  color: var(--color-on-surface);
-  font-size: 26px;
-  line-height: 1.6;
+.inlineInput {
+  @include mixins.form-single-line-input;
 }
 
 .textarea {
-  min-height: 156px;
+  @include mixins.form-textarea;
+}
+
+.inputPlaceholder,
+.textareaPlaceholder {
+  @include mixins.form-placeholder;
+}
+
+.inputPlaceholder {
+  @include mixins.form-placeholder(false);
+}
+
+.textareaPlaceholder {
+  @include mixins.form-placeholder(true);
+}
+
+.textareaShell {
+  @include mixins.form-textarea-shell;
+}
+
+.inlineInputShell {
+  @include mixins.form-inline-input-shell;
 }
 
 .chipList {
@@ -121,9 +148,7 @@
 }
 
 .helpText {
-  color: var(--color-tertiary);
-  font-size: 22px;
-  line-height: 1.6;
+  @include mixins.form-help-text;
 }
 
 .rowHeader,
@@ -156,7 +181,8 @@
   gap: 16px;
   padding: 18px;
   border-radius: 24px;
-  background: var(--color-surface-container-low);
+  background: linear-gradient(180deg, rgba(252, 249, 243, 0.98), rgba(245, 241, 233, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
 }
 
 .repeaterIndex {
@@ -174,14 +200,13 @@
 
 .inlineInput {
   flex: 1;
-  padding: 18px 20px;
-  background: #fff;
 }
 
 .stepCard {
   padding: 22px;
   border-radius: 24px;
-  background: var(--color-surface-container-low);
+  background: linear-gradient(180deg, rgba(252, 249, 243, 0.98), rgba(245, 241, 233, 0.94));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
 }
 
 .stepTitle {

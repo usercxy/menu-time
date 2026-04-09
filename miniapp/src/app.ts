@@ -1,3 +1,4 @@
+import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only'
 import { createElement, type PropsWithChildren } from 'react'
 import { useLaunch } from '@tarojs/taro'
 import { envConfig } from '@/constants/env'

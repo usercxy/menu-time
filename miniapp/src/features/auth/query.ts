@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { envConfig } from '@/constants/env'
 import { mockTokenBundle } from '@/mocks/session.mock'
 import { authService } from '@/services/modules/auth'

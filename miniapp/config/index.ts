@@ -5,6 +5,7 @@ import devConfig from './dev'
 import prodConfig from './prod'
 
 export default defineConfig<'webpack5'>(async (merge) => {
+  const mode = process.env.NODE_ENV || 'development'
   const baseConfig: UserConfigExport<'webpack5'> = {
     projectName: 'menu-time-miniapp',
     date: '2026-3-26',
@@ -66,7 +67,9 @@ export default defineConfig<'webpack5'>(async (merge) => {
     }
   }
 
-  if (process.env.NODE_ENV === 'development') {
+  console.log(`Taro config mode: ${mode}`)
+
+  if (mode === 'development') {
     return merge({}, baseConfig, devConfig)
   }
 

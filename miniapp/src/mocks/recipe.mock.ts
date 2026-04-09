@@ -191,8 +191,8 @@ function getCurrentVersion(recipe: MockRecipeRecord) {
 }
 
 function resolveCategory(payload: {
-  categoryId?: string | null
-  newCategoryName?: string | null
+  categoryId?: string
+  newCategoryName?: string
 }): RecipeCategoryDTO | undefined {
   const customName = payload.newCategoryName?.trim()
   if (customName) {

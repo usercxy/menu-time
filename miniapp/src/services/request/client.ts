@@ -48,6 +48,37 @@ export class RequestError extends Error {
 
 let refreshPromise: Promise<TokenBundleDTO | null> | null = null
 
+function logDevRequest(message: string, payload?: unknown) {
+  if (!envConfig.isDev) {
+    return
+  }
+
+  if (payload === undefined) {
+    console.info(message)
+    return
+  }
+
+  console.info(message, payload)
+}
+
+function stripNullish<T>(value: T): T {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => stripNullish(item))
+      .filter((item) => item !== undefined && item !== null) as T
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, entryValue]) => entryValue !== undefined && entryValue !== null)
+        .map(([key, entryValue]) => [key, stripNullish(entryValue)])
+    ) as T
+  }
+
+  return value
+}
+
 function normalizeUrl(url: string) {
   if (url.startsWith('http')) {
     return url
@@ -58,6 +89,7 @@ function normalizeUrl(url: string) {
 
 async function rawRequest<TData>(options: RequestOptions) {
   const method = options.method ?? 'GET'
+  const normalizedData = options.data === undefined ? undefined : stripNullish(options.data)
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...options.headers
@@ -73,16 +105,19 @@ async function rawRequest<TData>(options: RequestOptions) {
   const mockResponse = await resolveMockResponse<TData>({
     url: options.url,
     method,
-    data: options.data
+    data: normalizedData
   })
   if (mockResponse) {
+    logDevRequest(`[request:mock] ${method} ${options.url}`, normalizedData)
     return mockResponse
   }
+
+  logDevRequest(`[request:http] ${method} ${normalizeUrl(options.url)}`, normalizedData)
 
   const response = await Taro.request<ApiResponse<TData>>({
     url: normalizeUrl(options.url),
     method,
-    data: options.data,
+    data: normalizedData,
     header: headers
   })
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { Input, ScrollView, Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
 import { EmptyState } from '@/components/base/EmptyState'
@@ -7,6 +7,7 @@ import { ErrorState } from '@/components/base/ErrorState'
 import { LoadingState } from '@/components/base/LoadingState'
 import { RecipeCard } from '@/components/recipe/RecipeCard'
 import { routes } from '@/constants/routes'
+import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
 import { PageContainer } from '@/components/base/PageContainer'
 import { recipeService } from '@/services/modules/recipe'
 import { taxonomyService } from '@/services/modules/taxonomy'
@@ -65,6 +66,8 @@ export default function RecipeLibraryPage() {
         pageSize: PAGE_SIZE
       })
   })
+
+  usePageShowRefetch([categoriesQuery, tagsQuery, recipesQuery])
 
   const selectedCategoryLabel = useMemo(
     () => categoriesQuery.data?.find((item) => item.id === activeCategory)?.name || '全部分类',

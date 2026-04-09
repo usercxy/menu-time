@@ -1,30 +1,17 @@
 import { useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { Input, Text, Textarea, View } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
-import { z } from 'zod'
 import { PageContainer } from '@/components/base/PageContainer'
 import { EmptyState } from '@/components/base/EmptyState'
+import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { queryClient } from '@/utils/query-client'
 import { recipeService } from '@/services/modules/recipe'
 import { taxonomyService } from '@/services/modules/taxonomy'
 import { redirectToRoute } from '@/utils/navigation'
 import { routes } from '@/constants/routes'
+import { validateCreateVersionForm } from '@/utils/recipe-form'
 import styles from './index.module.scss'
-
-const versionFormSchema = z.object({
-  versionName: z.string().trim().min(1, '请输入版本名称').max(24, '版本名称最多 24 个字'),
-  newCategoryName: z.string().trim().optional(),
-  newTagNamesInput: z.string().trim().optional(),
-  tips: z.string().trim().optional()
-})
-
-function splitTagNames(value: string) {
-  return value
-    .split(/[，,]/)
-    .map((item) => item.trim())
-    .filter(Boolean)
-}
 
 export default function VersionCreatePage() {
   const router = useRouter()
@@ -139,34 +126,25 @@ export default function VersionCreatePage() {
       return
     }
 
-    const parsed = versionFormSchema.safeParse({
+    const parsed = validateCreateVersionForm({
+      sourceVersionId: sourceVersion.id,
       versionName,
+      selectedCategoryId,
       newCategoryName,
+      selectedTagIds,
       newTagNamesInput,
+      ingredients,
+      steps,
       tips
     })
 
     if (!parsed.success) {
-      setFormError(parsed.error.issues[0]?.message || '请检查表单内容')
+      setFormError(parsed.message || '请检查表单内容')
       return
     }
 
     setFormError('')
-
-    await createVersionMutation.mutateAsync({
-      sourceVersionId: sourceVersion.id,
-      versionName: parsed.data.versionName.trim(),
-      categoryId: selectedCategoryId,
-      newCategoryName: parsed.data.newCategoryName || null,
-      tagIds: selectedTagIds,
-      newTagNames: splitTagNames(parsed.data.newTagNamesInput || ''),
-      ingredients: ingredients.map((rawText) => ({ rawText })),
-      steps: steps.map((content, index) => ({
-        sortOrder: index + 1,
-        content
-      })),
-      tips: parsed.data.tips || ''
-    })
+    await createVersionMutation.mutateAsync(parsed.data)
   }
 
   if (!recipeId) {
@@ -217,14 +195,21 @@ export default function VersionCreatePage() {
 
               <View className={styles.fieldStack}>
                 <View className={styles.fieldBlock}>
-                  <Text className={styles.fieldLabel}>版本名称</Text>
-                  <Input
-                    className={styles.textInput}
-                    placeholder="例如：更松软版 / 微辣版"
-                    value={versionName}
-                    maxlength={24}
-                    onInput={(event) => setVersionName(event.detail.value)}
-                  />
+                  <View className={styles.labelRow}>
+                    <Text className={styles.fieldLabel}>版本名称</Text>
+                  </View>
+                  <View className={styles.inputShell}>
+                    <Input
+                      className={styles.textInput}
+                      placeholder="例如：更松软版 / 微辣版"
+                      placeholderClass={styles.inputPlaceholder}
+                      value={versionName}
+                      maxlength={24}
+                      cursorSpacing={96}
+                      onInput={(event) => setVersionName(event.detail.value)}
+                    />
+                  </View>
+                  <Text className={styles.helpText}>可选；留空时由后端自动生成默认版本名称。</Text>
                 </View>
 
                 <View className={styles.fieldBlock}>
@@ -246,13 +231,17 @@ export default function VersionCreatePage() {
                       </View>
                     ))}
                   </View>
-                  <Input
-                    className={styles.textInput}
-                    placeholder="也可以临时改一个新分类"
-                    value={newCategoryName}
-                    maxlength={12}
-                    onInput={(event) => setNewCategoryName(event.detail.value)}
-                  />
+                  <View className={styles.inputShell}>
+                    <Input
+                      className={styles.textInput}
+                      placeholder="也可以临时改一个新分类"
+                      placeholderClass={styles.inputPlaceholder}
+                      value={newCategoryName}
+                      maxlength={12}
+                      cursorSpacing={96}
+                      onInput={(event) => setNewCategoryName(event.detail.value)}
+                    />
+                  </View>
                   {selectedCategory ? (
                     <Text className={styles.helpText}>当前分类：{selectedCategory.name}</Text>
                   ) : null}
@@ -273,12 +262,16 @@ export default function VersionCreatePage() {
                       </View>
                     ))}
                   </View>
-                  <Input
-                    className={styles.textInput}
-                    placeholder="新标签可用逗号分隔"
-                    value={newTagNamesInput}
-                    onInput={(event) => setNewTagNamesInput(event.detail.value)}
-                  />
+                  <View className={styles.inputShell}>
+                    <Input
+                      className={styles.textInput}
+                      placeholder="新标签可用逗号分隔"
+                      placeholderClass={styles.inputPlaceholder}
+                      value={newTagNamesInput}
+                      cursorSpacing={96}
+                      onInput={(event) => setNewTagNamesInput(event.detail.value)}
+                    />
+                  </View>
                 </View>
               </View>
             </View>
@@ -301,14 +294,18 @@ export default function VersionCreatePage() {
                     {ingredients.map((ingredient, index) => (
                       <View className={styles.repeaterCard} key={`ingredient-${index}`}>
                         <Text className={styles.repeaterIndex}>{index + 1}</Text>
-                        <Input
-                          className={styles.inlineInput}
-                          placeholder="例如：牛腩 500g"
-                          value={ingredient}
-                          onInput={(event) =>
-                            updateListItem(setIngredients, index, event.detail.value)
-                          }
-                        />
+                        <View className={`${styles.inputShell} ${styles.inlineInputShell}`}>
+                          <Input
+                            className={styles.inlineInput}
+                            placeholder="例如：牛腩 500g"
+                            placeholderClass={styles.inputPlaceholder}
+                            value={ingredient}
+                            cursorSpacing={96}
+                            onInput={(event) =>
+                              updateListItem(setIngredients, index, event.detail.value)
+                            }
+                          />
+                        </View>
                         <View
                           className={styles.repeaterAction}
                           onClick={() => removeListItem(setIngredients, index)}
@@ -339,14 +336,18 @@ export default function VersionCreatePage() {
                             <Text>删除</Text>
                           </View>
                         </View>
-                        <Textarea
-                          className={styles.textarea}
-                          placeholder="例如：延长炖煮时间 10 分钟，让口感更软糯"
-                          value={step}
-                          maxlength={220}
-                          autoHeight
-                          onInput={(event) => updateListItem(setSteps, index, event.detail.value)}
-                        />
+                        <View className={`${styles.inputShell} ${styles.textareaShell}`}>
+                          <Textarea
+                            className={styles.textarea}
+                            placeholder="例如：延长炖煮时间 10 分钟，让口感更软糯"
+                            placeholderClass={styles.textareaPlaceholder}
+                            value={step}
+                            maxlength={220}
+                            autoHeight
+                            cursorSpacing={96}
+                            onInput={(event) => updateListItem(setSteps, index, event.detail.value)}
+                          />
+                        </View>
                       </View>
                     ))}
                   </View>
@@ -354,14 +355,18 @@ export default function VersionCreatePage() {
 
                 <View className={styles.fieldBlock}>
                   <Text className={styles.fieldLabel}>小贴士</Text>
-                  <Textarea
-                    className={styles.textarea}
-                    placeholder="写下这一版和上一版的关键差异。"
-                    value={tips}
-                    maxlength={240}
-                    autoHeight
-                    onInput={(event) => setTips(event.detail.value)}
-                  />
+                  <View className={`${styles.inputShell} ${styles.textareaShell}`}>
+                    <Textarea
+                      className={styles.textarea}
+                      placeholder="写下这一版和上一版的关键差异。"
+                      placeholderClass={styles.textareaPlaceholder}
+                      value={tips}
+                      maxlength={240}
+                      autoHeight
+                      cursorSpacing={96}
+                      onInput={(event) => setTips(event.detail.value)}
+                    />
+                  </View>
                 </View>
               </View>
             </View>

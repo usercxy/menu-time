@@ -1,3 +1,5 @@
+@use '../../../../styles/mixins' as mixins;
+
 .headerAction {
   display: flex;
   align-items: center;
@@ -257,14 +259,24 @@
   font-weight: 700;
 }
 
+.labelRow {
+  @include mixins.form-label-row;
+}
+
+.requiredBadge {
+  @include mixins.form-required-badge;
+}
+
+.inputShell {
+  @include mixins.form-input-shell;
+}
+
 .textInput {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 24px 26px;
-  border-radius: 22px;
-  background: var(--color-surface-container-low);
-  color: var(--color-on-surface);
-  font-size: 26px;
+  @include mixins.form-single-line-input;
+}
+
+.inputPlaceholder {
+  @include mixins.form-placeholder(false);
 }
 
 .colorList {
@@ -286,8 +298,7 @@
 }
 
 .colorHint {
-  color: var(--color-tertiary);
-  font-size: 22px;
+  @include mixins.form-help-text;
 }
 
 .errorText {

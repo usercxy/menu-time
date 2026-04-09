@@ -1,5 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import Taro from '@tarojs/taro'
+import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { TaxonomyManager } from '@/packages/profile/components/TaxonomyManager'
 import { taxonomyService } from '@/services/modules/taxonomy'
 import { queryClient } from '@/utils/query-client'

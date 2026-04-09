@@ -17,8 +17,7 @@ function resolveEnableMock() {
   }
 
   if (rawEnableMock === 'false') {
-    // A placeholder API host means "not configured yet", so keep mock data on.
-    return usesPlaceholderApi
+    return false
   }
 
   return isDev || usesPlaceholderApi
