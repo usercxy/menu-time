@@ -4,7 +4,7 @@
 
 本文档基于 `docs/backend/后端技术方案.md` 的 API 章节进一步细化路径、参数、响应、错误码与联调注意事项，默认接口前缀为 `/api/v1`，小程序端鉴权方式为 `Authorization: Bearer <accessToken>`。
 
-统一格式：
+统一成功格式：
 
 ```json
 {
@@ -14,7 +14,7 @@
 }
 ```
 
-错误格式：
+统一错误格式：
 
 ```json
 {
@@ -45,6 +45,7 @@
 }
 ```
 - 受保护接口统一从 token 中解析 `userId`、`householdId`
+- 当前 recipes、taxonomy 接口均已接入统一 `createRouteHandler`
 
 常用错误码：
 
@@ -72,15 +73,29 @@
 }
 ```
 
-成功响应字段：
+成功响应：
 
-- `accessToken`
-- `refreshToken`
-- `expiresIn`
-- `user.id`
-- `user.nickname`
-- `user.role`
-- `user.householdId`
+```json
+{
+  "success": true,
+  "data": {
+    "session": {
+      "userId": "uuid",
+      "householdId": "uuid",
+      "householdName": "Default Household",
+      "nickname": "本地测试用户",
+      "role": "member"
+    },
+    "tokens": {
+      "accessToken": "jwt",
+      "refreshToken": "jwt",
+      "accessTokenExpiresIn": 900,
+      "refreshTokenExpiresIn": 2592000
+    }
+  },
+  "requestId": "req_xxx"
+}
+```
 
 ### `POST /api/v1/auth/refresh`
 
@@ -96,9 +111,15 @@
 
 成功响应字段：
 
-- `accessToken`
-- `refreshToken`
-- `expiresIn`
+- `data.session.userId`
+- `data.session.householdId`
+- `data.session.householdName`
+- `data.session.nickname`
+- `data.session.role`
+- `data.tokens.accessToken`
+- `data.tokens.refreshToken`
+- `data.tokens.accessTokenExpiresIn`
+- `data.tokens.refreshTokenExpiresIn`
 
 ### `POST /api/v1/auth/logout`
 
@@ -122,10 +143,11 @@
 
 成功响应字段：
 
-- `user.id`
-- `user.nickname`
-- `user.role`
-- `user.householdId`
+- `data.userId`
+- `data.householdId`
+- `data.householdName`
+- `data.nickname`
+- `data.role`
 
 ## 3. 分类与标签接口
 
@@ -139,10 +161,14 @@
 
 返回字段：
 
-- `items[].id`
-- `items[].name`
-- `items[].sortOrder`
-- `items[].color`
+- `data[].id`
+- `data[].name`
+- `data[].sortOrder`
+- `data[].color`
+
+返回结构：
+
+- `data` 为 `CategoryDto[]`
 
 ### `POST /api/v1/categories`
 
@@ -200,6 +226,16 @@
 查询参数：
 
 - `includeArchived?: boolean`
+
+返回字段：
+
+- `data[].id`
+- `data[].name`
+- `data[].sortOrder`
+
+返回结构：
+
+- `data` 为 `TagDto[]`
 
 ### `POST /api/v1/tags`
 
@@ -265,6 +301,11 @@
 
 - `data` 为 `PageResult<RecipeListItemDTO>`
 
+错误码：
+
+- `UNAUTHORIZED`：未登录
+- `VALIDATION_ERROR`：查询参数不合法
+
 ### `POST /api/v1/recipes`
 
 用途：创建菜谱并自动生成 `V1`。
@@ -274,6 +315,7 @@
 ```json
 {
   "name": "糖醋排骨",
+  "slug": "sweet-sour-ribs",
   "categoryId": "uuid",
   "newCategoryName": null,
   "tagIds": ["uuid-1"],
@@ -286,13 +328,15 @@
       "normalizedName": "排骨",
       "amountText": "500",
       "unit": "g",
-      "isSeasoning": false
+      "isSeasoning": false,
+      "parseSource": "manual"
     }
   ],
   "steps": [
-    { "sortOrder": 1, "content": "排骨焯水" }
+    { "sortOrder": 0, "content": "排骨焯水" }
   ],
-  "tips": "山楂用新鲜的更酸爽"
+  "tips": "山楂用新鲜的更酸爽",
+  "isMajor": true
 }
 ```
 
@@ -318,11 +362,14 @@
 
 - `id`
 - `name`
+- `slug`
 - `coverImageUrl`
 - `coverSource`
 - `versionCount`
 - `momentCount`
 - `latestMomentAt`
+- `latestCookedAt`
+- `status`
 - `currentVersion`
 
 `currentVersion` 包含：
@@ -330,6 +377,10 @@
 - `id`
 - `versionNumber`
 - `versionName`
+- `sourceVersionId`
+- `isCurrent`
+- `diffSummaryText`
+- `diffSummaryJson`
 - `category`
 - `tags`
 - `ingredientsText`
@@ -346,10 +397,18 @@
 ```json
 {
   "name": "酸甜排骨",
+  "slug": "sweet-sour-ribs-v2",
   "coverImageId": "uuid",
+  "coverSource": "custom",
   "status": "active"
 }
 ```
+
+说明：
+
+- 至少传一个字段
+- `coverSource` 允许值：`custom`、`moment_latest`、`none`
+- `status` 允许值：`active`、`archived`
 
 ### `DELETE /api/v1/recipes/:id`
 
@@ -372,6 +431,11 @@
 
 - `data` 为 `PageResult<RecipeVersionListItemDTO>`
 
+查询参数：
+
+- `page?: number`
+- `pageSize?: number`
+
 ### `POST /api/v1/recipes/:id/versions`
 
 用途：新建版本。
@@ -384,10 +448,23 @@
   "versionName": "菠萝版",
   "categoryId": "uuid",
   "tagIds": ["uuid"],
+  "newTagNames": ["下饭"],
   "ingredientsText": "排骨500g、菠萝200g",
-  "ingredients": [],
-  "steps": [],
-  "tips": "最后加菠萝"
+  "ingredients": [
+    {
+      "rawText": "排骨500g",
+      "normalizedName": "排骨",
+      "amountText": "500",
+      "unit": "g",
+      "isSeasoning": false,
+      "parseSource": "manual"
+    }
+  ],
+  "steps": [
+    { "sortOrder": 0, "content": "排骨焯水备用" }
+  ],
+  "tips": "最后加菠萝",
+  "isMajor": true
 }
 ```
 
@@ -407,6 +484,7 @@
 - `versionNumber`
 - `versionName`
 - `sourceVersionId`
+- `isCurrent`
 - `diffSummaryText`
 - `diffSummaryJson`
 - `category`
@@ -442,6 +520,27 @@
 - `targetVersion`
 - `summaryText`
 - `summaryJson`
+
+`summaryJson` 当前结构：
+
+```json
+{
+  "ingredientsChanged": true,
+  "ingredientsTextBefore": "排骨500g",
+  "ingredientsTextAfter": "排骨500g、菠萝200g",
+  "addedTags": ["下饭"],
+  "removedTags": ["快手"],
+  "stepCountBefore": 2,
+  "stepCountAfter": 3,
+  "summary": "主料有调整；新增标签：下饭；步骤数由 2 步调整为 3 步"
+}
+```
+
+recipes 模块统一错误码补充：
+
+- `NOT_FOUND`：菜谱或版本不存在，或不属于当前家庭
+- `CONFLICT`：`slug` 冲突
+- `BUSINESS_RULE_VIOLATION`：无可复制来源版本等业务规则不满足
 
 ## 5. 时光记录接口
 
