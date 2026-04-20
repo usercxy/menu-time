@@ -14,6 +14,8 @@ export interface ApiFailure {
       | 'NOT_FOUND'
       | 'CONFLICT'
       | 'BUSINESS_RULE_VIOLATION'
+      | 'NETWORK_TIMEOUT'
+      | 'NETWORK_ERROR'
       | 'INTERNAL_ERROR'
     message: string
     details?: unknown

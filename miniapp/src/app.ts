@@ -1,12 +1,34 @@
 import 'abortcontroller-polyfill/dist/abortcontroller-polyfill-only'
 import { createElement, type PropsWithChildren } from 'react'
-import { useLaunch } from '@tarojs/taro'
+import Taro, { useLaunch } from '@tarojs/taro'
 import { envConfig } from '@/constants/env'
 import { AppProviders } from '@/providers/AppProviders'
+import { formatErrorForLog, isTimeoutLikeError } from '@/utils/network-error'
 import './app.scss'
+
+let hasInstalledGlobalErrorHandlers = false
+
+function installGlobalErrorHandlers() {
+  if (hasInstalledGlobalErrorHandlers) {
+    return
+  }
+
+  hasInstalledGlobalErrorHandlers = true
+
+  Taro.onUnhandledRejection((event) => {
+    if (isTimeoutLikeError(event.reason)) {
+      return
+    }
+
+    if (envConfig.isDev) {
+      console.warn('[global] unhandled rejection', formatErrorForLog(event.reason))
+    }
+  })
+}
 
 function App({ children }: PropsWithChildren) {
   useLaunch(() => {
+    installGlobalErrorHandlers()
     console.info('Menu Time miniapp launched.')
     if (envConfig.enableMock && envConfig.usesPlaceholderApi) {
       console.warn('TARO_APP_API_BASE_URL 未配置为可用地址，当前已自动切换到 mock 数据。')

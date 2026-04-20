@@ -1,4 +1,4 @@
-import { AppError, errorCodes } from "@/server/lib/errors";
+import { createS3StorageAdapter } from "@/server/lib/storage/s3-storage.adapter";
 import type {
   RegisterAssetInput,
   UploadTokenInput,
@@ -11,31 +11,13 @@ export interface StorageAdapter {
   getPublicUrl(assetKey: string): string;
 }
 
-class NoopStorageAdapter implements StorageAdapter {
-  async createUploadToken(input: UploadTokenInput): Promise<UploadTokenResult> {
-    void input;
-    throw new AppError("对象存储适配层尚未接入具体实现", {
-      code: errorCodes.INTERNAL_ERROR,
-      statusCode: 501,
-    });
-  }
-
-  async registerAsset(input: RegisterAssetInput) {
-    return input;
-  }
-
-  getPublicUrl(assetKey: string): string {
-    void assetKey;
-    throw new AppError("对象存储适配层尚未接入具体实现", {
-      code: errorCodes.INTERNAL_ERROR,
-      statusCode: 501,
-    });
-  }
-}
-
-let storageAdapter: StorageAdapter = new NoopStorageAdapter();
+let storageAdapter: StorageAdapter | null = null;
 
 export function getStorageAdapter() {
+  if (!storageAdapter) {
+    storageAdapter = createS3StorageAdapter();
+  }
+
   return storageAdapter;
 }
 

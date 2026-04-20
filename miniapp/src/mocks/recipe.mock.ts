@@ -442,14 +442,22 @@ export function updateMockRecipe(recipeId: string, payload: UpdateRecipePayload)
   const recipe = findRecipe(recipeId)
 
   if (!recipe) {
-    return { success: true as const }
+    return buildRecipeDetail(recipeStore[0])
   }
 
   if (payload.name?.trim()) {
     recipe.name = payload.name.trim()
   }
 
-  return { success: true as const }
+  if (payload.coverSource === 'none') {
+    recipe.coverImageUrl = undefined
+  }
+
+  if (payload.coverImageId && payload.coverSource === 'custom') {
+    recipe.coverImageUrl = DEFAULT_COVER_URL
+  }
+
+  return buildRecipeDetail(recipe)
 }
 
 export function createMockRecipeVersion(

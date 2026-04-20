@@ -4,6 +4,7 @@ import { envConfig } from '@/constants/env'
 import { mockTokenBundle } from '@/mocks/session.mock'
 import { authService } from '@/services/modules/auth'
 import { useSessionStore } from '@/store/session'
+import { formatErrorForLog } from '@/utils/network-error'
 import { clearTokenBundle, getTokenBundle, setTokenBundle } from '@/utils/token-storage'
 
 export function useAuthBootstrap() {
@@ -63,7 +64,7 @@ export function useAuthBootstrap() {
 
         clearTokenBundle()
         clearSession()
-        console.error('自动登录初始化失败', error)
+        console.warn('自动登录初始化失败', formatErrorForLog(error))
       }
     }
 

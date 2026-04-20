@@ -8,17 +8,22 @@ import { useSessionQuery } from '@/features/auth/query'
 import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
 import { mealPlanService } from '@/services/modules/meal-plan'
 import { recipeService } from '@/services/modules/recipe'
+import { useSessionStore } from '@/store/session'
 import { navigateToRoute } from '@/utils/navigation'
 
 export default function HomePage() {
+  const sessionStatus = useSessionStore((state) => state.status)
   const sessionQuery = useSessionQuery()
+  const sessionReady = sessionStatus === 'authenticated'
   const weekQuery = useQuery({
     queryKey: ['meal-plan', 'current-week'],
-    queryFn: mealPlanService.getCurrentWeekPlan
+    queryFn: mealPlanService.getCurrentWeekPlan,
+    enabled: sessionReady
   })
   const latestRecipesQuery = useQuery({
     queryKey: ['recipes', 'home-latest'],
-    queryFn: () => recipeService.getRecipes({ page: 1, pageSize: 2 })
+    queryFn: () => recipeService.getRecipes({ page: 1, pageSize: 2 }),
+    enabled: sessionReady
   })
 
   usePageShowRefetch([sessionQuery, weekQuery, latestRecipesQuery])
@@ -26,10 +31,24 @@ export default function HomePage() {
   const weekSummary = weekQuery.data?.summary
   const latestRecipes = latestRecipesQuery.data?.items || []
 
+  if (sessionStatus === 'anonymous') {
+    return (
+      <PageContainer title="食光记" subtitle="正在确认登录状态">
+        <View className="page-stack">
+          <ErrorState
+            title="登录状态暂不可用"
+            description="请退出后重新进入小程序，确认登录完成后再加载首页内容。"
+            onAction={() => void sessionQuery.refetch()}
+          />
+        </View>
+      </PageContainer>
+    )
+  }
+
   return (
     <PageContainer title="食光记" subtitle={`欢迎回来，${sessionQuery.data?.nickname || '主厨'}`}>
       <View className="page-stack">
-        {weekQuery.isLoading ? (
+        {!sessionReady || weekQuery.isLoading ? (
           <LoadingState title="正在准备首页" description="本周计划正在装盘，马上就好。" />
         ) : weekQuery.isError ? (
           <ErrorState
@@ -84,7 +103,7 @@ export default function HomePage() {
         </View>
 
         {/* Memories Feed (Scrapbook Style) */}
-        {latestRecipesQuery.isLoading ? (
+        {!sessionReady || latestRecipesQuery.isLoading ? (
           <LoadingState title="正在翻开菜谱记忆" description="最近做过的菜谱正在赶来首页。" />
         ) : latestRecipesQuery.isError ? (
           <ErrorState

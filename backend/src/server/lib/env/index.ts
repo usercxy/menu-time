@@ -4,6 +4,10 @@ import { z } from "zod";
 
 const durationPattern = /^\d+(ms|s|m|h|d)$/;
 
+function parseCsvList(value: string) {
+  return [...new Set(value.split(",").map((item) => item.trim()).filter(Boolean))];
+}
+
 const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   APP_NAME: z.string().trim().min(1).default("menu-time-backend"),
@@ -20,11 +24,20 @@ const envSchema = z.object({
   WECHAT_APP_SECRET: z.string().trim().min(1),
   WECHAT_API_BASE_URL: z.url(),
   MVP_DEFAULT_HOUSEHOLD_NAME: z.string().trim().min(1).default("我的家庭"),
-  S3_ENDPOINT: z.string().trim().min(1),
+  CLOUD_VENDOR: z.enum(["s3", "cos"]).default("cos"),
+  S3_ENDPOINT: z.string().trim().default(""),
+  S3_REGION: z.string().trim().default(""),
   S3_BUCKET: z.string().trim().min(1),
   S3_ACCESS_KEY: z.string().trim().min(1),
   S3_SECRET_KEY: z.string().trim().min(1),
-  S3_PUBLIC_BASE_URL: z.string().trim().min(1),
+  S3_PUBLIC_BASE_URL: z.string().trim().default(""),
+  S3_SIGNED_URL_TTL_SECONDS: z.coerce.number().int().min(60).max(3600).default(900),
+  MEDIA_MAX_IMAGE_SIZE_BYTES: z.coerce.number().int().positive().default(5 * 1024 * 1024),
+  MEDIA_ALLOWED_IMAGE_TYPES: z
+    .string()
+    .trim()
+    .default("image/jpeg,image/png,image/webp")
+    .transform(parseCsvList),
   PG_BOSS_SCHEMA: z.string().trim().min(1).default("pgboss"),
   ENABLE_JOB_WORKER: z
     .enum(["true", "false"])

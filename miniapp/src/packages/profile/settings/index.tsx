@@ -4,8 +4,9 @@ import { PageContainer } from '@/components/base/PageContainer'
 import { envConfig } from '@/constants/env'
 import { authService } from '@/services/modules/auth'
 import { useSessionStore } from '@/store/session'
-import { clearTokenBundle, getTokenBundle, setTokenBundle } from '@/utils/token-storage'
+import { formatErrorForLog } from '@/utils/network-error'
 import { queryClient } from '@/utils/query-client'
+import { clearTokenBundle, getTokenBundle, setTokenBundle } from '@/utils/token-storage'
 
 export default function SettingsPage() {
   const session = useSessionStore((state) => state.session)
@@ -83,7 +84,7 @@ export default function SettingsPage() {
       await queryClient.invalidateQueries({ queryKey: ['auth'] })
       void showToast('已重新登录', 'success')
     } catch (error) {
-      console.error('开发态重新登录失败', error)
+      console.warn('开发态重新登录失败', formatErrorForLog(error))
       void showToast('重新登录失败')
     }
   }

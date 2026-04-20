@@ -80,7 +80,8 @@ export interface CreateRecipeResultDTO {
 
 export interface UpdateRecipePayload {
   name?: string
-  coverImageId?: string
+  coverImageId?: string | null
+  coverSource?: 'custom' | 'moment_latest' | 'none'
   status?: 'active' | 'archived'
 }
 

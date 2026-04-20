@@ -6,6 +6,7 @@ interface RefreshableQuery {
   refetch: () => Promise<unknown>
   data?: unknown
   isFetching?: boolean
+  isEnabled?: boolean
   fetchStatus?: string
 }
 
@@ -25,6 +26,7 @@ export function usePageShowRefetch(
       hasShownRef.current = true
       const pendingQueries = queries
         .filter((query): query is RefreshableQuery => Boolean(query))
+        .filter((query) => query.isEnabled !== false)
         .filter((query) => !query.data && !query.isFetching)
       if (envConfig.isDev && pendingQueries.length) {
         console.info(
@@ -46,9 +48,11 @@ export function usePageShowRefetch(
       )
     }
     queries.forEach((query) => {
-      if (query) {
-        void query.refetch()
+      if (!query || query.isEnabled === false) {
+        return
       }
+
+      void query.refetch()
     })
   })
 }

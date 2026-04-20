@@ -40,11 +40,13 @@ export const recipeService = {
     return response.data
   },
   async updateRecipe(id: string, payload: UpdateRecipePayload) {
-    await request<{ success: true }>({
+    const response = await request<RecipeDetailDTO>({
       url: `/api/v1/recipes/${id}`,
       method: 'PATCH',
       data: payload
     })
+
+    return response.data
   },
   async getRecipeVersions(recipeId: string, query: { page?: number; pageSize?: number } = {}) {
     const response = await request<RecipeVersionListResultDTO>({

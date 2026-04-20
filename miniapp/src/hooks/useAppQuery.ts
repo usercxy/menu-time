@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query'
 import { envConfig } from '@/constants/env'
 import { queryClient } from '@/utils/query-client'
+import { formatErrorForLog } from '@/utils/network-error'
 
 export function useAppQuery<
   TQueryFnData,
@@ -21,7 +22,14 @@ export function useAppQuery<
   const enabled = options.enabled ?? true
 
   useEffect(() => {
-    if (!enabled || query.data !== undefined || query.isFetching || query.fetchStatus !== 'idle' || !options.queryFn) {
+    if (
+      !enabled ||
+      query.data !== undefined ||
+      query.isError ||
+      query.isFetching ||
+      query.fetchStatus !== 'idle' ||
+      !options.queryFn
+    ) {
       return
     }
 
@@ -40,7 +48,7 @@ export function useAppQuery<
       })
       .catch((error) => {
         if (envConfig.isDev) {
-          console.error('[useAppQuery] force fetch failed', options.queryKey, error)
+          console.warn('[useAppQuery] force fetch failed', options.queryKey, formatErrorForLog(error))
         }
       })
   }, [
@@ -52,6 +60,7 @@ export function useAppQuery<
     options.queryKey,
     options.staleTime,
     query.data,
+    query.isError,
     query.fetchStatus,
     query.isFetching
   ])

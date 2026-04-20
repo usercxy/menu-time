@@ -3,6 +3,7 @@ import { REQUEST_ID_HEADER, envConfig } from '@/constants/env'
 import { useSessionStore } from '@/store/session'
 import type { ApiFailure, ApiResponse } from '@/services/types/api'
 import type { AuthResultDTO, RefreshTokenPayload, TokenBundleDTO } from '@/services/types/auth'
+import { formatErrorForLog, getNetworkTransportErrorInfo } from '@/utils/network-error'
 import { clearTokenBundle, getTokenBundle, setTokenBundle } from '@/utils/token-storage'
 import { resolveMockResponse } from './mock'
 
@@ -15,6 +16,7 @@ export interface RequestOptions {
   auth?: boolean
   headers?: Record<string, string>
   retryOnAuthError?: boolean
+  timeout?: number
 }
 
 export interface RequestResult<TData> {
@@ -47,6 +49,12 @@ export class RequestError extends Error {
 }
 
 let refreshPromise: Promise<TokenBundleDTO | null> | null = null
+const MAX_CONSECUTIVE_UNAUTHORIZED_REQUESTS = 5
+const DEFAULT_REQUEST_TIMEOUT_MS = 15_000
+
+let consecutiveUnauthorizedCount = 0
+let unauthorizedCycleKey = getUnauthorizedCycleKey()
+let hasPromptedReenterMiniapp = false
 
 function logDevRequest(message: string, payload?: unknown) {
   if (!envConfig.isDev) {
@@ -87,6 +95,88 @@ function normalizeUrl(url: string) {
   return `${envConfig.apiBaseUrl}${url}`
 }
 
+function getUnauthorizedCycleKey() {
+  const tokenBundle = getTokenBundle()
+  return tokenBundle?.refreshToken || tokenBundle?.accessToken || 'anonymous'
+}
+
+function resetUnauthorizedState(nextCycleKey = getUnauthorizedCycleKey()) {
+  consecutiveUnauthorizedCount = 0
+  unauthorizedCycleKey = nextCycleKey
+  hasPromptedReenterMiniapp = false
+}
+
+function syncUnauthorizedState() {
+  const nextCycleKey = getUnauthorizedCycleKey()
+
+  if (nextCycleKey !== unauthorizedCycleKey && nextCycleKey !== 'anonymous') {
+    resetUnauthorizedState(nextCycleKey)
+  }
+}
+
+async function promptReenterMiniapp() {
+  if (hasPromptedReenterMiniapp) {
+    return
+  }
+
+  hasPromptedReenterMiniapp = true
+
+  try {
+    await Taro.showModal({
+      title: '登录状态异常',
+      content: '当前权限校验已连续失败 5 次，请退出后重新进入小程序再试。',
+      showCancel: false,
+      confirmText: '我知道了'
+    })
+  } catch (error) {
+    console.warn('提示重新进入小程序失败', formatErrorForLog(error))
+  }
+}
+
+function buildUnauthorizedLimitError() {
+  return new RequestError({
+    code: 'UNAUTHORIZED',
+    message: '当前登录状态已失效，请重新进入小程序后再试',
+    requestId: '',
+    statusCode: 401
+  })
+}
+
+function recordUnauthorizedFailure() {
+  consecutiveUnauthorizedCount += 1
+
+  if (envConfig.isDev) {
+    console.warn(
+      `[request:unauthorized] consecutive failures ${consecutiveUnauthorizedCount}/${MAX_CONSECUTIVE_UNAUTHORIZED_REQUESTS}`
+    )
+  }
+
+  if (consecutiveUnauthorizedCount >= MAX_CONSECUTIVE_UNAUTHORIZED_REQUESTS) {
+    void promptReenterMiniapp()
+  }
+}
+
+function normalizeRequestError(error: unknown, operation = '请求') {
+  if (error instanceof RequestError) {
+    return error
+  }
+
+  const transportError = getNetworkTransportErrorInfo(error, operation)
+  if (transportError) {
+    return new RequestError({
+      code: transportError.code,
+      message: transportError.message,
+      requestId: '',
+      statusCode: 0,
+      details: {
+        rawMessage: transportError.rawMessage
+      }
+    })
+  }
+
+  return error
+}
+
 async function rawRequest<TData>(options: RequestOptions) {
   const method = options.method ?? 'GET'
   const normalizedData = options.data === undefined ? undefined : stripNullish(options.data)
@@ -114,12 +204,19 @@ async function rawRequest<TData>(options: RequestOptions) {
 
   logDevRequest(`[request:http] ${method} ${normalizeUrl(options.url)}`, normalizedData)
 
-  const response = await Taro.request<ApiResponse<TData>>({
-    url: normalizeUrl(options.url),
-    method,
-    data: normalizedData,
-    header: headers
-  })
+  let response: Taro.request.SuccessCallbackResult<ApiResponse<TData>>
+
+  try {
+    response = await Taro.request<ApiResponse<TData>>({
+      url: normalizeUrl(options.url),
+      method,
+      data: normalizedData,
+      header: headers,
+      timeout: options.timeout ?? DEFAULT_REQUEST_TIMEOUT_MS
+    })
+  } catch (error) {
+    throw normalizeRequestError(error)
+  }
 
   const requestId =
     response.data.requestId ||
@@ -180,8 +277,23 @@ async function refreshAccessToken() {
 }
 
 export async function request<TData>(options: RequestOptions): Promise<RequestResult<TData>> {
+  if (options.auth !== false) {
+    syncUnauthorizedState()
+
+    if (consecutiveUnauthorizedCount >= MAX_CONSECUTIVE_UNAUTHORIZED_REQUESTS) {
+      void promptReenterMiniapp()
+      throw buildUnauthorizedLimitError()
+    }
+  }
+
   try {
-    return await rawRequest(options)
+    const result = await rawRequest<TData>(options)
+
+    if (options.auth !== false) {
+      resetUnauthorizedState()
+    }
+
+    return result
   } catch (error) {
     if (
       error instanceof RequestError &&
@@ -191,16 +303,28 @@ export async function request<TData>(options: RequestOptions): Promise<RequestRe
     ) {
       const refreshed = await refreshAccessToken()
       if (refreshed) {
-        return rawRequest({
-          ...options,
-          retryOnAuthError: false
-        })
+        try {
+          const retryResult = await rawRequest<TData>({
+            ...options,
+            retryOnAuthError: false
+          })
+
+          resetUnauthorizedState()
+          return retryResult
+        } catch (retryError) {
+          if (retryError instanceof RequestError && retryError.code === 'UNAUTHORIZED') {
+            recordUnauthorizedFailure()
+          }
+
+          throw retryError
+        }
       }
 
       clearTokenBundle()
       useSessionStore.getState().clearSession()
+      recordUnauthorizedFailure()
     }
 
-    throw error
+    throw normalizeRequestError(error)
   }
 }

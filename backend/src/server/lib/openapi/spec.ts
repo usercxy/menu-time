@@ -8,6 +8,10 @@ import {
   wechatLoginBodySchema,
 } from "@/server/modules/auth/auth.schema";
 import {
+  mediaAssetRegisterBodySchema,
+  mediaUploadTokenBodySchema,
+} from "@/server/modules/media/media.schema";
+import {
   recipeCompareQuerySchema,
   recipeCreateBodySchema,
   recipeIdParamSchema,
@@ -298,6 +302,22 @@ const operations: OperationDefinition[] = [
     paramsSchema: recipeIdParamSchema,
     querySchema: recipeCompareQuerySchema,
   },
+  {
+    method: "post",
+    path: "/api/v1/media/upload-token",
+    tag: "Media",
+    summary: "创建菜谱封面上传授权",
+    auth: "required",
+    bodySchema: mediaUploadTokenBodySchema,
+  },
+  {
+    method: "post",
+    path: "/api/v1/media/assets",
+    tag: "Media",
+    summary: "登记已上传的菜谱封面资源",
+    auth: "required",
+    bodySchema: mediaAssetRegisterBodySchema,
+  },
 ];
 
 function toOpenApiSchema(schema: ZodTypeAny) {
@@ -442,6 +462,7 @@ export function buildOpenApiDocument() {
       { name: "Tags" },
       { name: "Recipes" },
       { name: "Recipe Versions" },
+      { name: "Media" },
     ],
     components: {
       securitySchemes: {

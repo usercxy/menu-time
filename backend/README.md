@@ -8,6 +8,7 @@
 - 阶段 1 部分完成：已落地 `households`、`users`、`wechat_accounts`、`refresh_tokens`、`categories`、`tags`、`media_assets`、`recipes`、`recipe_versions`、`recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags` 共 12 个 Prisma 模型，并补齐两次 migration。
 - 阶段 2 已完成：auth 主链路、taxonomy 的 household-scoped 查询基础设施、`schema / mapper / service / repository` 模块实现，以及分类 / 标签 API 路由均已可用。
 - 阶段 3 已完成：里程碑 A/B/C/D/E/F 已完成，recipes 域数据模型、索引、双向关系、migration、模块抽象、菜谱 CRUD、版本管理、API 路由、recipes 演示 seed、自测与阶段验收均已落地。
+- 阶段 3 补充完成：菜谱封面上传链路已落地，包含 COS/S3 兼容对象存储适配器、上传授权、资源登记、封面绑定与前端对接文档。
 
 ## 当前已验证
 
@@ -26,6 +27,7 @@
 - 通过 `tsx` 执行 recipes 版本烟测，验证 `createRecipeVersion -> listRecipeVersions -> getRecipeVersionDetail -> compareRecipeVersions -> setCurrentRecipeVersion`
 - `npm run prisma:seed` 自动加载 `.env.local`，并写入 1 条带 2 个版本的 recipes 演示数据
 - `npm run dev -- --port 3146` 后通过真实 HTTP 请求验证 recipes API：未登录、列表、创建、详情、更新、版本列表、版本创建、版本详情、版本对比、切换当前版本、删除
+- 新增 media / storage 相关改动后再次执行 `npm run typecheck` 与 `npm run lint`，均通过
 
 ## 已完成基础能力
 
@@ -49,8 +51,82 @@
 - 已实现 recipes service 主链路：列表、详情、创建菜谱自动生成 `V1`、更新基础信息、软删除
 - 已实现 recipes 版本主链路：版本列表、版本详情、创建版本、版本对比、切换当前版本
 - 已开放 recipes API：`/api/v1/recipes`、`/api/v1/recipes/:id`、`/api/v1/recipes/:id/versions`、`/api/v1/recipes/:id/compare`
-- 预留对象存储适配层与 pg-boss worker 启动结构
+- 已实现对象存储适配层：支持 COS/S3 兼容预签名上传、对象存在校验和公开 URL 生成
+- 已开放 media API：`/api/v1/media/upload-token`、`/api/v1/media/assets`
+- 已补充前端接口文档：`docs/frontend-integration/recipe-cover-upload-apis.md`
+- 预留 pg-boss worker 启动结构
 - 增加 `/api/health` 健康检查接口
+
+## 菜谱封面上传设计
+
+当前菜谱封面上传采用“后端签发上传授权、前端直传对象存储、上传成功后登记资源、最后绑定菜谱封面”的四段式链路。
+
+### 方案概览
+
+```text
+前端选图
+  -> POST /api/v1/media/upload-token
+  <- uploadUrl / headers / assetKey
+
+前端直传 COS
+  -> PUT uploadUrl
+
+前端登记资源
+  -> POST /api/v1/media/assets
+  <- mediaAssetId / assetUrl
+
+前端绑定菜谱封面
+  -> PATCH /api/v1/recipes/:id
+     { coverImageId, coverSource: "custom" }
+```
+
+### 这样设计的原因
+
+- 贴合现有数据模型：数据库已经有 `media_assets` 和 `recipes.cover_image_id`，无需新增表即可完成封面图关联。
+- 减少后端流量压力：图片二进制不经过业务服务，上传流量直接进入 COS，更适合图片场景。
+- 贴合当前代码结构：项目已抽象 `storage.adapter`，采用预签名 URL 可以在现有分层上平滑接入。
+- 权限边界更清晰：对象 key 由后端统一生成，前端不能任意写路径；登记阶段再通过 `HeadObject` 校验对象确实存在、类型和大小匹配。
+- 便于后续扩展：后面接 moments、share 图或其他媒体资源时，可以复用同一套存储和登记链路。
+
+### 为什么不走“后端代理上传”
+
+- 代理上传会让应用服务承担全部文件带宽和内存开销，不适合图片直传场景。
+- 当前项目并没有围绕 multipart 代理上传建链路，强行改成代理上传会比直传方案改动更大。
+- 菜谱封面本质上是静态资源，放到对象存储更自然。
+
+### 为什么当前不走“STS 临时密钥直传”
+
+- STS 更适合大文件分片、复杂上传控制或客户端深度接入。
+- 当前只做单张封面，预签名 PUT URL 足够覆盖需求，前端接入也更简单。
+- 先用更轻的方案完成上线，后续若有多图、分片、视频再升级成本更低。
+
+### 当前边界
+
+- 本期只支持菜谱封面，不支持多图或相册。
+- `purpose` 当前只开放 `cover`。
+- 仅支持 `jpg / png / webp`。
+- 面向“公开读、私有写”的对象存储配置。
+- 替换封面时暂不自动删除旧对象，后续再补孤儿资源清理。
+
+### 对象 key 约定
+
+```text
+households/{householdId}/recipes/covers/{yyyy}/{mm}/{uuid}.{ext}
+```
+
+这样做的目的是：
+
+- household 级资源隔离
+- 路径业务含义明确
+- 便于后续清理、审计和统计
+
+### 相关代码位置
+
+- 存储适配：`src/server/lib/storage/s3-storage.adapter.ts`
+- 上传授权接口：`src/app/api/v1/media/upload-token/route.ts`
+- 资源登记接口：`src/app/api/v1/media/assets/route.ts`
+- media 模块服务：`src/server/modules/media/media.service.ts`
+- 前端对接文档：`docs/frontend-integration/recipe-cover-upload-apis.md`
 
 ## 本地使用
 
@@ -82,6 +158,27 @@ npm run lint
 npm run build
 ```
 
+对象存储相关环境变量示例（统一按真实 COS 联调）：
+
+```bash
+CLOUD_VENDOR=cos
+S3_ENDPOINT=https://cos.ap-guangzhou.myqcloud.com
+S3_REGION=ap-guangzhou
+S3_BUCKET=menu-time-1310659978
+S3_PUBLIC_BASE_URL=https://menu-time-1310659978.cos.ap-guangzhou.myqcloud.com
+S3_ACCESS_KEY=replace-me
+S3_SECRET_KEY=replace-me
+S3_SIGNED_URL_TTL_SECONDS=900
+MEDIA_MAX_IMAGE_SIZE_BYTES=52428800
+MEDIA_ALLOWED_IMAGE_TYPES=image/jpeg,image/png,image/webp
+```
+
+说明：
+
+- 当前开发、测试、生产示例都统一使用真实 COS，不再保留 `localhost:9000` 这类本地对象存储模板。
+- `CLOUD_VENDOR=cos` 时，如果误配了本地 `localhost` endpoint，代码会回退到 COS 默认域名，避免再次签出错误的本地上传地址。
+- 生产环境请使用新的、未泄露的子账号密钥，并通过密钥管理系统注入，不要提交到仓库。
+
 ## 已提供的接口
 
 - `GET /api/health`
@@ -109,16 +206,20 @@ npm run build
 - `GET /api/v1/recipes/:id/versions/:versionId`
 - `POST /api/v1/recipes/:id/versions/:versionId/set-current`
 - `GET /api/v1/recipes/:id/compare`
+- `POST /api/v1/media/upload-token`
+- `POST /api/v1/media/assets`
 
 文档入口：
 
 - Swagger UI：`/docs`
 - OpenAPI JSON：`/api/openapi`
+- 前端封面上传对接文档：`docs/frontend-integration/recipe-cover-upload-apis.md`
 
 说明：
 
 - 所有 `recipes` 接口均复用统一 `createRouteHandler`、`requestId` 透传、Zod 校验、统一响应和错误映射。
 - 所有 `recipes` 接口默认要求登录。
+- `media` 接口默认要求登录，推荐调用顺序为“申请上传授权 -> 直传 COS -> 登记资源 -> 绑定菜谱封面”。
 
 ## 联调示例请求
 
@@ -251,7 +352,8 @@ backend/
           context.ts               # requestId / householdId 上下文工具
           request-id.ts            # requestId 生成与注入
         storage/
-          storage.adapter.ts       # 对象存储适配层预留
+          storage.adapter.ts       # 对象存储适配层入口
+          s3-storage.adapter.ts    # COS/S3 兼容上传与对象校验
           storage.types.ts         # 存储相关类型
       modules/
         README.md                  # 模块目录约定说明
@@ -276,7 +378,12 @@ backend/
           recipes.repository.ts    # household-scoped 查询与版本写入 helper
           recipes.service.ts       # recipes 服务层基础能力
         media/
-          README.md                # 媒体模块占位
+          README.md                # 媒体模块说明
+          media.types.ts           # 媒体 DTO 与输入类型
+          media.schema.ts          # 上传授权 / 资源登记参数校验
+          media.mapper.ts          # 媒体 DTO 映射
+          media.repository.ts      # media_assets 数据访问
+          media.service.ts         # 媒体上传与登记业务逻辑
         moments/
           README.md                # 时光记录模块占位
         plans/
@@ -285,6 +392,9 @@ backend/
           README.md                # 购物清单模块占位
         random/
           README.md                # 随机点菜模块占位
+  docs/
+    frontend-integration/
+      recipe-cover-upload-apis.md # 菜谱封面上传前端接口文档
 ```
 
 ## 目录说明

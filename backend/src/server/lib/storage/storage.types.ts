@@ -1,14 +1,18 @@
+export type MediaPurpose = "moment" | "cover" | "share";
+
 export type UploadTokenInput = {
   householdId: string;
-  purpose: "moment" | "cover" | "share";
+  purpose: MediaPurpose;
   fileName: string;
   contentType: string;
+  sizeBytes: number;
 };
 
 export type UploadTokenResult = {
   uploadUrl: string;
   headers?: Record<string, string>;
   assetKey: string;
+  expiresInSeconds?: number;
 };
 
 export type RegisterAssetInput = {
@@ -19,6 +23,6 @@ export type RegisterAssetInput = {
   sizeBytes: number;
   width?: number;
   height?: number;
-  purpose: "moment" | "cover" | "share";
+  purpose: MediaPurpose;
   createdBy: string;
 };

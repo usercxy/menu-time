@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type Dispatch, type SetStateAction } from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { Input, Text, Textarea, View } from '@tarojs/components'
+import { Image, Input, Text, Textarea, View } from '@tarojs/components'
 import Taro, { useRouter } from '@tarojs/taro'
 import { EmptyState } from '@/components/base/EmptyState'
 import { LoadingState } from '@/components/base/LoadingState'
@@ -13,8 +13,14 @@ import { buildOptimisticRecipeDetail, buildOptimisticRecipeVersions } from '@/ut
 import { recipeService } from '@/services/modules/recipe'
 import { taxonomyService } from '@/services/modules/taxonomy'
 import { redirectToRoute } from '@/utils/navigation'
+import {
+  chooseRecipeCoverDraft,
+  getRecipeCoverUploadErrorMessage,
+  uploadRecipeCover,
+  type LocalImageDraft
+} from '@/utils/media-upload'
 import { validateCreateRecipeForm } from '@/utils/recipe-form'
-import type { RecipeDetailDTO } from '@/services/types/recipe'
+import type { RecipeDetailDTO, UpdateRecipePayload } from '@/services/types/recipe'
 import styles from './index.module.scss'
 
 export default function RecipeEditPage() {
@@ -31,6 +37,9 @@ export default function RecipeEditPage() {
   const [ingredients, setIngredients] = useState([''])
   const [steps, setSteps] = useState([''])
   const [tips, setTips] = useState('')
+  const [coverDraft, setCoverDraft] = useState<LocalImageDraft | null>(null)
+  const [isUploadingCover, setIsUploadingCover] = useState(false)
+  const [coverError, setCoverError] = useState('')
   const [formError, setFormError] = useState('')
 
   const detailQuery = useQuery({
@@ -60,6 +69,8 @@ export default function RecipeEditPage() {
     setIngredients(currentVersion?.ingredients.length ? currentVersion.ingredients.map((item) => item.rawText) : [''])
     setSteps(currentVersion?.steps.length ? currentVersion.steps.map((item) => item.content) : [''])
     setTips(currentVersion?.tips || '')
+    setCoverDraft(null)
+    setCoverError('')
     setFormError('')
   }
 
@@ -78,56 +89,11 @@ export default function RecipeEditPage() {
   )
 
   const createMutation = useMutation({
-    mutationFn: recipeService.createRecipe,
-    onSuccess: async (result, payload) => {
-      queryClient.setQueryData(
-        ['recipe-detail', result.recipeId],
-        buildOptimisticRecipeDetail(payload, result, categoriesQuery.data || [], tagsQuery.data || [])
-      )
-      queryClient.setQueryData(
-        ['recipe-versions', result.recipeId],
-        buildOptimisticRecipeVersions(payload, result, categoriesQuery.data || [], tagsQuery.data || [])
-      )
-
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['recipes'] }),
-        queryClient.invalidateQueries({ queryKey: ['meal-plan', 'current-week'] })
-      ])
-
-      Taro.showToast({
-        title: '菜谱已入库',
-        icon: 'success'
-      })
-
-      setTimeout(() => {
-        void redirectToRoute(routes.recipeDetail, { id: result.recipeId })
-      }, 220)
-    },
-    onError: () => {
-      setFormError('保存失败，请稍后重试。')
-    }
+    mutationFn: recipeService.createRecipe
   })
 
   const updateMutation = useMutation({
-    mutationFn: (payload: { name: string }) => recipeService.updateRecipe(recipeId, payload),
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ['recipe-detail', recipeId] }),
-        queryClient.invalidateQueries({ queryKey: ['recipes'] })
-      ])
-
-      Taro.showToast({
-        title: '菜谱档案已更新',
-        icon: 'success'
-      })
-
-      setTimeout(() => {
-        void redirectToRoute(routes.recipeDetail, { id: recipeId })
-      }, 220)
-    },
-    onError: () => {
-      setFormError('更新失败，请稍后重试。')
-    }
+    mutationFn: (payload: UpdateRecipePayload) => recipeService.updateRecipe(recipeId, payload)
   })
 
   const toggleTag = (tagId: string) => {
@@ -148,6 +114,63 @@ export default function RecipeEditPage() {
     setter((current) => [...current, ''])
   }
 
+  const chooseCover = async () => {
+    try {
+      const nextCoverDraft = await chooseRecipeCoverDraft()
+      if (!nextCoverDraft) {
+        return
+      }
+
+      setCoverDraft(nextCoverDraft)
+      setCoverError('')
+      setFormError('')
+    } catch (error) {
+      const rawMessage =
+        error instanceof Error ? error.message : String((error as { errMsg?: string })?.errMsg || '')
+
+      if (/cancel/i.test(rawMessage)) {
+        return
+      }
+
+      const message = getRecipeCoverUploadErrorMessage(error)
+      setCoverError(message)
+      Taro.showToast({
+        title: message,
+        icon: 'none'
+      })
+    }
+  }
+
+  const clearPendingCover = () => {
+    setCoverDraft(null)
+    setCoverError('')
+  }
+
+  const previewCover = async (url: string) => {
+    if (!url) {
+      return
+    }
+
+    await Taro.previewImage({
+      urls: [url],
+      current: url
+    })
+  }
+
+  const uploadPendingCover = async () => {
+    if (!coverDraft) {
+      return null
+    }
+
+    setIsUploadingCover(true)
+
+    try {
+      return await uploadRecipeCover(coverDraft)
+    } finally {
+      setIsUploadingCover(false)
+    }
+  }
+
   const resetForm = () => {
     if (isEditMode && detailQuery.data) {
       hydrateForm(detailQuery.data)
@@ -163,6 +186,8 @@ export default function RecipeEditPage() {
     setIngredients([''])
     setSteps([''])
     setTips('')
+    setCoverDraft(null)
+    setCoverError('')
     setFormError('')
   }
 
@@ -185,18 +210,148 @@ export default function RecipeEditPage() {
     }
 
     setFormError('')
+    setCoverError('')
 
     if (isEditMode) {
-      await updateMutation.mutateAsync({
+      let coverUploadFailed = false
+      let updatePayload: UpdateRecipePayload = {
         name: parsed.data.name
-      })
+      }
+
+      if (coverDraft) {
+        try {
+          const uploadedCover = await uploadPendingCover()
+          if (uploadedCover) {
+            updatePayload = {
+              ...updatePayload,
+              coverImageId: uploadedCover.id,
+              coverSource: 'custom'
+            }
+          }
+        } catch (error) {
+          coverUploadFailed = true
+          setCoverError(getRecipeCoverUploadErrorMessage(error))
+        }
+      }
+
+      try {
+        const updatedDetail = await updateMutation.mutateAsync(updatePayload)
+        queryClient.setQueryData(['recipe-detail', recipeId], updatedDetail)
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['recipe-detail', recipeId] }),
+          queryClient.invalidateQueries({ queryKey: ['recipes'] })
+        ])
+
+        if (coverUploadFailed) {
+          Taro.showToast({
+            title: '基础信息已保存，封面待重试',
+            icon: 'none'
+          })
+          return
+        }
+
+        setCoverDraft(null)
+        Taro.showToast({
+          title: '菜谱档案已更新',
+          icon: 'success'
+        })
+
+        setTimeout(() => {
+          void redirectToRoute(routes.recipeDetail, { id: recipeId })
+        }, 220)
+      } catch (error) {
+        setFormError(error instanceof Error ? error.message : '更新失败，请稍后重试。')
+      }
       return
     }
 
-    await createMutation.mutateAsync(parsed.data)
+    let result: Awaited<ReturnType<typeof recipeService.createRecipe>>
+    try {
+      result = await createMutation.mutateAsync(parsed.data)
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : '保存失败，请稍后重试。')
+      return
+    }
+
+    let uploadedCoverAsset: Awaited<ReturnType<typeof uploadRecipeCover>> | null = null
+
+    if (coverDraft) {
+      try {
+        uploadedCoverAsset = await uploadPendingCover()
+        if (uploadedCoverAsset) {
+          await recipeService.updateRecipe(result.recipeId, {
+            coverImageId: uploadedCoverAsset.id,
+            coverSource: 'custom'
+          })
+        }
+      } catch (error) {
+        const message = getRecipeCoverUploadErrorMessage(error)
+        const optimisticDetail = buildOptimisticRecipeDetail(
+          parsed.data,
+          result,
+          categoriesQuery.data || [],
+          tagsQuery.data || []
+        )
+
+        queryClient.setQueryData(['recipe-detail', result.recipeId], optimisticDetail)
+        queryClient.setQueryData(
+          ['recipe-versions', result.recipeId],
+          buildOptimisticRecipeVersions(parsed.data, result, categoriesQuery.data || [], tagsQuery.data || [])
+        )
+
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ['recipes'] }),
+          queryClient.invalidateQueries({ queryKey: ['meal-plan', 'current-week'] })
+        ])
+
+        setCoverError(message)
+        Taro.showToast({
+          title: '菜谱已创建，请补传封面',
+          icon: 'none'
+        })
+
+        setTimeout(() => {
+          void redirectToRoute(routes.recipeEdit, { id: result.recipeId })
+        }, 220)
+        return
+      }
+    }
+
+    const optimisticDetail = buildOptimisticRecipeDetail(
+      parsed.data,
+      result,
+      categoriesQuery.data || [],
+      tagsQuery.data || []
+    )
+
+    if (uploadedCoverAsset) {
+      optimisticDetail.coverImageUrl = uploadedCoverAsset.assetUrl
+      optimisticDetail.coverSource = 'custom'
+    }
+
+    queryClient.setQueryData(['recipe-detail', result.recipeId], optimisticDetail)
+    queryClient.setQueryData(
+      ['recipe-versions', result.recipeId],
+      buildOptimisticRecipeVersions(parsed.data, result, categoriesQuery.data || [], tagsQuery.data || [])
+    )
+
+    await Promise.all([
+      queryClient.invalidateQueries({ queryKey: ['recipes'] }),
+      queryClient.invalidateQueries({ queryKey: ['meal-plan', 'current-week'] })
+    ])
+
+    setCoverDraft(null)
+    Taro.showToast({
+      title: '菜谱已入库',
+      icon: 'success'
+    })
+
+    setTimeout(() => {
+      void redirectToRoute(routes.recipeDetail, { id: result.recipeId })
+    }, 220)
   }
 
-  const submitPending = isEditMode ? updateMutation.isPending : createMutation.isPending
+  const submitPending = isUploadingCover || (isEditMode ? updateMutation.isPending : createMutation.isPending)
 
   if (isEditMode && detailQuery.isLoading) {
     return (
@@ -215,6 +370,20 @@ export default function RecipeEditPage() {
   }
 
   const detail = detailQuery.data
+  const coverPreviewUrl = coverDraft?.filePath || detail?.coverImageUrl || ''
+  const hasRemoteCover = Boolean(detail?.coverImageUrl)
+  const coverStatusText = coverDraft
+    ? `待上传 · ${coverDraft.width} x ${coverDraft.height}`
+    : hasRemoteCover
+      ? detail?.coverSource === 'custom'
+        ? '当前使用自定义封面'
+        : '当前封面由系统回填'
+      : '还没有封面图'
+  const coverDescription = coverDraft
+    ? '保存时会按“申请授权 -> 直传存储 -> 登记资源 -> 绑定菜谱”完成联调。'
+    : isEditMode
+      ? '可从相册或相机选择一张图片，保存时会自动上传并绑定到当前菜谱。'
+      : '创建成功后如果已选图片，会继续上传并补绑为这道菜的自定义封面。'
 
   return (
     <PageContainer
@@ -228,7 +397,7 @@ export default function RecipeEditPage() {
           <Text className={styles.introDescription}>
             {isEditMode
               ? '编辑模式当前只更新菜名等基础信息；分类、标签和做法内容建议通过新建版本继续演进。'
-              : '这一版先打通 mock 创建闭环：保存后会直接进入菜谱详情页，方便继续做版本和时光记录。'}
+              : '保存后会先创建菜谱，再按需补传封面，随后直接进入详情页继续整理版本和时光记录。'}
           </Text>
         </View>
 
@@ -241,6 +410,42 @@ export default function RecipeEditPage() {
           </View>
 
           <View className={styles.fieldStack}>
+            <View className={styles.fieldBlock}>
+              <Text className={styles.fieldLabel}>封面图</Text>
+              <View className={styles.coverCard}>
+                {coverPreviewUrl ? (
+                  <Image className={styles.coverPreview} mode="aspectFill" src={coverPreviewUrl} />
+                ) : (
+                  <View className={styles.coverPlaceholder}>
+                    <Text className={styles.coverPlaceholderTitle}>给这道菜留一张封面</Text>
+                    <Text className={styles.coverPlaceholderText}>JPG / PNG / WEBP，建议横图，保存时自动上传。</Text>
+                  </View>
+                )}
+
+                <View className={styles.coverMeta}>
+                  <Text className={styles.coverMetaTitle}>{coverStatusText}</Text>
+                  <Text className={styles.coverMetaDescription}>{coverDescription}</Text>
+                  <View className={styles.coverActionRow}>
+                    <View className={styles.rowAction} onClick={() => void chooseCover()}>
+                      <Text>{coverPreviewUrl ? '重新选择' : '选择图片'}</Text>
+                    </View>
+                    {coverPreviewUrl ? (
+                      <View className={styles.rowAction} onClick={() => void previewCover(coverPreviewUrl)}>
+                        <Text>预览</Text>
+                      </View>
+                    ) : null}
+                    {coverDraft ? (
+                      <View className={styles.rowAction} onClick={clearPendingCover}>
+                        <Text>撤销选择</Text>
+                      </View>
+                    ) : null}
+                  </View>
+                </View>
+              </View>
+              <Text className={styles.helpText}>封面会展示在菜谱详情、菜谱列表和首页卡片中。</Text>
+              {coverError ? <Text className={styles.coverErrorText}>{coverError}</Text> : null}
+            </View>
+
             <View className={styles.fieldBlock}>
               <View className={styles.labelRow}>
                 <Text className={styles.fieldLabel}>菜谱名</Text>
@@ -478,9 +683,11 @@ export default function RecipeEditPage() {
           >
             <Text>
               {submitPending
-                ? isEditMode
-                  ? '更新中...'
-                  : '保存中...'
+                ? isUploadingCover
+                  ? '上传封面中...'
+                  : isEditMode
+                    ? '更新中...'
+                    : '保存中...'
                 : isEditMode
                   ? '保存基础信息'
                   : '保存并查看详情'}
