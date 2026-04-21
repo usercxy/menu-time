@@ -1,8 +1,8 @@
 .root {
   padding: 32px 24px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 12px 32px rgba(55, 56, 49, 0.06);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--shadow-soft);
   text-align: center;
 }
 
@@ -17,7 +17,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: rgba(168, 69, 51, 0.22);
+  background: var(--color-tertiary-state-muted);
 }
 
 .title {
@@ -25,13 +25,13 @@
   margin-top: 14px;
   font-size: 28px;
   font-weight: 700;
-  color: #373831;
+  color: var(--color-on-surface);
 }
 
 .description {
   display: block;
   margin-top: 10px;
-  color: #64655c;
+  color: var(--color-on-surface-variant);
   font-size: 22px;
   line-height: 1.6;
 }

@@ -1,54 +1,62 @@
 :root {
-  /* --- Base Palette (Internal) --- */
-  --palette-warm-white: #fffcf7;
-  --palette-sand-light: #fcf9f3;
-  --palette-sand-medium: #f6f4ec;
-  --palette-sand-dark: #f0eee4;
-  --palette-sand-deep: #eae9dd;
-  --palette-rust-base: #a84533;
-  --palette-rust-dim: #983a28;
-  --palette-rust-deep: #8a3729;
-  --palette-rust-light: #ffac9c;
-  --palette-sage-base: #596859;
-  --palette-sage-dim: #4d5c4d;
-  --palette-sage-light: #e4f5e2;
-  --palette-earth-base: #6e6353;
-  --palette-earth-dim: #615747;
-  --palette-earth-light: #feefda;
-  --palette-ink-base: #373831;
-  --palette-ink-muted: #64655c;
-  --palette-ink-light: #818178;
+  /* --- Base Palette (Internal - Vintage Emerald) --- */
+  --palette-cream-white: #fffdf2;
+  --palette-cream-light: #fcfaf0;
+  --palette-cream-medium: #f5f2e6;
+  --palette-cream-dark: #ede9d8;
+  --palette-cream-deep: #e3deca;
+  --palette-emerald-base: #2c4c3b;
+  --palette-emerald-dim: #1b3226;
+  --palette-emerald-deep: #12221a;
+  --palette-emerald-light: #d5e2db;
+  --palette-olive-base: #6b705c;
+  --palette-olive-dim: #585d4a;
+  --palette-olive-light: #e9ede0;
+  --palette-ochre-base: #a85507;
+  --palette-ochre-dim: #8a4606;
+  --palette-ochre-light: #fde6d2;
+  --palette-ink-base: #1a1c19;
+  --palette-ink-muted: #414941;
+  --palette-ink-light: #717971;
 
   /* --- Semantic Tokens (Theming Layer) --- */
   
   /* Background & Surface */
-  --color-background: var(--palette-warm-white);
-  --color-surface: var(--palette-warm-white);
+  --color-background: var(--palette-cream-white);
+  --color-surface: var(--palette-cream-white);
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: var(--palette-sand-light);
-  --color-surface-container: var(--palette-sand-medium);
-  --color-surface-container-high: var(--palette-sand-dark);
-  --color-surface-container-highest: var(--palette-sand-deep);
+  --color-surface-container-low: var(--palette-cream-light);
+  --color-surface-container: var(--palette-cream-medium);
+  --color-surface-container-high: var(--palette-cream-dark);
+  --color-surface-container-highest: var(--palette-cream-deep);
+  --color-page-background:
+    radial-gradient(circle at top left, rgba(168, 85, 7, 0.12), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(44, 76, 59, 0.12), transparent 32%),
+    linear-gradient(180deg, var(--palette-cream-white) 0%, var(--palette-cream-dark) 100%);
+  --color-nav-background: rgba(255, 253, 242, 0.96);
+  --color-overlay-scrim: rgba(26, 28, 25, 0.28);
   
-  /* Brand - Primary (Rust) */
-  --color-primary: var(--palette-rust-base);
-  --color-primary-dim: var(--palette-rust-dim);
-  --color-primary-deep: var(--palette-rust-deep);
-  --color-primary-container: var(--palette-rust-light);
+  /* Brand - Primary (Forest Green) */
+  --color-primary: var(--palette-emerald-base);
+  --color-primary-dim: var(--palette-emerald-dim);
+  --color-primary-deep: var(--palette-emerald-deep);
+  --color-primary-container: var(--palette-emerald-light);
   --color-on-primary: #ffffff;
-  --color-on-primary-container: #721e10;
+  --color-on-primary-container: var(--palette-emerald-deep);
   
-  /* Brand - Secondary (Sage) */
-  --color-secondary: var(--palette-sage-base);
-  --color-secondary-dim: var(--palette-sage-dim);
-  --color-secondary-container: var(--palette-sage-light);
+  /* Brand - Secondary (Olive) */
+  --color-secondary: var(--palette-olive-base);
+  --color-secondary-dim: var(--palette-olive-dim);
+  --color-secondary-container: var(--palette-olive-light);
   --color-on-secondary: #ffffff;
+  --color-on-secondary-container: var(--palette-olive-dim);
   
-  /* Brand - Tertiary (Earth) */
-  --color-tertiary: var(--palette-earth-base);
-  --color-tertiary-dim: var(--palette-earth-dim);
-  --color-tertiary-container: var(--palette-earth-light);
+  /* Brand - Tertiary (Ochre / Accent) */
+  --color-tertiary: var(--palette-ochre-base);
+  --color-tertiary-dim: var(--palette-ochre-dim);
+  --color-tertiary-container: var(--palette-ochre-light);
   --color-on-tertiary: #ffffff;
+  --color-on-tertiary-container: var(--palette-ochre-dim);
   
   /* Text */
   --color-text-main: var(--palette-ink-base);
@@ -57,23 +65,34 @@
   --color-on-surface: var(--palette-ink-base);
   --color-on-surface-variant: var(--palette-ink-muted);
   
+  /* Legacy Compatibility Aliases */
+  --color-text: var(--color-text-main);
+  --color-text-secondary: var(--color-text-muted);
+  
   /* Outline & Utility */
-  --color-outline: var(--palette-ink-light);
-  --color-outline-variant: #babaaf;
-  --color-error: #b3374e;
+  --color-outline: var(--palette-olive-base);
+  --color-outline-variant: #adb5ad;
+  --color-tertiary-fixed-dim: var(--palette-ochre-base);
+  --color-error: #ba1a1a;
   --color-on-error: #ffffff;
+  --color-primary-state-soft: rgba(44, 76, 59, 0.06);
+  --color-primary-state-pressed: rgba(44, 76, 59, 0.12);
+  --color-ink-state-soft: rgba(26, 28, 25, 0.04);
+  --color-ink-state-pressed: rgba(26, 28, 25, 0.1);
+  --color-tertiary-state-soft: rgba(168, 85, 7, 0.1);
+  --color-tertiary-state-muted: rgba(168, 85, 7, 0.22);
   
   /* --- Elevation & Effects --- */
-  --shadow-soft: 0 12px 32px rgba(55, 56, 49, 0.06);
-  --shadow-floating: 0 18px 42px rgba(96, 69, 39, 0.12);
-  --shadow-scrapbook: 0px 12px 32px rgba(55, 56, 49, 0.06);
-  --shadow-primary: 0 12px 32px rgba(168, 69, 51, 0.2);
+  --shadow-soft: 0 12px 32px rgba(26, 28, 25, 0.04);
+  --shadow-floating: 0 18px 42px rgba(27, 50, 38, 0.12);
+  --shadow-scrapbook: 0px 8px 24px rgba(26, 28, 25, 0.05);
+  --shadow-primary: 0 12px 32px rgba(44, 76, 59, 0.2);
   
   /* --- Geometry --- */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 24px;
-  --radius-card: 24px;
+  --radius-card: 20px;
   --radius-pill: 999px;
   
   /* --- Layout --- */
@@ -82,7 +101,7 @@
 }
 
 /* 
-Example: Cool Night Theme (Replace the Semantic Tokens above to switch theme)
+Example: Cool Night Theme
 :root[data-theme='cool-night'] {
   --color-background: #1a1b1e;
   --color-surface: #1a1b1e;

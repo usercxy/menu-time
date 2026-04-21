@@ -22,15 +22,15 @@ export default defineAppConfig({
   window: {
     backgroundTextStyle: 'light',
     navigationStyle: 'custom',
-    backgroundColor: '#fffcf7',
-    backgroundColorTop: '#fffcf7',
-    backgroundColorBottom: '#f1e7d7'
+    backgroundColor: '#fffdf2',
+    backgroundColorTop: '#fffdf2',
+    backgroundColorBottom: '#fffdf2'
   },
   tabBar: {
-    color: '#6e6353',
-    selectedColor: '#a84533',
-    backgroundColor: '#fffcf7',
-    borderStyle: 'white',
+    color: '#6b705c',
+    selectedColor: '#2c4c3b',
+    backgroundColor: '#fffdf2',
+    borderStyle: 'black',
     list: [
       {
         pagePath: 'pages/home/index',

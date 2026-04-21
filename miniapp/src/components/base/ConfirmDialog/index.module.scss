@@ -9,28 +9,28 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: rgba(55, 56, 49, 0.28);
+  background: var(--color-overlay-scrim);
 }
 
 .panel {
   width: 100%;
   border-radius: 28px;
-  background: #fff;
+  background: var(--color-surface-container-lowest);
   padding: 28px;
-  box-shadow: 0 18px 42px rgba(96, 69, 39, 0.12);
+  box-shadow: var(--shadow-floating);
 }
 
 .title {
   display: block;
   font-size: 30px;
   font-weight: 700;
-  color: #373831;
+  color: var(--color-on-surface);
 }
 
 .description {
   display: block;
   margin-top: 12px;
-  color: #64655c;
+  color: var(--color-on-surface-variant);
   font-size: 22px;
   line-height: 1.6;
 }

@@ -1,5 +1,5 @@
 .heroCard {
-  background: var(--color-surface-container-low);
+  background: var(--color-surface-container);
   border-radius: var(--radius-card);
   position: relative;
   overflow: hidden;
@@ -80,7 +80,7 @@
   position: absolute;
   top: 24px;
   right: 24px;
-  background: rgba(254, 239, 218, 0.92);
+  background: rgba(253, 230, 210, 0.92);
   padding: 8px 24px;
   border-radius: 999px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
