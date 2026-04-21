@@ -5,23 +5,25 @@ import { getEnv } from "@/server/lib/env";
 import { getLogger } from "@/server/lib/logger";
 import { requireRequestHouseholdId } from "@/server/lib/request/context";
 import { getStorageAdapter } from "@/server/lib/storage/storage.adapter";
-import { mapMediaAssetDto } from "@/server/modules/media/media.mapper";
-import * as mediaRepository from "@/server/modules/media/media.repository";
+import { mapFileAssetDto } from "@/server/modules/files/files.mapper";
+import * as filesRepository from "@/server/modules/files/files.repository";
 import type {
-  MediaAssetDto,
-  MediaAssetRegistrationPayload,
-  MediaUploadTokenPayload,
-  MediaUploadTokenResultDto,
-} from "@/server/modules/media/media.types";
+  FileAssetDto,
+  FileAssetRegistrationPayload,
+  FileReadPayload,
+  FileReadUrlDto,
+  FileUploadTokenPayload,
+  FileUploadTokenResultDto,
+} from "@/server/modules/files/files.types";
 
 const prisma = getPrismaClient();
-const logger = getLogger({ module: "media" });
+const logger = getLogger({ module: "files" });
 
 type SessionInput = {
   session?: Pick<AuthSession, "householdId" | "userId"> | null;
 };
 
-function resolveMediaHouseholdId(session?: Pick<AuthSession, "householdId"> | null) {
+function resolveFilesHouseholdId(session?: Pick<AuthSession, "householdId"> | null) {
   return session?.householdId ?? requireRequestHouseholdId();
 }
 
@@ -36,10 +38,7 @@ function resolveActingUserId(session?: Pick<AuthSession, "userId"> | null) {
   return session.userId;
 }
 
-function assertSupportedCoverUpload(input: {
-  contentType: string;
-  sizeBytes: number;
-}) {
+function assertSupportedImage(input: { contentType: string; sizeBytes: number }) {
   const env = getEnv();
 
   if (!env.MEDIA_ALLOWED_IMAGE_TYPES.includes(input.contentType)) {
@@ -65,20 +64,19 @@ function assertSupportedCoverUpload(input: {
 
 export async function createUploadToken(
   input: SessionInput & {
-    data: MediaUploadTokenPayload;
+    data: FileUploadTokenPayload;
   },
-): Promise<MediaUploadTokenResultDto> {
-  const householdId = resolveMediaHouseholdId(input.session);
+): Promise<FileUploadTokenResultDto> {
+  const householdId = resolveFilesHouseholdId(input.session);
   const env = getEnv();
 
-  assertSupportedCoverUpload({
+  assertSupportedImage({
     contentType: input.data.contentType,
     sizeBytes: input.data.sizeBytes,
   });
 
   const result = await getStorageAdapter().createUploadToken({
     householdId,
-    purpose: input.data.purpose,
     fileName: input.data.fileName,
     contentType: input.data.contentType,
     sizeBytes: input.data.sizeBytes,
@@ -87,11 +85,10 @@ export async function createUploadToken(
   logger.info(
     {
       householdId,
-      purpose: input.data.purpose,
       assetKey: result.assetKey,
       sizeBytes: input.data.sizeBytes,
     },
-    "media upload token created",
+    "file upload token created",
   );
 
   return {
@@ -105,18 +102,18 @@ export async function createUploadToken(
 
 export async function registerAsset(
   input: SessionInput & {
-    data: MediaAssetRegistrationPayload;
+    data: FileAssetRegistrationPayload;
   },
-): Promise<MediaAssetDto> {
-  const householdId = resolveMediaHouseholdId(input.session);
+): Promise<FileAssetDto> {
+  const householdId = resolveFilesHouseholdId(input.session);
   const createdById = resolveActingUserId(input.session);
 
-  assertSupportedCoverUpload({
+  assertSupportedImage({
     contentType: input.data.mimeType,
     sizeBytes: input.data.sizeBytes,
   });
 
-  const existing = await mediaRepository.findMediaAssetByAssetKey(prisma, {
+  const existing = await filesRepository.findFileAssetByAssetKey(prisma, {
     assetKey: input.data.assetKey,
   });
 
@@ -135,11 +132,11 @@ export async function registerAsset(
     sizeBytes: input.data.sizeBytes,
     width: input.data.width,
     height: input.data.height,
-    purpose: input.data.purpose,
+    purpose: "image",
     createdBy: createdById,
   });
 
-  const saved = await mediaRepository.upsertMediaAsset(prisma, {
+  const saved = await filesRepository.upsertFileAsset(prisma, {
     householdId,
     assetKey: verified.assetKey,
     assetUrl: verified.assetUrl,
@@ -147,18 +144,70 @@ export async function registerAsset(
     sizeBytes: verified.sizeBytes,
     width: verified.width,
     height: verified.height,
-    purpose: input.data.purpose,
+    purpose: "image",
     createdById,
   });
 
   logger.info(
     {
       householdId,
-      mediaAssetId: saved.id,
+      fileAssetId: saved.id,
       assetKey: saved.assetKey,
     },
-    "media asset registered",
+    "file asset registered",
   );
 
-  return mapMediaAssetDto(saved);
+  return mapFileAssetDto(saved);
+}
+
+async function findOwnedFileOrThrow(input: SessionInput & { id: string }) {
+  const householdId = resolveFilesHouseholdId(input.session);
+  const file = await filesRepository.findFileAssetById(prisma, {
+    householdId,
+    id: input.id,
+  });
+
+  if (!file) {
+    throw new AppError("文件不存在", {
+      code: errorCodes.NOT_FOUND,
+      statusCode: 404,
+    });
+  }
+
+  return file;
+}
+
+export async function createPreviewUrl(
+  input: SessionInput & {
+    data: FileReadPayload;
+  },
+): Promise<FileReadUrlDto> {
+  const file = await findOwnedFileOrThrow({
+    session: input.session,
+    id: input.data.id,
+  });
+
+  return getStorageAdapter().createReadAssetUrl({
+    assetKey: file.assetKey,
+    mimeType: file.mimeType,
+    disposition: "inline",
+  });
+}
+
+export async function createDownloadUrl(
+  input: SessionInput & {
+    data: FileReadPayload;
+  },
+): Promise<FileReadUrlDto> {
+  const file = await findOwnedFileOrThrow({
+    session: input.session,
+    id: input.data.id,
+  });
+
+  return getStorageAdapter().createReadAssetUrl({
+    assetKey: file.assetKey,
+    mimeType: file.mimeType,
+    disposition: "attachment",
+    fileName: input.data.fileName,
+  });
 }

@@ -59,12 +59,14 @@
 
 @mixin form-single-line-input {
   @include form-text-control;
+
   height: 88px;
   line-height: 88px;
 }
 
 @mixin form-textarea {
   @include form-text-control;
+
   min-height: 156px;
   padding: 24px 0;
   line-height: 1.7;

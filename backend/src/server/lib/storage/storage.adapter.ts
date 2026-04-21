@@ -1,5 +1,7 @@
 import { createS3StorageAdapter } from "@/server/lib/storage/s3-storage.adapter";
 import type {
+  ReadAssetUrlInput,
+  ReadAssetUrlResult,
   RegisterAssetInput,
   UploadTokenInput,
   UploadTokenResult,
@@ -8,6 +10,7 @@ import type {
 export interface StorageAdapter {
   createUploadToken(input: UploadTokenInput): Promise<UploadTokenResult>;
   registerAsset(input: RegisterAssetInput): Promise<RegisterAssetInput>;
+  createReadAssetUrl(input: ReadAssetUrlInput): Promise<ReadAssetUrlResult>;
   getPublicUrl(assetKey: string): string;
 }
 

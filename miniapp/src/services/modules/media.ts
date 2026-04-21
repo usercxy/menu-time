@@ -9,7 +9,7 @@ import type {
 export const mediaService = {
   async createUploadToken(payload: CreateUploadTokenPayload) {
     const response = await request<UploadTokenDTO>({
-      url: '/api/v1/media/upload-token',
+      url: '/api/v1/files/upload-token',
       method: 'POST',
       data: payload
     })
@@ -18,7 +18,7 @@ export const mediaService = {
   },
   async registerAsset(payload: RegisterMediaAssetPayload) {
     const response = await request<MediaAssetDTO>({
-      url: '/api/v1/media/assets',
+      url: '/api/v1/files/assets',
       method: 'POST',
       data: payload
     })

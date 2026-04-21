@@ -8,7 +8,7 @@
 - 阶段 1 部分完成：已落地 `households`、`users`、`wechat_accounts`、`refresh_tokens`、`categories`、`tags`、`media_assets`、`recipes`、`recipe_versions`、`recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags` 共 12 个 Prisma 模型，并补齐两次 migration。
 - 阶段 2 已完成：auth 主链路、taxonomy 的 household-scoped 查询基础设施、`schema / mapper / service / repository` 模块实现，以及分类 / 标签 API 路由均已可用。
 - 阶段 3 已完成：里程碑 A/B/C/D/E/F 已完成，recipes 域数据模型、索引、双向关系、migration、模块抽象、菜谱 CRUD、版本管理、API 路由、recipes 演示 seed、自测与阶段验收均已落地。
-- 阶段 3 补充完成：菜谱封面上传链路已落地，包含 COS/S3 兼容对象存储适配器、上传授权、资源登记、封面绑定与前端对接文档。
+- 阶段 3 补充完成：统一图片文件链路已落地，包含 COS/S3 兼容对象存储适配器、上传授权、资源登记、预览与下载能力。
 
 ## 当前已验证
 
@@ -27,7 +27,7 @@
 - 通过 `tsx` 执行 recipes 版本烟测，验证 `createRecipeVersion -> listRecipeVersions -> getRecipeVersionDetail -> compareRecipeVersions -> setCurrentRecipeVersion`
 - `npm run prisma:seed` 自动加载 `.env.local`，并写入 1 条带 2 个版本的 recipes 演示数据
 - `npm run dev -- --port 3146` 后通过真实 HTTP 请求验证 recipes API：未登录、列表、创建、详情、更新、版本列表、版本创建、版本详情、版本对比、切换当前版本、删除
-- 新增 media / storage 相关改动后再次执行 `npm run typecheck` 与 `npm run lint`，均通过
+- 新增 files / storage 相关改动后再次执行 `npm run typecheck` 与 `npm run lint`，均通过
 
 ## 已完成基础能力
 
@@ -52,32 +52,31 @@
 - 已实现 recipes 版本主链路：版本列表、版本详情、创建版本、版本对比、切换当前版本
 - 已开放 recipes API：`/api/v1/recipes`、`/api/v1/recipes/:id`、`/api/v1/recipes/:id/versions`、`/api/v1/recipes/:id/compare`
 - 已实现对象存储适配层：支持 COS/S3 兼容预签名上传、对象存在校验和公开 URL 生成
-- 已开放 media API：`/api/v1/media/upload-token`、`/api/v1/media/assets`
-- 已补充前端接口文档：`docs/frontend-integration/recipe-cover-upload-apis.md`
+- 已开放 files API：`/api/v1/files/upload-token`、`/api/v1/files/assets`、`/api/v1/files/:id/preview`、`/api/v1/files/:id/download`
 - 预留 pg-boss worker 启动结构
 - 增加 `/api/health` 健康检查接口
 
-## 菜谱封面上传设计
+## 统一文件上传与访问设计（图片）
 
-当前菜谱封面上传采用“后端签发上传授权、前端直传对象存储、上传成功后登记资源、最后绑定菜谱封面”的四段式链路。
+当前图片文件采用“后端签发上传授权、前端直传对象存储、上传成功后登记资源、按需获取预览/下载链接”的链路。
 
 ### 方案概览
 
 ```text
 前端选图
-  -> POST /api/v1/media/upload-token
+  -> POST /api/v1/files/upload-token
   <- uploadUrl / headers / assetKey
 
 前端直传 COS
   -> PUT uploadUrl
 
 前端登记资源
-  -> POST /api/v1/media/assets
-  <- mediaAssetId / assetUrl
+  -> POST /api/v1/files/assets
+  <- fileId / assetUrl
 
-前端绑定菜谱封面
-  -> PATCH /api/v1/recipes/:id
-     { coverImageId, coverSource: "custom" }
+前端预览/下载
+  -> GET /api/v1/files/:id/preview
+  -> GET /api/v1/files/:id/download?filename=xxx
 ```
 
 ### 这样设计的原因
@@ -102,8 +101,8 @@
 
 ### 当前边界
 
-- 本期只支持菜谱封面，不支持多图或相册。
-- `purpose` 当前只开放 `cover`。
+- 本期只支持图片文件，不支持 PDF/Office/压缩包。
+- `purpose` 当前固定为 `image`。
 - 仅支持 `jpg / png / webp`。
 - 面向“公开读、私有写”的对象存储配置。
 - 替换封面时暂不自动删除旧对象，后续再补孤儿资源清理。
@@ -111,7 +110,7 @@
 ### 对象 key 约定
 
 ```text
-households/{householdId}/recipes/covers/{yyyy}/{mm}/{uuid}.{ext}
+households/{householdId}/files/images/{yyyy}/{mm}/{uuid}.{ext}
 ```
 
 这样做的目的是：
@@ -123,10 +122,11 @@ households/{householdId}/recipes/covers/{yyyy}/{mm}/{uuid}.{ext}
 ### 相关代码位置
 
 - 存储适配：`src/server/lib/storage/s3-storage.adapter.ts`
-- 上传授权接口：`src/app/api/v1/media/upload-token/route.ts`
-- 资源登记接口：`src/app/api/v1/media/assets/route.ts`
-- media 模块服务：`src/server/modules/media/media.service.ts`
-- 前端对接文档：`docs/frontend-integration/recipe-cover-upload-apis.md`
+- 上传授权接口：`src/app/api/v1/files/upload-token/route.ts`
+- 资源登记接口：`src/app/api/v1/files/assets/route.ts`
+- 预览接口：`src/app/api/v1/files/[id]/preview/route.ts`
+- 下载接口：`src/app/api/v1/files/[id]/download/route.ts`
+- files 模块服务：`src/server/modules/files/files.service.ts`
 
 ## 本地使用
 
@@ -206,20 +206,21 @@ MEDIA_ALLOWED_IMAGE_TYPES=image/jpeg,image/png,image/webp
 - `GET /api/v1/recipes/:id/versions/:versionId`
 - `POST /api/v1/recipes/:id/versions/:versionId/set-current`
 - `GET /api/v1/recipes/:id/compare`
-- `POST /api/v1/media/upload-token`
-- `POST /api/v1/media/assets`
+- `POST /api/v1/files/upload-token`
+- `POST /api/v1/files/assets`
+- `GET /api/v1/files/:id/preview`
+- `GET /api/v1/files/:id/download`
 
 文档入口：
 
 - Swagger UI：`/docs`
 - OpenAPI JSON：`/api/openapi`
-- 前端封面上传对接文档：`docs/frontend-integration/recipe-cover-upload-apis.md`
 
 说明：
 
 - 所有 `recipes` 接口均复用统一 `createRouteHandler`、`requestId` 透传、Zod 校验、统一响应和错误映射。
 - 所有 `recipes` 接口默认要求登录。
-- `media` 接口默认要求登录，推荐调用顺序为“申请上传授权 -> 直传 COS -> 登记资源 -> 绑定菜谱封面”。
+- `files` 接口默认要求登录，推荐调用顺序为“申请上传授权 -> 直传 COS -> 登记资源 -> 获取预览/下载链接”。
 
 ## 联调示例请求
 
@@ -377,13 +378,13 @@ backend/
           recipes.mapper.ts        # Prisma -> DTO 映射
           recipes.repository.ts    # household-scoped 查询与版本写入 helper
           recipes.service.ts       # recipes 服务层基础能力
-        media/
-          README.md                # 媒体模块说明
-          media.types.ts           # 媒体 DTO 与输入类型
-          media.schema.ts          # 上传授权 / 资源登记参数校验
-          media.mapper.ts          # 媒体 DTO 映射
-          media.repository.ts      # media_assets 数据访问
-          media.service.ts         # 媒体上传与登记业务逻辑
+        files/
+          README.md                # 文件模块说明
+          files.types.ts           # 文件 DTO 与输入类型
+          files.schema.ts          # 上传授权 / 资源登记 / 下载查询参数校验
+          files.mapper.ts          # 文件 DTO 映射
+          files.repository.ts      # media_assets 数据访问
+          files.service.ts         # 文件上传、登记、预览与下载业务逻辑
         moments/
           README.md                # 时光记录模块占位
         plans/
@@ -392,9 +393,6 @@ backend/
           README.md                # 购物清单模块占位
         random/
           README.md                # 随机点菜模块占位
-  docs/
-    frontend-integration/
-      recipe-cover-upload-apis.md # 菜谱封面上传前端接口文档
 ```
 
 ## 目录说明

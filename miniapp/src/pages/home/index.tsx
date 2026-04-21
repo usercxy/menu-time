@@ -1,25 +1,29 @@
+import { useMemo } from 'react'
 import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { Image, Text, View } from '@tarojs/components'
 import { routes } from '@/constants/routes'
+import { PageContainer } from '@/components/base/PageContainer'
 import { ErrorState } from '@/components/base/ErrorState'
 import { LoadingState } from '@/components/base/LoadingState'
-import { PageContainer } from '@/components/base/PageContainer'
 import { useSessionQuery } from '@/features/auth/query'
 import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
 import { mealPlanService } from '@/services/modules/meal-plan'
 import { recipeService } from '@/services/modules/recipe'
 import { useSessionStore } from '@/store/session'
 import { navigateToRoute } from '@/utils/navigation'
+import styles from './index.module.scss'
 
 export default function HomePage() {
   const sessionStatus = useSessionStore((state) => state.status)
   const sessionQuery = useSessionQuery()
   const sessionReady = sessionStatus === 'authenticated'
+  
   const weekQuery = useQuery({
     queryKey: ['meal-plan', 'current-week'],
     queryFn: mealPlanService.getCurrentWeekPlan,
     enabled: sessionReady
   })
+  
   const latestRecipesQuery = useQuery({
     queryKey: ['recipes', 'home-latest'],
     queryFn: () => recipeService.getRecipes({ page: 1, pageSize: 2 }),
@@ -30,6 +34,15 @@ export default function HomePage() {
 
   const weekSummary = weekQuery.data?.summary
   const latestRecipes = latestRecipesQuery.data?.items || []
+
+  // Generate random rotations for cards to give a scrapbook feel
+  const cardStyles = useMemo(() => {
+    return latestRecipes.map((_, i) => ({
+      transform: `rotate(${i % 2 === 0 ? (Math.random() * -2 - 0.5) : (Math.random() * 2 + 0.5)}deg)`,
+      marginLeft: i % 2 === 0 ? '0' : '32px',
+      marginRight: i % 2 === 0 ? '32px' : '0'
+    }))
+  }, [latestRecipes])
 
   if (sessionStatus === 'anonymous') {
     return (
@@ -48,6 +61,7 @@ export default function HomePage() {
   return (
     <PageContainer title="食光记" subtitle={`欢迎回来，${sessionQuery.data?.nickname || '主厨'}`}>
       <View className="page-stack">
+        {/* Hero Section */}
         {!sessionReady || weekQuery.isLoading ? (
           <LoadingState title="正在准备首页" description="本周计划正在装盘，马上就好。" />
         ) : weekQuery.isError ? (
@@ -57,52 +71,32 @@ export default function HomePage() {
             onAction={() => void weekQuery.refetch()}
           />
         ) : (
-          <View className="hero-card" onClick={() => navigateToRoute(routes.mealPlanner)}>
-            <View style={{ position: 'relative', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-              <View style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <Text className="eyebrow">本周计划</Text>
-                <Text className="editorial-title">
-                  已安排 {weekSummary?.completedMeals || 0} 顿餐食
-                </Text>
-                <Text className="muted-text" style={{ fontSize: '24px' }}>
-                  {weekSummary?.summary || '快去开启本周的美味旅程吧'}
-                </Text>
-              </View>
-              <View style={{ 
-                backgroundColor: 'var(--color-primary)', 
-                color: 'var(--color-on-primary)', 
-                width: '80px', 
-                height: '80px', 
-                borderRadius: '50%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                boxShadow: 'var(--shadow-floating)'
-              }}
-              >
-                <Text style={{ fontSize: '40px' }}>📅</Text>
-              </View>
+          <View className={styles.heroCard} onClick={() => navigateToRoute(routes.mealPlanner)}>
+            <View className={styles.heroContent}>
+              <Text className="eyebrow">本周计划</Text>
+              <Text className="editorial-title">
+                已安排 {weekSummary?.completedMeals || 0} 顿餐食
+              </Text>
+              <Text className="muted-text" style={{ fontSize: '24px' }}>
+                {weekSummary?.summary || '快去开启本周的美味旅程吧'}
+              </Text>
             </View>
-            <View style={{ 
-              position: 'absolute', 
-              right: '-40px', 
-              top: '-40px', 
-              opacity: 0.05,
-              transform: 'rotate(15deg)'
-            }}
-            >
-              <Text style={{ fontSize: '200px' }}>🍽️</Text>
+            <View className={styles.heroIcon}>
+              <Text style={{ fontSize: '40px' }}>📅</Text>
+            </View>
+            <View className={styles.heroBackground}>
+              <Text>🍽️</Text>
             </View>
           </View>
         )}
 
-        {/* Memories Feed Header */}
-        <View style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', padding: '0 8px' }}>
+        {/* Section Header */}
+        <View className={styles.sectionHeader}>
           <Text className="section-title">时光锦囊</Text>
           <Text className="inline-link" onClick={() => navigateToRoute(routes.recipeLibrary)}>查看全部</Text>
         </View>
 
-        {/* Memories Feed (Scrapbook Style) */}
+        {/* Memory Feed */}
         {!sessionReady || latestRecipesQuery.isLoading ? (
           <LoadingState title="正在翻开菜谱记忆" description="最近做过的菜谱正在赶来首页。" />
         ) : latestRecipesQuery.isError ? (
@@ -112,44 +106,35 @@ export default function HomePage() {
             onAction={() => void latestRecipesQuery.refetch()}
           />
         ) : (
-          <View className="page-stack" style={{ gap: '60px' }}>
+          <View className={styles.memoryGrid}>
             {latestRecipes.map((recipe, index) => (
               <View
-                className={`memory-card ${index % 2 === 0 ? 'scrapbook-angle-1' : 'scrapbook-angle-2'}`}
+                className={styles.memoryCard}
                 key={recipe.id}
                 onClick={() => navigateToRoute(routes.recipeDetail, { id: recipe.id })}
-                style={{ marginLeft: index % 2 === 0 ? '0' : '32px' }}
+                style={cardStyles[index]}
               >
-                <View style={{ position: 'relative', marginBottom: '24px', overflow: 'hidden', borderRadius: '12px' }}>
+                <View className={styles.memoryImageWrap}>
                   <Image 
                     className="recipe-cover" 
                     mode="aspectFill" 
                     src={recipe.coverImageUrl || ''} 
                     style={{ height: index % 2 === 0 ? '480px' : '400px' }}
                   />
-                  <View style={{ 
-                    position: 'absolute', 
-                    top: '24px', 
-                    right: '24px', 
-                    backgroundColor: 'rgba(254, 239, 218, 0.9)', 
-                    padding: '8px 20px', 
-                    borderRadius: '999px',
-                    transform: index % 2 === 0 ? 'rotate(1.2deg)' : 'rotate(-3deg)'
-                  }}
-                  >
-                    <Text style={{ fontSize: '20px', color: 'var(--color-on-tertiary-container)', fontWeight: 600 }}>
+                  <View className={styles.memoryDateBadge} style={{ transform: index % 2 === 0 ? 'rotate(1.2deg)' : 'rotate(-3deg)' }}>
+                    <Text className={styles.memoryDateText}>
                       {new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.')}
                     </Text>
                   </View>
                 </View>
                 
-                <View style={{ padding: '0 8px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  <View style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <View style={{ width: '40px', height: '2px', backgroundColor: 'var(--color-primary-dim)', opacity: 0.3 }} />
+                <View className={styles.memoryBody}>
+                  <View className={styles.memoryTitleRow}>
+                    <View className={styles.memoryLine} />
                     <Text className="recipe-name" style={{ fontSize: '36px' }}>{recipe.name}</Text>
                   </View>
                   
-                  <Text className="muted-text" style={{ fontSize: '26px', fontStyle: 'italic' }}>
+                  <Text className={styles.memoryNote}>
                     “{recipe.currentVersion?.versionName || '这道菜的味道，值得被时光铭记。'}”
                   </Text>
                   
@@ -171,23 +156,10 @@ export default function HomePage() {
       </View>
       
       {/* Floating Action Button */}
-      <View style={{
-        position: 'fixed',
-        bottom: '48px',
-        right: '48px',
-        width: '112px',
-        height: '112px',
-        backgroundColor: 'var(--color-primary)',
-        color: 'var(--color-on-primary)',
-        borderRadius: '50%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: '0 12px 32px rgba(168, 69, 51, 0.3)',
-        zIndex: 100
-      }} onClick={() => navigateToRoute(routes.recipeEdit)}
-      >
-        <Text style={{ fontSize: '60px' }}>+</Text>
+      <View className={styles.fab} onClick={() => navigateToRoute(routes.recipeEdit)}>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </View>
     </PageContainer>
   )

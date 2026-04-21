@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import Taro from '@tarojs/taro'
 import { Text, View } from '@tarojs/components'
 import { navigateBackOrHome } from '@/utils/navigation'
 import styles from './index.module.scss'
@@ -12,19 +11,21 @@ interface TopNavBarProps {
 }
 
 export function TopNavBar({ title, subtitle, showBack, rightAction }: TopNavBarProps) {
-  const statusBarHeight = Taro.getSystemInfoSync().statusBarHeight || 24
-
   return (
-    <View className={styles.bar} style={{ paddingTop: `${statusBarHeight}px` }}>
+    <View className={styles.bar}>
       <View className={styles.inner}>
         <View className={styles.left}>
           {showBack ? (
             <View className={styles.back} onClick={() => navigateBackOrHome()}>
-              <Text className={styles.icon}>‹</Text>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </View>
           ) : (
             <View className={styles.back}>
-              <Text className={styles.icon}>≡</Text>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 8H20M4 16H20" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </View>
           )}
           <View className={styles.titleWrap}>
@@ -35,7 +36,9 @@ export function TopNavBar({ title, subtitle, showBack, rightAction }: TopNavBarP
         <View className={styles.right}>
           {rightAction || (
             <View className={styles.actionIcon}>
-              <Text>+</Text>
+               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 6V18M6 12H18" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
             </View>
           )}
         </View>

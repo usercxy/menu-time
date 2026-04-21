@@ -8,9 +8,11 @@ import {
   wechatLoginBodySchema,
 } from "@/server/modules/auth/auth.schema";
 import {
-  mediaAssetRegisterBodySchema,
-  mediaUploadTokenBodySchema,
-} from "@/server/modules/media/media.schema";
+  fileAssetRegisterBodySchema,
+  fileDownloadQuerySchema,
+  fileIdParamSchema,
+  fileUploadTokenBodySchema,
+} from "@/server/modules/files/files.schema";
 import {
   recipeCompareQuerySchema,
   recipeCreateBodySchema,
@@ -304,19 +306,36 @@ const operations: OperationDefinition[] = [
   },
   {
     method: "post",
-    path: "/api/v1/media/upload-token",
-    tag: "Media",
-    summary: "创建菜谱封面上传授权",
+    path: "/api/v1/files/upload-token",
+    tag: "Files",
+    summary: "创建文件上传授权",
     auth: "required",
-    bodySchema: mediaUploadTokenBodySchema,
+    bodySchema: fileUploadTokenBodySchema,
   },
   {
     method: "post",
-    path: "/api/v1/media/assets",
-    tag: "Media",
-    summary: "登记已上传的菜谱封面资源",
+    path: "/api/v1/files/assets",
+    tag: "Files",
+    summary: "登记已上传文件资源",
     auth: "required",
-    bodySchema: mediaAssetRegisterBodySchema,
+    bodySchema: fileAssetRegisterBodySchema,
+  },
+  {
+    method: "get",
+    path: "/api/v1/files/{id}/preview",
+    tag: "Files",
+    summary: "获取文件预览链接",
+    auth: "required",
+    paramsSchema: fileIdParamSchema,
+  },
+  {
+    method: "get",
+    path: "/api/v1/files/{id}/download",
+    tag: "Files",
+    summary: "获取文件下载链接",
+    auth: "required",
+    paramsSchema: fileIdParamSchema,
+    querySchema: fileDownloadQuerySchema,
   },
 ];
 
@@ -462,7 +481,7 @@ export function buildOpenApiDocument() {
       { name: "Tags" },
       { name: "Recipes" },
       { name: "Recipe Versions" },
-      { name: "Media" },
+      { name: "Files" },
     ],
     components: {
       securitySchemes: {

@@ -1,7 +1,4 @@
-export type MediaUploadPurpose = 'cover'
-
 export interface CreateUploadTokenPayload {
-  purpose: MediaUploadPurpose
   fileName: string
   contentType: string
   sizeBytes: number
@@ -21,7 +18,6 @@ export interface RegisterMediaAssetPayload {
   sizeBytes: number
   width?: number
   height?: number
-  purpose: MediaUploadPurpose
 }
 
 export interface MediaAssetDTO {
@@ -32,6 +28,6 @@ export interface MediaAssetDTO {
   sizeBytes: number
   width?: number | null
   height?: number | null
-  purpose: MediaUploadPurpose
+  purpose: 'image'
   createdAt: string
 }

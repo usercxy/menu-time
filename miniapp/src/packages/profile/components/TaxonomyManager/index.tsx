@@ -1,7 +1,7 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Input, Text, View } from '@tarojs/components'
-import { EmptyState } from '@/components/base/EmptyState'
 import { PageContainer } from '@/components/base/PageContainer'
+import { EmptyState } from '@/components/base/EmptyState'
 import styles from './index.module.scss'
 
 export interface TaxonomyManagerItem {

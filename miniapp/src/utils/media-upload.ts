@@ -159,7 +159,6 @@ export async function chooseRecipeCoverDraft(): Promise<LocalImageDraft | null> 
 
 export async function uploadRecipeCover(draft: LocalImageDraft): Promise<MediaAssetDTO> {
   const uploadToken = await mediaService.createUploadToken({
-    purpose: 'cover',
     fileName: draft.fileName,
     contentType: draft.mimeType,
     sizeBytes: draft.sizeBytes
@@ -192,7 +191,6 @@ export async function uploadRecipeCover(draft: LocalImageDraft): Promise<MediaAs
     mimeType: draft.mimeType,
     sizeBytes: draft.sizeBytes,
     width: draft.width,
-    height: draft.height,
-    purpose: 'cover'
+    height: draft.height
   })
 }

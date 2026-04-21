@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 
 import {
   HeadObjectCommand,
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
   S3ServiceException,
@@ -14,7 +15,9 @@ import { getEnv } from "@/server/lib/env";
 import { AppError, errorCodes } from "@/server/lib/errors";
 import type { StorageAdapter } from "@/server/lib/storage/storage.adapter";
 import type {
-  MediaPurpose,
+  FilePurpose,
+  ReadAssetUrlInput,
+  ReadAssetUrlResult,
   RegisterAssetInput,
   UploadTokenInput,
   UploadTokenResult,
@@ -110,16 +113,12 @@ function resolveS3Config(): ResolvedS3Config {
   };
 }
 
-function resolveAssetPrefix(householdId: string, purpose: MediaPurpose) {
-  if (purpose === "cover") {
-    return `households/${householdId}/recipes/covers`;
+function resolveAssetPrefix(householdId: string, purpose: FilePurpose) {
+  if (purpose === "image") {
+    return `households/${householdId}/files/images`;
   }
 
-  if (purpose === "moment") {
-    return `households/${householdId}/moments`;
-  }
-
-  return `households/${householdId}/shares`;
+  return `households/${householdId}/files`;
 }
 
 function resolveFileExtension(fileName: string, contentType: string) {
@@ -139,7 +138,11 @@ function buildAssetKey(input: UploadTokenInput) {
   const month = `${now.getUTCMonth() + 1}`.padStart(2, "0");
   const extension = resolveFileExtension(input.fileName, input.contentType);
 
-  return `${resolveAssetPrefix(input.householdId, input.purpose)}/${year}/${month}/${randomUUID()}${extension}`;
+  return `${resolveAssetPrefix(input.householdId, "image")}/${year}/${month}/${randomUUID()}${extension}`;
+}
+
+function sanitizeFileName(fileName: string) {
+  return fileName.replace(/[\r\n]/g, "").trim();
 }
 
 export class S3StorageAdapter implements StorageAdapter {
@@ -174,6 +177,27 @@ export class S3StorageAdapter implements StorageAdapter {
         "Content-Type": input.contentType,
       },
       assetKey,
+      expiresInSeconds: this.config.signedUrlTtlSeconds,
+    };
+  }
+
+  async createReadAssetUrl(input: ReadAssetUrlInput): Promise<ReadAssetUrlResult> {
+    const command = new GetObjectCommand({
+      Bucket: this.config.bucket,
+      Key: input.assetKey,
+      ResponseContentType: input.mimeType,
+      ResponseContentDisposition:
+        input.disposition === "attachment"
+          ? `attachment${input.fileName ? `; filename*=UTF-8''${encodeURIComponent(sanitizeFileName(input.fileName))}` : ""}`
+          : "inline",
+    });
+
+    const url = await getSignedUrl(this.client, command, {
+      expiresIn: this.config.signedUrlTtlSeconds,
+    });
+
+    return {
+      url,
       expiresInSeconds: this.config.signedUrlTtlSeconds,
     };
   }

@@ -1,53 +1,97 @@
 :root {
-  /* Surface & Background */
-  --color-surface: #fffcf7;
-  --color-background: #fffcf7;
-  --color-on-background: #373831;
-  --color-on-surface: #373831;
-  --color-surface-variant: #eae9dd;
-  --color-on-surface-variant: #64655c;
+  /* --- Base Palette (Internal) --- */
+  --palette-warm-white: #fffcf7;
+  --palette-sand-light: #fcf9f3;
+  --palette-sand-medium: #f6f4ec;
+  --palette-sand-dark: #f0eee4;
+  --palette-sand-deep: #eae9dd;
+  --palette-rust-base: #a84533;
+  --palette-rust-dim: #983a28;
+  --palette-rust-deep: #8a3729;
+  --palette-rust-light: #ffac9c;
+  --palette-sage-base: #596859;
+  --palette-sage-dim: #4d5c4d;
+  --palette-sage-light: #e4f5e2;
+  --palette-earth-base: #6e6353;
+  --palette-earth-dim: #615747;
+  --palette-earth-light: #feefda;
+  --palette-ink-base: #373831;
+  --palette-ink-muted: #64655c;
+  --palette-ink-light: #818178;
+
+  /* --- Semantic Tokens (Theming Layer) --- */
   
-  /* Containers */
-  --color-surface-container: #f6f4ec;
+  /* Background & Surface */
+  --color-background: var(--palette-warm-white);
+  --color-surface: var(--palette-warm-white);
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #fcf9f3;
-  --color-surface-container-high: #f0eee4;
-  --color-surface-container-highest: #eae9dd;
+  --color-surface-container-low: var(--palette-sand-light);
+  --color-surface-container: var(--palette-sand-medium);
+  --color-surface-container-high: var(--palette-sand-dark);
+  --color-surface-container-highest: var(--palette-sand-deep);
   
-  /* Brand Colors */
-  --color-primary: #a84533;
+  /* Brand - Primary (Rust) */
+  --color-primary: var(--palette-rust-base);
+  --color-primary-dim: var(--palette-rust-dim);
+  --color-primary-deep: var(--palette-rust-deep);
+  --color-primary-container: var(--palette-rust-light);
   --color-on-primary: #ffffff;
-  --color-primary-dim: #983a28;
-  --color-primary-container: #ffac9c;
   --color-on-primary-container: #721e10;
-  --color-primary-fixed: #ffac9c;
-  --color-primary-fixed-dim: #ff9783;
-  --color-secondary: #596859;
-  --color-on-secondary: #ffffff;
-  --color-secondary-dim: #4d5c4d;
-  --color-secondary-container: #e4f5e2;
-  --color-on-secondary-container: #4f5e4f;
-  --color-tertiary: #6e6353;
-  --color-on-tertiary: #ffffff;
-  --color-tertiary-dim: #615747;
-  --color-tertiary-container: #feefda;
-  --color-on-tertiary-container: #635949;
   
-  /* Outline & Others */
-  --color-outline: #818178;
+  /* Brand - Secondary (Sage) */
+  --color-secondary: var(--palette-sage-base);
+  --color-secondary-dim: var(--palette-sage-dim);
+  --color-secondary-container: var(--palette-sage-light);
+  --color-on-secondary: #ffffff;
+  
+  /* Brand - Tertiary (Earth) */
+  --color-tertiary: var(--palette-earth-base);
+  --color-tertiary-dim: var(--palette-earth-dim);
+  --color-tertiary-container: var(--palette-earth-light);
+  --color-on-tertiary: #ffffff;
+  
+  /* Text */
+  --color-text-main: var(--palette-ink-base);
+  --color-text-muted: var(--palette-ink-muted);
+  --color-text-light: var(--palette-ink-light);
+  --color-on-surface: var(--palette-ink-base);
+  --color-on-surface-variant: var(--palette-ink-muted);
+  
+  /* Outline & Utility */
+  --color-outline: var(--palette-ink-light);
   --color-outline-variant: #babaaf;
   --color-error: #b3374e;
   --color-on-error: #ffffff;
   
-  /* Shadows */
+  /* --- Elevation & Effects --- */
   --shadow-soft: 0 12px 32px rgba(55, 56, 49, 0.06);
   --shadow-floating: 0 18px 42px rgba(96, 69, 39, 0.12);
   --shadow-scrapbook: 0px 12px 32px rgba(55, 56, 49, 0.06);
+  --shadow-primary: 0 12px 32px rgba(168, 69, 51, 0.2);
   
-  /* Radius */
+  /* --- Geometry --- */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 24px;
   --radius-card: 24px;
   --radius-pill: 999px;
+  
+  /* --- Layout --- */
+  --nav-bar-height: 88px;
+  --status-bar-height: 20px;
 }
+
+/* 
+Example: Cool Night Theme (Replace the Semantic Tokens above to switch theme)
+:root[data-theme='cool-night'] {
+  --color-background: #1a1b1e;
+  --color-surface: #1a1b1e;
+  --color-surface-container-low: #25262b;
+  --color-primary: #4dabf7;
+  --color-primary-dim: #339af0;
+  --color-on-primary: #ffffff;
+  --color-text-main: #e9ecef;
+  --color-text-muted: #adb5bd;
+  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+*/

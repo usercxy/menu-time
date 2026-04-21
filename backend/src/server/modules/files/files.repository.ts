@@ -1,11 +1,26 @@
 import type { MediaAsset } from "@prisma/client";
 
 import type { DbClient } from "@/server/db/transactions";
-import type { MediaUploadPurpose } from "@/server/modules/media/media.types";
+import type { FileUploadPurpose } from "@/server/modules/files/files.types";
 
-export type MediaAssetRecord = MediaAsset;
+export type FileAssetRecord = MediaAsset;
 
-export async function findMediaAssetByAssetKey(
+export async function findFileAssetById(
+  db: DbClient,
+  input: {
+    householdId: string;
+    id: string;
+  },
+) {
+  return db.mediaAsset.findFirst({
+    where: {
+      id: input.id,
+      householdId: input.householdId,
+    },
+  });
+}
+
+export async function findFileAssetByAssetKey(
   db: DbClient,
   input: {
     assetKey: string;
@@ -18,7 +33,7 @@ export async function findMediaAssetByAssetKey(
   });
 }
 
-export async function upsertMediaAsset(
+export async function upsertFileAsset(
   db: DbClient,
   input: {
     householdId: string;
@@ -28,7 +43,7 @@ export async function upsertMediaAsset(
     sizeBytes: number;
     width?: number;
     height?: number;
-    purpose: MediaUploadPurpose;
+    purpose: FileUploadPurpose;
     createdById: string;
   },
 ) {

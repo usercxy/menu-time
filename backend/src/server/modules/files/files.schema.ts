@@ -1,11 +1,13 @@
 import { z } from "zod";
 
-const assetKeyPattern = /^households\/[0-9a-f-]+\/recipes\/covers\/\d{4}\/\d{2}\/[0-9a-f-]+\.(jpg|png|webp)$/i;
+const fileAssetKeyPattern =
+  /^households\/[0-9a-f-]+\/files\/images\/\d{4}\/\d{2}\/[0-9a-f-]+\.(jpg|png|webp)$/i;
 
-export const mediaUploadPurposeSchema = z.literal("cover");
+export const fileIdParamSchema = z.object({
+  id: z.string().uuid("id 格式无效"),
+});
 
-export const mediaUploadTokenBodySchema = z.object({
-  purpose: mediaUploadPurposeSchema,
+export const fileUploadTokenBodySchema = z.object({
   fileName: z.string().trim().min(1, "fileName 不能为空").max(255, "fileName 不能超过 255 个字符"),
   contentType: z
     .string()
@@ -19,13 +21,13 @@ export const mediaUploadTokenBodySchema = z.object({
     .max(Number.MAX_SAFE_INTEGER, "sizeBytes 超出支持范围"),
 });
 
-export const mediaAssetRegisterBodySchema = z.object({
+export const fileAssetRegisterBodySchema = z.object({
   assetKey: z
     .string()
     .trim()
     .min(1, "assetKey 不能为空")
     .max(255, "assetKey 不能超过 255 个字符")
-    .regex(assetKeyPattern, "assetKey 格式无效"),
+    .regex(fileAssetKeyPattern, "assetKey 格式无效"),
   mimeType: z
     .string()
     .trim()
@@ -48,5 +50,8 @@ export const mediaAssetRegisterBodySchema = z.object({
     .positive("height 必须大于 0")
     .max(20000, "height 超出支持范围")
     .optional(),
-  purpose: mediaUploadPurposeSchema,
+});
+
+export const fileDownloadQuerySchema = z.object({
+  filename: z.string().trim().min(1, "filename 不能为空").max(255, "filename 不能超过 255 个字符").optional(),
 });

@@ -1,7 +1,7 @@
-import type { MediaAssetRecord } from "@/server/modules/media/media.repository";
-import type { MediaAssetDto } from "@/server/modules/media/media.types";
+import type { FileAssetRecord } from "@/server/modules/files/files.repository";
+import type { FileAssetDto } from "@/server/modules/files/files.types";
 
-export function mapMediaAssetDto(record: MediaAssetRecord): MediaAssetDto {
+export function mapFileAssetDto(record: FileAssetRecord): FileAssetDto {
   return {
     id: record.id,
     assetKey: record.assetKey,
@@ -10,7 +10,7 @@ export function mapMediaAssetDto(record: MediaAssetRecord): MediaAssetDto {
     sizeBytes: Number(record.sizeBytes),
     width: record.width ?? null,
     height: record.height ?? null,
-    purpose: record.purpose as MediaAssetDto["purpose"],
+    purpose: record.purpose as FileAssetDto["purpose"],
     createdAt: record.createdAt.toISOString(),
   };
 }

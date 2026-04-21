@@ -1,8 +1,9 @@
-export type MediaPurpose = "moment" | "cover" | "share";
+export type FilePurpose = "image";
+
+export type ReadAssetDisposition = "inline" | "attachment";
 
 export type UploadTokenInput = {
   householdId: string;
-  purpose: MediaPurpose;
   fileName: string;
   contentType: string;
   sizeBytes: number;
@@ -23,6 +24,18 @@ export type RegisterAssetInput = {
   sizeBytes: number;
   width?: number;
   height?: number;
-  purpose: MediaPurpose;
+  purpose: FilePurpose;
   createdBy: string;
+};
+
+export type ReadAssetUrlInput = {
+  assetKey: string;
+  mimeType: string;
+  disposition: ReadAssetDisposition;
+  fileName?: string;
+};
+
+export type ReadAssetUrlResult = {
+  url: string;
+  expiresInSeconds: number;
 };

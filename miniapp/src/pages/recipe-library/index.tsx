@@ -1,16 +1,15 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
-import { Input, ScrollView, Text, View } from '@tarojs/components'
+import { Input, Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
+import { PageContainer } from '@/components/base/PageContainer'
 import { EmptyState } from '@/components/base/EmptyState'
 import { ErrorState } from '@/components/base/ErrorState'
 import { LoadingState } from '@/components/base/LoadingState'
 import { RecipeCard } from '@/components/recipe/RecipeCard'
 import { routes } from '@/constants/routes'
 import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
-import { PageContainer } from '@/components/base/PageContainer'
 import { recipeService } from '@/services/modules/recipe'
-import { taxonomyService } from '@/services/modules/taxonomy'
 import { navigateToRoute } from '@/utils/navigation'
 import styles from './index.module.scss'
 
@@ -31,8 +30,6 @@ function getStoredViewMode(): RecipeViewMode {
 export default function RecipeLibraryPage() {
   const [keyword, setKeyword] = useState('')
   const [page, setPage] = useState(1)
-  const [activeCategory, setActiveCategory] = useState<string | null>(null)
-  const [activeTag, setActiveTag] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<RecipeViewMode>(getStoredViewMode)
 
   useEffect(() => {
@@ -45,38 +42,19 @@ export default function RecipeLibraryPage() {
 
   useEffect(() => {
     setPage(1)
-  }, [keyword, activeCategory, activeTag])
+  }, [keyword])
 
-  const categoriesQuery = useQuery({
-    queryKey: ['taxonomy', 'categories'],
-    queryFn: taxonomyService.getCategories
-  })
-  const tagsQuery = useQuery({
-    queryKey: ['taxonomy', 'tags'],
-    queryFn: taxonomyService.getTags
-  })
   const recipesQuery = useQuery({
-    queryKey: ['recipes', keyword, activeCategory, activeTag, page, PAGE_SIZE],
+    queryKey: ['recipes', 'library', keyword, page, PAGE_SIZE],
     queryFn: () =>
       recipeService.getRecipes({
         keyword,
-        categoryId: activeCategory || undefined,
-        tagIds: activeTag ? [activeTag] : undefined,
         page,
         pageSize: PAGE_SIZE
       })
   })
 
-  usePageShowRefetch([categoriesQuery, tagsQuery, recipesQuery])
-
-  const selectedCategoryLabel = useMemo(
-    () => categoriesQuery.data?.find((item) => item.id === activeCategory)?.name || '全部分类',
-    [activeCategory, categoriesQuery.data]
-  )
-  const selectedTagLabel = useMemo(
-    () => tagsQuery.data?.find((item) => item.id === activeTag)?.name || '全部场景',
-    [activeTag, tagsQuery.data]
-  )
+  usePageShowRefetch([recipesQuery])
 
   const result = recipesQuery.data
   const totalPages = result ? Math.max(1, Math.ceil(result.total / result.pageSize)) : 1
@@ -87,25 +65,23 @@ export default function RecipeLibraryPage() {
         <View className={styles.filterHero}>
           <Text className="eyebrow">Recipe Atlas</Text>
           <Text className={styles.filterHeroTitle}>
-            今天想找什么味道？试着按分类和场景标签一起缩小范围。
+            想起哪道家的味道，就先搜一搜；没有的话，马上把它记成一张新菜谱。
           </Text>
           <View className={styles.filterSummary}>
             <View className={styles.summaryPill}>
-              <Text>{selectedCategoryLabel}</Text>
+              <Text>关键词检索</Text>
             </View>
             <View className={styles.summaryPill}>
-              <Text>{selectedTagLabel}</Text>
+              <Text>{viewMode === 'grid' ? '双列卡片' : '长列表'}</Text>
             </View>
-            {(activeCategory || activeTag || keyword.trim()) ? (
+            {keyword.trim() ? (
               <View
                 className={styles.clearAction}
                 onClick={() => {
                   setKeyword('')
-                  setActiveCategory(null)
-                  setActiveTag(null)
                 }}
               >
-                <Text>清空筛选</Text>
+                <Text>清空搜索</Text>
               </View>
             ) : null}
           </View>
@@ -120,14 +96,24 @@ export default function RecipeLibraryPage() {
               value={keyword}
               onInput={(event) => setKeyword(event.detail.value)}
             />
+            <View
+              className={styles.createAction}
+              onClick={() => navigateToRoute(routes.recipeEdit)}
+            >
+              <View className={styles.createActionIcon} aria-role="button">
+                <View className={styles.createActionBarHorizontal} />
+                <View className={styles.createActionBarVertical} />
+              </View>
+              <Text className={styles.createActionLabel}>新建</Text>
+            </View>
           </View>
         </View>
 
         <View className={styles.filterSection}>
           <View className={styles.filterHeader}>
             <View>
-              <Text className="section-title">筛选与展示</Text>
-              <Text className={styles.filterHint}>切换分类、标签或视图方式时，会自动重置到第一页。</Text>
+              <Text className="section-title">展示方式</Text>
+              <Text className={styles.filterHint}>搜索词变更时会自动回到第一页，方便继续往下翻看。</Text>
             </View>
             <View className={styles.viewSwitch}>
               <View
@@ -142,45 +128,6 @@ export default function RecipeLibraryPage() {
               >
                 <Text>双列卡片</Text>
               </View>
-            </View>
-          </View>
-
-          <ScrollView scrollX className={styles.categoryNav} showScrollbar={false}>
-            <View
-              className={`${styles.categoryTab} ${activeCategory === null ? styles.categoryTabActive : ''}`}
-              onClick={() => setActiveCategory(null)}
-            >
-              <Text>全部</Text>
-            </View>
-            {categoriesQuery.data?.map((item) => (
-              <View
-                className={`${styles.categoryTab} ${activeCategory === item.id ? styles.categoryTabActive : ''}`}
-                key={item.id}
-                onClick={() => setActiveCategory(item.id)}
-              >
-                <Text>{item.name}</Text>
-              </View>
-            ))}
-          </ScrollView>
-
-          <View className={styles.tagSection}>
-            <Text className={styles.tagSectionLabel}>标签筛选</Text>
-            <View className={styles.tagWrap}>
-              <View
-                className={`${styles.tagChip} ${activeTag === null ? styles.tagChipActive : ''}`}
-                onClick={() => setActiveTag(null)}
-              >
-                <Text>全部场景</Text>
-              </View>
-              {tagsQuery.data?.map((item) => (
-                <View
-                  className={`${styles.tagChip} ${activeTag === item.id ? styles.tagChipActive : ''}`}
-                  key={item.id}
-                  onClick={() => setActiveTag(item.id)}
-                >
-                  <Text>#{item.name}</Text>
-                </View>
-              ))}
             </View>
           </View>
         </View>
@@ -238,8 +185,8 @@ export default function RecipeLibraryPage() {
           </>
         ) : (
           <EmptyState
-            title="这组筛选下还没有菜谱"
-            description="换一个标签或分类试试，也可以先去新建菜谱把这道家常味记录下来。"
+            title="还没有找到对应菜谱"
+            description="换个关键词再搜，或者点右侧新建按钮，把这道家常味先记下来。"
           />
         )}
       </View>
