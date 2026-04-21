@@ -1,8 +1,10 @@
+@use '@/styles/theme' as *;
+
 .root {
   padding: 32px 24px;
   border-radius: 24px;
-  background: var(--color-surface-container-lowest);
-  box-shadow: var(--shadow-soft);
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
   text-align: center;
 }
 
@@ -17,7 +19,7 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: var(--color-tertiary-state-muted);
+  background: theme('color-tertiary-state-muted');
 }
 
 .title {
@@ -25,13 +27,13 @@
   margin-top: 14px;
   font-size: 28px;
   font-weight: 700;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
 }
 
 .description {
   display: block;
   margin-top: 10px;
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 22px;
   line-height: 1.6;
 }

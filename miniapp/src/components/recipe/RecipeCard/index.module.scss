@@ -1,8 +1,10 @@
+@use '@/styles/theme' as *;
+
 .root {
   overflow: hidden;
   border-radius: 24px;
-  background: var(--color-surface-container-lowest);
-  box-shadow: var(--shadow-soft);
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
 }
 
 .rootList {
@@ -41,10 +43,14 @@
   max-width: calc(100% - 40px);
   padding: 8px 16px;
   border-radius: 999px;
-  background: rgba(168, 69, 51, 0.9);
-  color: #fff;
+  background: theme('color-primary-deep');
+  color: theme('color-on-primary');
   font-size: 20px;
   font-weight: 700;
+}
+
+.versionBadge text {
+  color: inherit;
 }
 
 .content {
@@ -61,7 +67,7 @@
 }
 
 .title {
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 32px;
   font-weight: 700;
   line-height: 1.35;
@@ -76,8 +82,8 @@
   min-height: 52px;
   padding: 0 14px;
   border-radius: 999px;
-  background: var(--color-tertiary-container);
-  color: var(--color-on-tertiary-container);
+  background: theme('color-tertiary-container');
+  color: theme('color-on-tertiary-container');
   font-size: 20px;
   font-weight: 700;
 }
@@ -88,8 +94,22 @@
   gap: 10px;
 }
 
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.metaIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 .metaText {
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 22px;
   line-height: 1.6;
+  min-width: 0;
 }

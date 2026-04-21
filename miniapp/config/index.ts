@@ -28,6 +28,9 @@ export default defineConfig<'webpack5'>(async (merge) => {
       enable: false
     },
     mini: {
+      sassLoaderOption: {
+        additionalData: '@use "@/styles/theme" as *;'
+      },
       postcss: {
         pxtransform: {
           enable: true,
@@ -48,6 +51,9 @@ export default defineConfig<'webpack5'>(async (merge) => {
     h5: {
       publicPath: '/',
       staticDirectory: 'static',
+      sassLoaderOption: {
+        additionalData: '@use "@/styles/theme" as *;'
+      },
       postcss: {
         autoprefixer: {
           enable: true,

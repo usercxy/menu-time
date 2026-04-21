@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Image, Text, View } from '@tarojs/components'
+import { SvgIcon } from '@/components/base/SvgIcon'
+import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import { routes } from '@/constants/routes'
 import { ConfirmDialog } from '@/components/base/ConfirmDialog'
 import { PageContainer } from '@/components/base/PageContainer'
@@ -32,7 +34,13 @@ export default function MyPage() {
             <Text className={styles.nickName}>{sessionQuery.data?.nickname || '林深见鹿'}</Text>
             <Text className={styles.motto}>传承家味，留存食光</Text>
             <View className={styles.familyBadge}>
-              <Text>👨‍👩‍👧‍👦 林氏家族核心成员</Text>
+              <SvgIcon
+                className={styles.familyBadgeIcon}
+                name="yonghu"
+                size={26}
+                color={svgIconColors.onSecondaryContainer}
+              />
+              <Text>林氏家族核心成员</Text>
             </View>
           </View>
         </View>
@@ -40,14 +48,17 @@ export default function MyPage() {
         {/* Statistics Grid */}
         <View className={styles.statsGrid}>
           <View className={styles.statItem}>
+            <SvgIcon className={styles.statIcon} name="wenjian" size={32} color={svgIconColors.primary} />
             <Text className={styles.statValue}>128</Text>
             <Text className={styles.statLabel}>菜谱创作</Text>
           </View>
           <View className={styles.statItem}>
+            <SvgIcon className={styles.statIcon} name="shijian" size={32} color={svgIconColors.primary} />
             <Text className={styles.statValue}>45</Text>
             <Text className={styles.statLabel}>时光记录</Text>
           </View>
           <View className={styles.statItem}>
+            <SvgIcon className={styles.statIcon} name="lishi" size={32} color={svgIconColors.primary} />
             <Text className={styles.statValue}>312</Text>
             <Text className={styles.statLabel}>版本存档</Text>
           </View>
@@ -57,36 +68,66 @@ export default function MyPage() {
         <View className={styles.menuGroup}>
           <View className={styles.menuItem} onClick={() => navigateToRoute(routes.categoryManage)}>
             <View className={styles.menuLeft}>
-              <View className={`${styles.menuIcon} ${styles.bgTertiary}`} style={{ backgroundColor: 'var(--color-tertiary-container)' }}>
-                <Text>📂</Text>
+              <View className={`${styles.menuIcon} ${styles.menuIconTertiary}`}>
+                <SvgIcon
+                  className={styles.menuIconImage}
+                  name="wenjian"
+                  size={36}
+                  color={svgIconColors.onTertiaryContainer}
+                />
               </View>
               <Text className={styles.menuText}>分类管理</Text>
             </View>
-            <Text style={{ color: 'var(--color-outline)', fontSize: '32px' }}>›</Text>
+            <SvgIcon
+              className={styles.menuArrowIcon}
+              name="youjiantou"
+              size={28}
+              color={svgIconColors.onSurfaceVariant}
+            />
           </View>
           <View className={styles.divider} />
           <View className={styles.menuItem} onClick={() => navigateToRoute(routes.tagManage)}>
             <View className={styles.menuLeft}>
-              <View className={`${styles.menuIcon}`} style={{ backgroundColor: 'var(--color-tertiary-container)' }}>
-                <Text>🏷️</Text>
+              <View className={`${styles.menuIcon} ${styles.menuIconTertiary}`}>
+                <SvgIcon
+                  className={styles.menuIconImage}
+                  name="xingbiao"
+                  size={36}
+                  color={svgIconColors.onTertiaryContainer}
+                />
               </View>
               <Text className={styles.menuText}>标签体系</Text>
             </View>
-            <Text style={{ color: 'var(--color-outline)', fontSize: '32px' }}>›</Text>
+            <SvgIcon
+              className={styles.menuArrowIcon}
+              name="youjiantou"
+              size={28}
+              color={svgIconColors.onSurfaceVariant}
+            />
           </View>
         </View>
 
         <View className={styles.menuGroup}>
           <View className={styles.menuItem}>
             <View className={styles.menuLeft}>
-              <View className={`${styles.menuIcon}`} style={{ backgroundColor: 'var(--color-secondary-container)' }}>
-                <Text>👥</Text>
+              <View className={`${styles.menuIcon} ${styles.menuIconSecondary}`}>
+                <SvgIcon
+                  className={styles.menuIconImage}
+                  name="yonghu"
+                  size={36}
+                  color={svgIconColors.onSecondaryContainer}
+                />
               </View>
               <Text className={styles.menuText}>家族协作</Text>
             </View>
-            <View style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <View style={{ backgroundColor: 'var(--color-primary)', color: 'white', padding: '2px 12px', borderRadius: '4px', fontSize: '18px', fontWeight: 700 }}>P1</View>
-              <Text style={{ color: 'var(--color-outline)', fontSize: '32px' }}>›</Text>
+            <View className={styles.menuTail}>
+              <View className={styles.planBadge}>P1</View>
+              <SvgIcon
+                className={styles.menuArrowIcon}
+                name="youjiantou"
+                size={28}
+                color={svgIconColors.onSurfaceVariant}
+              />
             </View>
           </View>
         </View>
@@ -94,22 +135,42 @@ export default function MyPage() {
         <View className={styles.menuGroup}>
           <View className={styles.menuItem} onClick={() => navigateToRoute(routes.settings)}>
             <View className={styles.menuLeft}>
-              <View className={`${styles.menuIcon}`} style={{ backgroundColor: 'var(--color-surface-container-highest)' }}>
-                <Text>⚙️</Text>
+              <View className={`${styles.menuIcon} ${styles.menuIconSurface}`}>
+                <SvgIcon
+                  className={styles.menuIconImage}
+                  name="shezhi"
+                  size={36}
+                  color={svgIconColors.primaryDeep}
+                />
               </View>
               <Text className={styles.menuText}>系统设置</Text>
             </View>
-            <Text style={{ color: 'var(--color-outline)', fontSize: '32px' }}>›</Text>
+            <SvgIcon
+              className={styles.menuArrowIcon}
+              name="youjiantou"
+              size={28}
+              color={svgIconColors.onSurfaceVariant}
+            />
           </View>
           <View className={styles.divider} />
           <View className={styles.menuItem} onClick={() => setShowDialog(true)}>
             <View className={styles.menuLeft}>
-              <View className={`${styles.menuIcon}`} style={{ backgroundColor: 'var(--color-surface-container-highest)' }}>
-                <Text>🧪</Text>
+              <View className={`${styles.menuIcon} ${styles.menuIconSurface}`}>
+                <SvgIcon
+                  className={styles.menuIconImage}
+                  name="chakan"
+                  size={36}
+                  color={svgIconColors.primaryDeep}
+                />
               </View>
               <Text className={styles.menuText}>组件预览</Text>
             </View>
-            <Text style={{ color: 'var(--color-outline)', fontSize: '32px' }}>›</Text>
+            <SvgIcon
+              className={styles.menuArrowIcon}
+              name="youjiantou"
+              size={28}
+              color={svgIconColors.onSurfaceVariant}
+            />
           </View>
         </View>
 

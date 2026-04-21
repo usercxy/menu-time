@@ -1,20 +1,22 @@
+@use '@/styles/theme' as *;
+
 @mixin linen-card {
-  background: var(--color-surface-container-lowest);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-soft);
+  background: theme('color-surface-container-lowest');
+  border-radius: theme('radius-card');
+  box-shadow: theme('shadow-soft');
 }
 
 @mixin scrapbook-card {
-  background: var(--color-surface-container-lowest);
+  background: theme('color-surface-container-lowest');
   padding: 32px;
   border-radius: 16px;
-  box-shadow: var(--shadow-scrapbook);
+  box-shadow: theme('shadow-scrapbook');
 }
 
 @mixin section-title {
   font-size: 40px;
   font-weight: 700;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-family: "Noto Serif SC", serif;
 }
 
@@ -32,16 +34,18 @@
   align-items: center;
   min-height: 96px;
   padding: 0 28px;
-  border: 3px solid var(--color-outline-variant);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-container-low);
-  box-shadow: inset 0 2px 4px var(--color-ink-state-soft);
+  border: 3px solid theme('color-input-border');
+  border-radius: theme('radius-md');
+  background: theme('color-input-background');
+  box-shadow:
+    inset 0 2px 4px theme('color-ink-state-soft'),
+    0 0 0 1px theme('color-action-border');
   transition: all 0.2s ease;
   
   &:focus-within {
-    border-color: var(--color-primary);
-    background: var(--color-surface-container-lowest);
-    box-shadow: 0 0 0 4px var(--color-primary-state-pressed);
+    border-color: theme('color-primary-deep');
+    background: theme('color-surface-container-lowest');
+    box-shadow: 0 0 0 4px theme('color-primary-state-pressed');
   }
 }
 
@@ -49,16 +53,16 @@
   flex: 1;
   min-height: 80px;
   padding: 0 20px;
-  border: 2px solid var(--color-outline-variant);
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-container-lowest);
+  border: 2px solid theme('color-input-border');
+  border-radius: theme('radius-sm');
+  background: theme('color-input-background');
 }
 
 @mixin form-text-control {
   width: 100%;
   box-sizing: border-box;
   background: transparent;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 28px;
   font-weight: 500;
 }
@@ -84,7 +88,7 @@
 }
 
 @mixin form-placeholder($multiline: false) {
-  color: var(--color-text-light);
+  color: theme('color-text-light');
   font-size: 26px;
 
   @if $multiline {
@@ -95,7 +99,7 @@
 }
 
 @mixin form-help-text {
-  color: var(--color-tertiary);
+  color: theme('color-tertiary');
   font-size: 22px;
   line-height: 1.6;
 }
@@ -115,9 +119,9 @@
   min-width: 68px;
   min-height: 36px;
   padding: 0 12px;
-  border-radius: var(--radius-sm);
-  background: var(--color-tertiary-container);
-  color: var(--color-tertiary);
+  border-radius: theme('radius-sm');
+  background: theme('color-tertiary-container');
+  color: theme('color-tertiary');
   font-size: 20px;
   font-weight: 700;
   line-height: 1;
@@ -130,7 +134,7 @@
   gap: 12px;
   min-height: 88px;
   padding: 0 40px;
-  border-radius: var(--radius-pill);
+  border-radius: theme('radius-pill');
   font-size: 28px;
   font-weight: 700;
   transition: all 0.2s ease;
@@ -139,30 +143,34 @@
     transform: scale(0.96);
     opacity: 0.9;
   }
+
+  text {
+    color: inherit;
+  }
 }
 
 @mixin primary-button {
   @include standard-button-base;
 
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  box-shadow: var(--shadow-primary);
+  background: theme('color-primary');
+  color: theme('color-on-primary');
+  box-shadow: theme('shadow-primary');
 }
 
 @mixin secondary-button {
   @include standard-button-base;
 
-  background: var(--color-surface-container-highest);
-  color: var(--color-text-main);
-  border: 1px solid var(--color-outline-variant);
+  background: theme('color-surface-container-highest');
+  color: theme('color-text-main');
+  border: 1px solid theme('color-outline-variant');
 }
 
 @mixin ghost-button {
   @include standard-button-base;
 
   background: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  color: theme('color-primary');
+  border: 2px solid theme('color-primary');
 }
 
 @mixin pill-action {
@@ -170,15 +178,33 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-height: 64px;
   padding: 12px 24px;
-  border-radius: var(--radius-pill);
-  background: var(--color-primary-container);
-  color: var(--color-primary);
+  border-radius: theme('radius-pill');
+  background: theme('color-action-container');
+  color: theme('color-primary');
+  border: 1px solid theme('color-action-border');
   font-size: 24px;
   font-weight: 700;
   
   &:active {
-    opacity: 0.7;
-    background: var(--color-primary-container);
+    background: theme('color-primary-state-pressed');
+    transform: scale(0.96);
+  }
+
+  text {
+    color: inherit;
+  }
+}
+
+@mixin danger-action {
+  @include pill-action;
+
+  background: theme('color-error-container');
+  color: theme('color-on-error-container');
+  border-color: rgba(186, 26, 26, 0.28);
+
+  &:active {
+    background: rgba(186, 26, 26, 0.16);
   }
 }

@@ -1,5 +1,7 @@
 import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { Image, Text, View, ScrollView } from '@tarojs/components'
+import { SvgIcon } from '@/components/base/SvgIcon'
+import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import { routes } from '@/constants/routes'
 import { PageContainer } from '@/components/base/PageContainer'
 import { mealPlanService } from '@/services/modules/meal-plan'
@@ -54,7 +56,12 @@ export default function MealPlannerPage() {
           <View className={styles.randomButton} onClick={() => navigateToRoute(routes.randomPick)}>
             <View className={styles.randomInfo}>
               <View className={styles.randomIcon}>
-                <Text>🎲</Text>
+                <SvgIcon
+                  className={styles.randomIconImage}
+                  name="shuaxin"
+                  size={44}
+                  color={svgIconColors.onTertiaryContainer}
+                />
               </View>
               <View className={styles.randomText}>
                 <Text className={styles.randomTitle}>纠结时刻？</Text>
@@ -62,7 +69,7 @@ export default function MealPlannerPage() {
               </View>
             </View>
             <View className={styles.arrowButton}>
-              <Text>→</Text>
+              <SvgIcon className={styles.arrowIcon} name="youjiantou" size={28} color={svgIconColors.onPrimary} />
             </View>
           </View>
         </View>
@@ -71,7 +78,7 @@ export default function MealPlannerPage() {
         <View className={styles.mealsSection}>
           <View className={styles.mealHeader}>
             <Text className="section-title">今日餐单</Text>
-            <Text style={{ fontSize: '24px', fontWeight: 500, color: 'var(--color-secondary)' }}>
+            <Text className={styles.mealCount}>
               {planQuery.data?.todayMeals.length || 0} 道菜品
             </Text>
           </View>
@@ -97,7 +104,8 @@ export default function MealPlannerPage() {
                     <Text className={styles.mealNote}>{meal.note || '点击编辑口味偏好...'}</Text>
                   </View>
                   <View className={styles.mealEdit}>
-                    <Text>✏️</Text>
+                    <SvgIcon className={styles.mealEditIcon} name="bianji" size={20} color={svgIconColors.primary} />
+                    <Text>编辑</Text>
                   </View>
                 </View>
               </View>
@@ -108,10 +116,18 @@ export default function MealPlannerPage() {
         {/* Shopping List Access */}
         <View className="surface-card" onClick={() => navigateToRoute(routes.shoppingList, { weekStartDate: '2026-03-23' })}>
           <View className="profile-link__meta">
-            <Text className="profile-link__title">🛒 购物清单</Text>
+            <View className={styles.linkTitleRow}>
+              <SvgIcon className={styles.linkTitleIcon} name="wenjian" size={26} color={svgIconColors.primary} />
+              <Text className="profile-link__title">购物清单</Text>
+            </View>
             <Text className="profile-link__subtitle">查看本周所需原料，一键生成清单</Text>
           </View>
-          <Text className="inline-link">前往</Text>
+          <SvgIcon
+            className={styles.linkArrowIcon}
+            name="youjiantou"
+            size={28}
+            color={svgIconColors.onSurfaceVariant}
+          />
         </View>
       </View>
     </PageContainer>

@@ -1,22 +1,25 @@
+@use '@/styles/theme' as *;
+
 .filterHero,
 .filterSection,
 .resultSummaryCard {
   padding: 32px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: var(--shadow-soft);
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .filterHero {
   background:
-    radial-gradient(circle at top right, rgba(168, 69, 51, 0.14), transparent 36%),
-    linear-gradient(180deg, rgba(255, 249, 243, 0.96) 0%, rgba(255, 255, 255, 0.92) 100%);
+    radial-gradient(circle at top right, theme('color-tertiary-state-soft'), transparent 36%),
+    theme('color-surface-container-lowest');
 }
 
 .filterHeroTitle {
   display: block;
   margin-top: 14px;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 36px;
   font-weight: 700;
   line-height: 1.45;
@@ -45,13 +48,16 @@
 }
 
 .summaryPill {
-  background: rgba(255, 255, 255, 0.72);
-  color: var(--color-secondary);
+  background: theme('color-surface-container-lowest');
+  color: theme('color-secondary');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .clearAction {
-  background: rgba(168, 69, 51, 0.08);
-  color: var(--color-primary);
+  background: theme('color-action-container');
+  color: theme('color-primary');
+  border: 1px solid theme('color-action-border');
+  gap: 8px;
 }
 
 .searchSection {
@@ -66,66 +72,51 @@
   padding: 18px 20px 18px 32px;
   gap: 18px;
   border-radius: 24px;
-  background: var(--color-surface-container);
-  box-shadow: var(--shadow-soft);
+  background: theme('color-input-background');
+  border: 3px solid theme('color-input-border');
+  box-shadow: theme('shadow-soft');
 }
 
 .searchIcon {
-  font-size: 32px;
-  color: var(--color-outline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: theme('color-outline');
 }
 
 .searchInput {
   flex: 1;
   background: transparent;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 28px;
 }
 
 .createAction {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
   min-width: 152px;
   min-height: 76px;
-  padding: 0 22px;
+  justify-content: center;
+  padding: 0 28px;
   border-radius: 22px;
-  background:
-    linear-gradient(135deg, rgba(168, 69, 51, 1) 0%, rgba(191, 97, 72, 0.96) 100%);
-  box-shadow: 0 14px 28px rgba(168, 69, 51, 0.2);
+  background: theme('color-primary');
+  box-shadow: theme('shadow-primary');
+  gap: 10px;
 }
 
-.createActionIcon {
-  position: relative;
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.18);
+.actionIcon,
+.createActionIcon,
+.viewToggleIcon,
+.paginationIcon {
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
 }
 
-.createActionBarHorizontal,
-.createActionBarVertical {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border-radius: 999px;
-  background: var(--color-on-primary);
-  transform: translate(-50%, -50%);
-}
-
-.createActionBarHorizontal {
-  width: 18px;
-  height: 3px;
-}
-
-.createActionBarVertical {
-  width: 3px;
-  height: 18px;
-}
-
 .createActionLabel {
-  color: var(--color-on-primary);
+  color: theme('color-on-primary');
   font-size: 24px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -142,7 +133,7 @@
 .resultSummaryDescription {
   display: block;
   margin-top: 8px;
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 22px;
 }
 
@@ -153,18 +144,25 @@
 }
 
 .viewToggle {
-  background: rgba(89, 104, 89, 0.1);
-  color: var(--color-secondary);
+  background: theme('color-action-container');
+  color: theme('color-secondary');
+  border: 1px solid theme('color-action-border');
+  gap: 8px;
 }
 
 .viewToggleActive {
-  background: var(--color-secondary);
-  color: #fff;
+  background: theme('color-primary-deep');
+  color: theme('color-on-primary');
+  border-color: theme('color-primary-deep');
+}
+
+.viewToggleActive text {
+  color: inherit;
 }
 
 .resultSummaryTitle {
   display: block;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 30px;
   font-weight: 700;
 }
@@ -190,8 +188,10 @@
 
 .paginationAction {
   flex: 1;
-  background: rgba(168, 69, 51, 0.08);
-  color: var(--color-primary);
+  background: theme('color-action-container');
+  color: theme('color-primary');
+  border: 1px solid theme('color-action-border');
+  gap: 8px;
 }
 
 .paginationActionDisabled {

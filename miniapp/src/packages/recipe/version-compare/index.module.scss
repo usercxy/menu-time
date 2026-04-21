@@ -1,22 +1,25 @@
+@use '@/styles/theme' as *;
+
 .summaryCard,
 .columnCard,
 .versionBadgeCard,
 .loadingCard {
   padding: 32px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: var(--shadow-soft);
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .summaryCard {
   background:
-    linear-gradient(135deg, rgba(168, 69, 51, 0.12), rgba(254, 239, 218, 0.42)),
-    rgba(255, 255, 255, 0.94);
+    radial-gradient(circle at top right, theme('color-tertiary-state-soft'), transparent 36%),
+    theme('color-surface-container-lowest');
 }
 
 .summaryEyebrow {
   display: block;
-  color: var(--color-secondary);
+  color: theme('color-secondary');
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -26,7 +29,7 @@
 .summaryText {
   display: block;
   margin-top: 12px;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 30px;
   line-height: 1.6;
   font-weight: 700;
@@ -42,19 +45,20 @@
 .metricCard {
   padding: 20px;
   border-radius: 22px;
-  background: rgba(255, 255, 255, 0.72);
+  background: theme('color-surface-container-low');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .metricLabel {
   display: block;
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 20px;
 }
 
 .metricValue {
   display: block;
   margin-top: 8px;
-  color: var(--color-primary);
+  color: theme('color-primary');
   font-size: 30px;
   font-weight: 700;
 }
@@ -67,7 +71,7 @@
 }
 
 .summaryMeta {
-  color: var(--color-tertiary);
+  color: theme('color-tertiary');
   font-size: 22px;
   line-height: 1.6;
 }
@@ -80,14 +84,14 @@
 
 .versionSide {
   display: block;
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 20px;
 }
 
 .versionName {
   display: block;
   margin-top: 8px;
-  color: var(--color-primary);
+  color: theme('color-primary');
   font-size: 28px;
   font-weight: 700;
   line-height: 1.5;
@@ -107,14 +111,14 @@
 }
 
 .blockTitle {
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 24px;
   font-weight: 700;
 }
 
 .blockBody,
 .listItem {
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 22px;
   line-height: 1.7;
 }

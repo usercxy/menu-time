@@ -1,22 +1,25 @@
 @use '../../../styles/mixins' as mixins;
 
+@use '@/styles/theme' as *;
+
 .heroCard,
 .sectionCard {
   padding: 36px 32px;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: var(--shadow-soft);
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .heroCard {
   background:
-    linear-gradient(135deg, rgba(168, 69, 51, 0.12), rgba(254, 239, 218, 0.4)),
-    rgba(255, 255, 255, 0.94);
+    radial-gradient(circle at top right, theme('color-tertiary-state-soft'), transparent 36%),
+    theme('color-surface-container-lowest');
 }
 
 .heroEyebrow {
   display: block;
-  color: var(--color-secondary);
+  color: theme('color-secondary');
   font-size: 20px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -26,7 +29,7 @@
 .heroTitle {
   display: block;
   margin-top: 12px;
-  color: var(--color-primary);
+  color: theme('color-primary');
   font-size: 38px;
   font-weight: 700;
 }
@@ -34,7 +37,7 @@
 .heroDescription {
   display: block;
   margin-top: 10px;
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 24px;
   line-height: 1.7;
 }
@@ -47,7 +50,7 @@
 }
 
 .sectionHint {
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 22px;
 }
 
@@ -61,8 +64,8 @@
   align-self: flex-start;
   padding: 12px 20px;
   border-radius: 999px;
-  background: rgba(89, 104, 89, 0.12);
-  color: var(--color-secondary);
+  background: theme('color-secondary-container');
+  color: theme('color-secondary');
   font-size: 24px;
   font-weight: 700;
 }
@@ -80,7 +83,7 @@
 }
 
 .fieldLabel {
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 26px;
   font-weight: 700;
 }
@@ -136,15 +139,21 @@
 .filterChip {
   padding: 14px 24px;
   border-radius: 999px;
-  background: var(--color-surface-container-high);
-  color: var(--color-on-surface-variant);
+  background: theme('color-surface-container-high');
+  color: theme('color-on-surface-variant');
   font-size: 24px;
+  border: 1px solid theme('color-outline-variant');
 }
 
 .filterChipActive {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  box-shadow: 0 10px 24px rgba(168, 69, 51, 0.18);
+  background: theme('color-primary-deep');
+  color: theme('color-on-primary');
+  border-color: theme('color-primary');
+  box-shadow: theme('shadow-primary');
+}
+
+.filterChipActive text {
+  color: inherit;
 }
 
 .helpText {
@@ -161,12 +170,11 @@
 
 .rowAction,
 .repeaterAction {
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: rgba(168, 69, 51, 0.08);
-  color: var(--color-primary);
-  font-size: 22px;
-  font-weight: 600;
+  @include mixins.pill-action;
+}
+
+.repeaterAction {
+  @include mixins.danger-action;
 }
 
 .repeaterStack {
@@ -181,16 +189,16 @@
   gap: 16px;
   padding: 18px;
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(252, 249, 243, 0.98), rgba(245, 241, 233, 0.94));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  background: theme('color-surface-container-low');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .repeaterIndex {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: rgba(168, 69, 51, 0.12);
-  color: var(--color-primary);
+  background: theme('color-action-container');
+  color: theme('color-primary');
   font-size: 22px;
   font-weight: 700;
   display: flex;
@@ -205,12 +213,12 @@
 .stepCard {
   padding: 22px;
   border-radius: 24px;
-  background: linear-gradient(180deg, rgba(252, 249, 243, 0.98), rgba(245, 241, 233, 0.94));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  background: theme('color-surface-container-low');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .stepTitle {
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   font-size: 24px;
   font-weight: 700;
 }
@@ -219,8 +227,8 @@
   display: block;
   padding: 20px 24px;
   border-radius: 20px;
-  background: rgba(179, 55, 78, 0.1);
-  color: var(--color-error);
+  background: theme('color-error-container');
+  color: theme('color-error');
   font-size: 22px;
 }
 

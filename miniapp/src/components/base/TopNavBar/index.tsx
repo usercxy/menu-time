@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import { Text, View } from '@tarojs/components'
+import { SvgIcon } from '@/components/base/SvgIcon'
+import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import { navigateBackOrHome } from '@/utils/navigation'
 import styles from './index.module.scss'
 
@@ -8,24 +10,47 @@ interface TopNavBarProps {
   subtitle?: string
   showBack?: boolean
   rightAction?: ReactNode
+  statusBarHeight: number
+  navBarHeight: number
 }
 
-export function TopNavBar({ title, subtitle, showBack, rightAction }: TopNavBarProps) {
+function getLeadingIconName(title: string) {
+  if (title === '菜谱库') {
+    return 'wenjian' as const
+  }
+
+  if (title === '点菜台') {
+    return 'liebiao' as const
+  }
+
+  if (title === '我的') {
+    return 'yonghu' as const
+  }
+
+  return 'shijian' as const
+}
+
+export function TopNavBar({
+  title,
+  subtitle,
+  showBack,
+  rightAction,
+  statusBarHeight,
+  navBarHeight
+}: TopNavBarProps) {
+  const leadingIconName = getLeadingIconName(title)
+
   return (
-    <View className={styles.bar}>
-      <View className={styles.inner}>
+    <View className={styles.bar} style={{ paddingTop: `${statusBarHeight}px` }}>
+      <View className={styles.inner} style={{ height: `${navBarHeight}px` }}>
         <View className={styles.left}>
           {showBack ? (
             <View className={styles.back} onClick={() => navigateBackOrHome()}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <SvgIcon name="zuojiantou" size={24} color={svgIconColors.primary} />
             </View>
           ) : (
-            <View className={styles.back}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 8H20M4 16H20" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+            <View className={styles.leadingIcon}>
+              <SvgIcon name={leadingIconName} size={26} color={svgIconColors.primary} />
             </View>
           )}
           <View className={styles.titleWrap}>
@@ -33,15 +58,7 @@ export function TopNavBar({ title, subtitle, showBack, rightAction }: TopNavBarP
             {subtitle ? <Text className={styles.subtitle}>{subtitle}</Text> : null}
           </View>
         </View>
-        <View className={styles.right}>
-          {rightAction || (
-            <View className={styles.actionIcon}>
-               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 6V18M6 12H18" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </View>
-          )}
-        </View>
+        {rightAction ? <View className={styles.right}>{rightAction}</View> : null}
       </View>
     </View>
   )

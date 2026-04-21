@@ -1,0 +1,75 @@
+@use 'sass:map';
+
+$theme-tokens: (
+  'color-background': #fffdf2,
+  'color-surface': #fffdf2,
+  'color-surface-container-lowest': #ffffff,
+  'color-surface-container-low': #fcfaf0,
+  'color-surface-container': #f5f2e6,
+  'color-surface-container-high': #ede9d8,
+  'color-surface-container-highest': #e3deca,
+  'color-page-background': (
+    radial-gradient(circle at top left, rgba(168, 85, 7, 0.12), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(44, 76, 59, 0.12), transparent 32%),
+    linear-gradient(180deg, #fffdf2 0%, #ede9d8 100%)
+  ),
+  'color-nav-background': rgba(255, 253, 242, 0.96),
+  'color-overlay-scrim': rgba(26, 28, 25, 0.28),
+  'color-primary': #2c4c3b,
+  'color-primary-dim': #1b3226,
+  'color-primary-deep': #12221a,
+  'color-primary-container': #d5e2db,
+  'color-on-primary': #ffffff,
+  'color-on-primary-container': #12221a,
+  'color-secondary': #6b705c,
+  'color-secondary-dim': #585d4a,
+  'color-secondary-container': #e9ede0,
+  'color-on-secondary': #ffffff,
+  'color-on-secondary-container': #585d4a,
+  'color-tertiary': #a85507,
+  'color-tertiary-dim': #8a4606,
+  'color-tertiary-container': #fde6d2,
+  'color-on-tertiary': #ffffff,
+  'color-on-tertiary-container': #8a4606,
+  'color-text-main': #1a1c19,
+  'color-text-muted': #414941,
+  'color-text-light': #717971,
+  'color-on-surface': #1a1c19,
+  'color-on-surface-variant': #414941,
+  'color-text': #1a1c19,
+  'color-text-secondary': #414941,
+  'color-outline': #6b705c,
+  'color-outline-variant': #adb5ad,
+  'color-tertiary-fixed-dim': #a85507,
+  'color-error': #ba1a1a,
+  'color-on-error': #ffffff,
+  'color-error-container': rgba(186, 26, 26, 0.1),
+  'color-on-error-container': #8f1212,
+  'color-input-background': #fffef8,
+  'color-input-border': #6b705c,
+  'color-action-container': #d5e2db,
+  'color-action-border': rgba(44, 76, 59, 0.28),
+  'color-primary-state-soft': rgba(44, 76, 59, 0.06),
+  'color-primary-state-pressed': rgba(44, 76, 59, 0.12),
+  'color-ink-state-soft': rgba(26, 28, 25, 0.04),
+  'color-ink-state-pressed': rgba(26, 28, 25, 0.1),
+  'color-tertiary-state-soft': rgba(168, 85, 7, 0.1),
+  'color-tertiary-state-muted': rgba(168, 85, 7, 0.22),
+  'shadow-soft': 0 12px 32px rgba(26, 28, 25, 0.04),
+  'shadow-floating': 0 18px 42px rgba(27, 50, 38, 0.12),
+  'shadow-scrapbook': 0 8px 24px rgba(26, 28, 25, 0.05),
+  'shadow-primary': 0 12px 32px rgba(44, 76, 59, 0.2),
+  'radius-sm': 8px,
+  'radius-md': 12px,
+  'radius-lg': 24px,
+  'radius-card': 20px,
+  'radius-pill': 999px
+);
+
+@function theme($token) {
+  @if map.has-key($theme-tokens, $token) {
+    @return map.get($theme-tokens, $token);
+  }
+
+  @error "Unknown theme token: #{$token}";
+}

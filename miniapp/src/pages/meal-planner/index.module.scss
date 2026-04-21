@@ -1,3 +1,5 @@
+@use '@/styles/theme' as *;
+
 .calendarSection {
   margin-bottom: 32px;
 }
@@ -13,9 +15,9 @@
 .weekLabel {
   font-size: 22px;
   font-weight: 500;
-  color: var(--color-tertiary);
+  color: theme('color-tertiary');
   padding: 8px 24px;
-  background: var(--color-surface-container);
+  background: theme('color-surface-container');
   border-radius: 999px;
 }
 
@@ -39,13 +41,13 @@
   align-items: center;
   justify-content: center;
   border-radius: 24px;
-  background: var(--color-surface-container-high);
-  color: var(--color-on-surface-variant);
+  background: theme('color-surface-container-high');
+  color: theme('color-on-surface-variant');
   
   &--active {
-    background: var(--color-primary);
-    color: var(--color-on-primary);
-    box-shadow: 0 16px 32px rgba(168, 69, 51, 0.2);
+    background: theme('color-primary-deep');
+    color: theme('color-on-primary');
+    box-shadow: theme('shadow-primary');
   }
 }
 
@@ -68,12 +70,12 @@
 .randomButton {
   width: 100%;
   padding: 40px;
-  background: var(--color-tertiary-container);
+  background: theme('color-tertiary-container');
   border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid var(--color-tertiary-fixed-dim);
+  border: 1px solid theme('color-tertiary-fixed-dim');
   
   &:active {
     transform: scale(0.98);
@@ -90,11 +92,16 @@
   width: 96px;
   height: 96px;
   border-radius: 50%;
-  background: rgba(110, 99, 83, 0.1);
+  background: theme('color-tertiary-state-soft');
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 48px;
+}
+
+.randomIconImage {
+  width: 44px;
+  height: 44px;
 }
 
 .randomText {
@@ -106,12 +113,12 @@
 .randomTitle {
   font-size: 32px;
   font-weight: 700;
-  color: var(--color-on-tertiary-container);
+  color: theme('color-on-tertiary-container');
 }
 
 .randomSubtitle {
   font-size: 24px;
-  color: var(--color-on-tertiary-container);
+  color: theme('color-on-tertiary-container');
   opacity: 0.7;
 }
 
@@ -119,12 +126,17 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background: var(--color-on-tertiary-container);
-  color: var(--color-on-tertiary);
+  background: theme('color-on-tertiary-container');
+  color: theme('color-on-tertiary');
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 32px;
+}
+
+.arrowIcon {
+  width: 28px;
+  height: 28px;
 }
 
 .mealHeader {
@@ -135,6 +147,12 @@
   margin-bottom: 24px;
 }
 
+.mealCount {
+  font-size: 24px;
+  font-weight: 500;
+  color: theme('color-secondary');
+}
+
 .mealGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -142,13 +160,13 @@
 }
 
 .mealCard {
-  background: var(--color-surface-container-lowest);
+  background: theme('color-surface-container-lowest');
   border-radius: 24px;
   overflow: hidden;
   display: flex;
   height: 256px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(186, 186, 175, 0.1);
+  box-shadow: theme('shadow-soft');
+  border: 1px solid theme('color-outline-variant');
 }
 
 .mealCoverWrap {
@@ -160,12 +178,12 @@
   position: absolute;
   top: 16px;
   left: 16px;
-  background: rgba(255, 255, 255, 0.9);
+  background: theme('color-surface-container-lowest');
   padding: 4px 16px;
   border-radius: 8px;
   font-size: 20px;
   font-weight: 700;
-  color: var(--color-primary);
+  color: theme('color-primary');
 }
 
 .mealInfo {
@@ -179,19 +197,55 @@
 .mealTitle {
   font-size: 32px;
   font-weight: 700;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
   display: block;
 }
 
 .mealNote {
   font-size: 24px;
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   margin-top: 8px;
   display: block;
 }
 
 .mealEdit {
   align-self: flex-end;
-  color: var(--color-primary-dim);
-  font-size: 32px;
+  min-height: 56px;
+  padding: 0 20px;
+  border-radius: theme('radius-pill');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: theme('color-action-container');
+  border: 1px solid theme('color-action-border');
+  color: theme('color-primary');
+  font-size: 22px;
+  font-weight: 700;
+  gap: 8px;
+}
+
+.mealEditIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.mealEdit text {
+  color: inherit;
+}
+
+.linkTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.linkTitleIcon {
+  width: 26px;
+  height: 26px;
+}
+
+.linkArrowIcon {
+  width: 28px;
+  height: 28px;
+  opacity: 0.8;
 }

@@ -1,4 +1,6 @@
 import { Image, Text, View } from '@tarojs/components'
+import { SvgIcon } from '@/components/base/SvgIcon'
+import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import type { RecipeListItemDTO } from '@/services/types/recipe'
 import styles from './index.module.scss'
 
@@ -33,14 +35,22 @@ export function RecipeCard({ recipe, viewMode, onClick }: RecipeCardProps) {
         </View>
 
         <View className={styles.metaStack}>
-          <Text className={styles.metaText}>📂 {recipe.currentVersion?.category?.name || '未分类'}</Text>
-          <Text className={styles.metaText}>
-            🏷️{' '}
-            {recipe.currentVersion?.tags.length
-              ? recipe.currentVersion.tags.map((tag) => tag.name).join(' / ')
-              : '暂无标签'}
-          </Text>
-          <Text className={styles.metaText}>🕰️ {recipe.latestCookedAt || '还没有烹饪记录'}</Text>
+          <View className={styles.metaRow}>
+            <SvgIcon className={styles.metaIcon} name="wenjian" size={20} color={svgIconColors.onSurfaceVariant} />
+            <Text className={styles.metaText}>{recipe.currentVersion?.category?.name || '未分类'}</Text>
+          </View>
+          <View className={styles.metaRow}>
+            <SvgIcon className={styles.metaIcon} name="xingbiao" size={20} color={svgIconColors.onSurfaceVariant} />
+            <Text className={styles.metaText}>
+              {recipe.currentVersion?.tags.length
+                ? recipe.currentVersion.tags.map((tag) => tag.name).join(' / ')
+                : '暂无标签'}
+            </Text>
+          </View>
+          <View className={styles.metaRow}>
+            <SvgIcon className={styles.metaIcon} name="shijian" size={20} color={svgIconColors.onSurfaceVariant} />
+            <Text className={styles.metaText}>{recipe.latestCookedAt || '还没有烹饪记录'}</Text>
+          </View>
         </View>
       </View>
     </View>

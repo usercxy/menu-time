@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
-import { Input, Text, View } from '@tarojs/components'
+import { Icon, Input, Text, View } from '@tarojs/components'
 import Taro from '@tarojs/taro'
+import { SvgIcon } from '@/components/base/SvgIcon'
+import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import { PageContainer } from '@/components/base/PageContainer'
 import { EmptyState } from '@/components/base/EmptyState'
 import { ErrorState } from '@/components/base/ErrorState'
@@ -81,6 +83,7 @@ export default function RecipeLibraryPage() {
                   setKeyword('')
                 }}
               >
+                <SvgIcon className={styles.actionIcon} name="guanbi" size={20} color={svgIconColors.primary} />
                 <Text>清空搜索</Text>
               </View>
             ) : null}
@@ -89,7 +92,7 @@ export default function RecipeLibraryPage() {
 
         <View className={styles.searchSection}>
           <View className={styles.searchContainer}>
-            <Text className={styles.searchIcon}>🔍</Text>
+            <Icon className={styles.searchIcon} type="search" size={22} color="#6b705c" />
             <Input
               className={styles.searchInput}
               placeholder="搜索味蕾记忆..."
@@ -100,10 +103,12 @@ export default function RecipeLibraryPage() {
               className={styles.createAction}
               onClick={() => navigateToRoute(routes.recipeEdit)}
             >
-              <View className={styles.createActionIcon} aria-role="button">
-                <View className={styles.createActionBarHorizontal} />
-                <View className={styles.createActionBarVertical} />
-              </View>
+              <SvgIcon
+                className={styles.createActionIcon}
+                name="jiahao"
+                size={20}
+                color={svgIconColors.onPrimary}
+              />
               <Text className={styles.createActionLabel}>新建</Text>
             </View>
           </View>
@@ -120,12 +125,24 @@ export default function RecipeLibraryPage() {
                 className={`${styles.viewToggle} ${viewMode === 'list' ? styles.viewToggleActive : ''}`}
                 onClick={() => setViewMode('list')}
               >
+                <SvgIcon
+                  className={styles.viewToggleIcon}
+                  name="liebiao"
+                  size={20}
+                  color={viewMode === 'list' ? svgIconColors.onPrimary : svgIconColors.secondary}
+                />
                 <Text>长列表</Text>
               </View>
               <View
                 className={`${styles.viewToggle} ${viewMode === 'grid' ? styles.viewToggleActive : ''}`}
                 onClick={() => setViewMode('grid')}
               >
+                <SvgIcon
+                  className={styles.viewToggleIcon}
+                  name="gongge"
+                  size={20}
+                  color={viewMode === 'grid' ? svgIconColors.onPrimary : svgIconColors.secondary}
+                />
                 <Text>双列卡片</Text>
               </View>
             </View>
@@ -169,6 +186,12 @@ export default function RecipeLibraryPage() {
                   }
                 }}
               >
+                <SvgIcon
+                  className={styles.paginationIcon}
+                  name="zuojiantou"
+                  size={20}
+                  color={svgIconColors.primary}
+                />
                 <Text>上一页</Text>
               </View>
               <View
@@ -180,6 +203,12 @@ export default function RecipeLibraryPage() {
                 }}
               >
                 <Text>下一页</Text>
+                <SvgIcon
+                  className={styles.paginationIcon}
+                  name="youjiantou"
+                  size={20}
+                  color={svgIconColors.primary}
+                />
               </View>
             </View>
           </>

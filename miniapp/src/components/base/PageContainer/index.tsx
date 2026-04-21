@@ -37,19 +37,16 @@ export function PageContainer({
   const totalNavHeight = statusBarHeight + navBarHeight
 
   return (
-    <View 
-      className={`app-shell ${styles.root}`}
-      style={{
-        '--status-bar-height': `${statusBarHeight}px`,
-        '--nav-bar-height': `${navBarHeight}px`,
-        '--total-nav-height': `${totalNavHeight}px`
-      } as any}
-    >
-      <TopNavBar title={title} subtitle={subtitle} showBack={showBack} rightAction={rightAction} />
-      <View 
-        className={`page-shell ${styles.body}`}
-        style={{ paddingTop: `calc(var(--total-nav-height) + 32px)` }}
-      >
+    <View className={`app-shell ${styles.root}`}>
+      <TopNavBar
+        title={title}
+        subtitle={subtitle}
+        showBack={showBack}
+        rightAction={rightAction}
+        statusBarHeight={statusBarHeight}
+        navBarHeight={navBarHeight}
+      />
+      <View className={`page-shell ${styles.body}`} style={{ paddingTop: `${totalNavHeight + 32}px` }}>
         {children}
       </View>
     </View>

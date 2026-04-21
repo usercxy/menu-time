@@ -1,3 +1,5 @@
+@use '@/styles/theme' as *;
+
 .overlay {
   position: fixed;
   top: 0;
@@ -9,28 +11,28 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background: var(--color-overlay-scrim);
+  background: theme('color-overlay-scrim');
 }
 
 .panel {
   width: 100%;
   border-radius: 28px;
-  background: var(--color-surface-container-lowest);
+  background: theme('color-surface-container-lowest');
   padding: 28px;
-  box-shadow: var(--shadow-floating);
+  box-shadow: theme('shadow-floating');
 }
 
 .title {
   display: block;
   font-size: 30px;
   font-weight: 700;
-  color: var(--color-on-surface);
+  color: theme('color-on-surface');
 }
 
 .description {
   display: block;
   margin-top: 12px;
-  color: var(--color-on-surface-variant);
+  color: theme('color-on-surface-variant');
   font-size: 22px;
   line-height: 1.6;
 }

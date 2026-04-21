@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { Image, Text, View } from '@tarojs/components'
+import { SvgIcon } from '@/components/base/SvgIcon'
+import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import { routes } from '@/constants/routes'
 import { PageContainer } from '@/components/base/PageContainer'
 import { ErrorState } from '@/components/base/ErrorState'
@@ -12,6 +14,8 @@ import { recipeService } from '@/services/modules/recipe'
 import { useSessionStore } from '@/store/session'
 import { navigateToRoute } from '@/utils/navigation'
 import styles from './index.module.scss'
+
+const EMPTY_RECIPES: Awaited<ReturnType<typeof recipeService.getRecipes>>['items'] = []
 
 export default function HomePage() {
   const sessionStatus = useSessionStore((state) => state.status)
@@ -33,7 +37,7 @@ export default function HomePage() {
   usePageShowRefetch([sessionQuery, weekQuery, latestRecipesQuery])
 
   const weekSummary = weekQuery.data?.summary
-  const latestRecipes = latestRecipesQuery.data?.items || []
+  const latestRecipes = latestRecipesQuery.data?.items ?? EMPTY_RECIPES
 
   // Generate random rotations for cards to give a scrapbook feel
   const cardStyles = useMemo(() => {
@@ -82,10 +86,20 @@ export default function HomePage() {
               </Text>
             </View>
             <View className={styles.heroIcon}>
-              <Text style={{ fontSize: '40px' }}>📅</Text>
+              <SvgIcon
+                className={styles.heroIconImage}
+                name="shijian"
+                size={40}
+                color={svgIconColors.onPrimary}
+              />
             </View>
             <View className={styles.heroBackground}>
-              <Text>🍽️</Text>
+              <SvgIcon
+                className={styles.heroBackgroundIcon}
+                name="shijian"
+                size={200}
+                color={svgIconColors.primary}
+              />
             </View>
           </View>
         )}
@@ -93,7 +107,15 @@ export default function HomePage() {
         {/* Section Header */}
         <View className={styles.sectionHeader}>
           <Text className="section-title">时光锦囊</Text>
-          <Text className="inline-link" onClick={() => navigateToRoute(routes.recipeLibrary)}>查看全部</Text>
+          <View className={styles.sectionLink} onClick={() => navigateToRoute(routes.recipeLibrary)}>
+            <Text className="inline-link">查看全部</Text>
+            <SvgIcon
+              className={styles.sectionLinkIcon}
+              name="youjiantou"
+              size={24}
+              color={svgIconColors.onSurfaceVariant}
+            />
+          </View>
         </View>
 
         {/* Memory Feed */}
@@ -157,9 +179,8 @@ export default function HomePage() {
       
       {/* Floating Action Button */}
       <View className={styles.fab} onClick={() => navigateToRoute(routes.recipeEdit)}>
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
+        <SvgIcon className={styles.fabIcon} name="jiahao" size={22} color={svgIconColors.onPrimary} />
+        <Text>新建</Text>
       </View>
     </PageContainer>
   )

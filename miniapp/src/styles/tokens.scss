@@ -75,6 +75,12 @@
   --color-tertiary-fixed-dim: var(--palette-ochre-base);
   --color-error: #ba1a1a;
   --color-on-error: #ffffff;
+  --color-error-container: rgba(186, 26, 26, 0.1);
+  --color-on-error-container: #8f1212;
+  --color-input-background: #fffef8;
+  --color-input-border: var(--palette-olive-base);
+  --color-action-container: var(--palette-emerald-light);
+  --color-action-border: rgba(44, 76, 59, 0.28);
   --color-primary-state-soft: rgba(44, 76, 59, 0.06);
   --color-primary-state-pressed: rgba(44, 76, 59, 0.12);
   --color-ink-state-soft: rgba(26, 28, 25, 0.04);
