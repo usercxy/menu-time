@@ -5,10 +5,12 @@
 ## 当前进度
 
 - 阶段 0 已完成：工程底座、统一响应 / 错误、日志、健康检查、Prisma、鉴权基础设施已落地。
-- 阶段 1 部分完成：已落地 `households`、`users`、`wechat_accounts`、`refresh_tokens`、`categories`、`tags`、`media_assets`、`recipes`、`recipe_versions`、`recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags` 共 12 个 Prisma 模型，并补齐两次 migration。
+- 阶段 1 部分完成：已落地 `households`、`users`、`wechat_accounts`、`refresh_tokens`、`categories`、`tags`、`media_assets`、`recipes`、`recipe_versions`、`recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags`、`moments`、`moment_images`、`meal_plan_weeks`、`meal_plan_items` 共 16 个 Prisma 模型，并补齐四次 migration。
 - 阶段 2 已完成：auth 主链路、taxonomy 的 household-scoped 查询基础设施、`schema / mapper / service / repository` 模块实现，以及分类 / 标签 API 路由均已可用。
 - 阶段 3 已完成：里程碑 A/B/C/D/E/F 已完成，recipes 域数据模型、索引、双向关系、migration、模块抽象、菜谱 CRUD、版本管理、API 路由、recipes 演示 seed、自测与阶段验收均已落地。
 - 阶段 3 补充完成：统一图片文件链路已落地，包含 COS/S3 兼容对象存储适配器、上传授权、资源登记、预览与下载能力。
+- 阶段 4 已完成：`moments / moment_images`、时光记录 CRUD、时光轴、首页最新动态、菜谱统计回填、封面回填入口和 demo seed 已落地。
+- 阶段 5 已完成：`meal_plan_weeks / meal_plan_items`、当前周菜单、指定周懒创建、菜单项 CRUD、跨桶移动、同餐次重排和 demo seed 已落地。
 
 ## 当前已验证
 
@@ -28,6 +30,10 @@
 - `npm run prisma:seed` 自动加载 `.env.local`，并写入 1 条带 2 个版本的 recipes 演示数据
 - `npm run dev -- --port 3146` 后通过真实 HTTP 请求验证 recipes API：未登录、列表、创建、详情、更新、版本列表、版本创建、版本详情、版本对比、切换当前版本、删除
 - 新增 files / storage 相关改动后再次执行 `npm run typecheck` 与 `npm run lint`，均通过
+- `npx prisma migrate deploy --schema prisma/schema.prisma` 已验证新增 `moments / moment_images` migration 可正常应用
+- `npm run dev -- --port 3148` 后通过真实 HTTP 请求验证阶段 4：`files/upload-token`、时光记录图片数校验、创建、时光轴、首页最新动态、编辑、删除、菜谱统计回填、封面回填
+- `npx prisma migrate deploy --schema prisma/schema.prisma` 已验证新增 `meal_plan_weeks / meal_plan_items` migration 可正常应用
+- `npm run dev -- --port 3148` 后通过真实 HTTP 请求验证阶段 5：当前周菜单、指定周懒创建、周一校验、周范围校验、菜谱版本绑定校验、菜单项创建、跨桶更新、同餐次重排、删除后顺序压紧、周计划数量统计
 
 ## 已完成基础能力
 
@@ -53,6 +59,8 @@
 - 已开放 recipes API：`/api/v1/recipes`、`/api/v1/recipes/:id`、`/api/v1/recipes/:id/versions`、`/api/v1/recipes/:id/compare`
 - 已实现对象存储适配层：支持 COS/S3 兼容预签名上传、对象存在校验和公开 URL 生成
 - 已开放 files API：`/api/v1/files/upload-token`、`/api/v1/files/assets`、`/api/v1/files/:id/preview`、`/api/v1/files/:id/download`
+- 已开放 moments API：`/api/v1/recipes/:id/moments`、`/api/v1/moments/latest`、`/api/v1/moments/:id`
+- 已开放 menu-plans API：`/api/v1/menu-plans/current-week`、`/api/v1/menu-plans/weeks/:weekStartDate`、`/api/v1/menu-plans/weeks/:weekStartDate/items`、`/api/v1/menu-plans/items/:id`、`/api/v1/menu-plans/weeks/:weekStartDate/reorder`
 - 预留 pg-boss worker 启动结构
 - 增加 `/api/health` 健康检查接口
 
@@ -146,7 +154,7 @@ npm run dev
 说明：
 
 - `npm run prisma:seed` 会自动加载 `.env.local`。
-- seed 会补齐默认家庭、管理员、分类、标签，以及 1 条带 2 个版本的演示菜谱，便于直接联调阶段 3 recipes 接口。
+- seed 会补齐默认家庭、管理员、分类、标签，以及 1 条带 2 个版本、1 条时光记录和 1 周演示周菜单的数据，便于直接联调阶段 3/4/5 接口。
 
 常用检查命令：
 
@@ -210,6 +218,17 @@ MEDIA_ALLOWED_IMAGE_TYPES=image/jpeg,image/png,image/webp
 - `POST /api/v1/files/assets`
 - `GET /api/v1/files/:id/preview`
 - `GET /api/v1/files/:id/download`
+- `GET /api/v1/recipes/:id/moments`
+- `POST /api/v1/recipes/:id/moments`
+- `GET /api/v1/moments/latest`
+- `PATCH /api/v1/moments/:id`
+- `DELETE /api/v1/moments/:id`
+- `GET /api/v1/menu-plans/current-week`
+- `GET /api/v1/menu-plans/weeks/:weekStartDate`
+- `POST /api/v1/menu-plans/weeks/:weekStartDate/items`
+- `PATCH /api/v1/menu-plans/items/:id`
+- `DELETE /api/v1/menu-plans/items/:id`
+- `POST /api/v1/menu-plans/weeks/:weekStartDate/reorder`
 
 文档入口：
 

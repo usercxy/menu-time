@@ -18,6 +18,8 @@ const DEFAULT_TAGS = [
 ];
 
 const DEMO_RECIPE_SLUG = "demo-braised-pork-ribs";
+const DEMO_MOMENT_ASSET_KEY_SUFFIX = "demo-braised-pork-ribs-moment.jpg";
+const DEMO_MEAL_PLAN_WEEK_START = "2026-04-20";
 
 async function ensureDefaultHousehold() {
   const existing = await prisma.household.findFirst({
@@ -333,6 +335,206 @@ async function ensureDemoRecipe(householdId, adminId) {
   });
 }
 
+async function ensureDemoMoment(householdId, adminId, recipeId) {
+  const existing = await prisma.moment.findFirst({
+    where: {
+      householdId,
+      recipeId,
+      content: "第一次做高压锅快手版，排骨更软糯，晚饭被一扫而空。",
+      deletedAt: null,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  if (existing) {
+    return {
+      momentId: existing.id,
+      created: false,
+    };
+  }
+
+  const recipe = await prisma.recipe.findUniqueOrThrow({
+    where: {
+      id: recipeId,
+    },
+    include: {
+      currentVersion: true,
+    },
+  });
+
+  const assetKey = `households/${householdId}/files/images/2026/04/${DEMO_MOMENT_ASSET_KEY_SUFFIX}`;
+  const assetUrl = `https://example.com/${assetKey}`;
+
+  const asset = await prisma.mediaAsset.upsert({
+    where: {
+      assetKey,
+    },
+    create: {
+      householdId,
+      assetKey,
+      assetUrl,
+      mimeType: "image/jpeg",
+      sizeBytes: 1024,
+      width: 1200,
+      height: 900,
+      purpose: "image",
+      createdById: adminId,
+    },
+    update: {
+      assetUrl,
+      mimeType: "image/jpeg",
+      sizeBytes: 1024,
+      width: 1200,
+      height: 900,
+      purpose: "image",
+    },
+  });
+
+  const created = await prisma.$transaction(async (tx) => {
+    const moment = await tx.moment.create({
+      data: {
+        householdId,
+        recipeId,
+        recipeVersionId: recipe.currentVersion?.id ?? null,
+        occurredOn: new Date("2026-04-18T00:00:00.000Z"),
+        content: "第一次做高压锅快手版，排骨更软糯，晚饭被一扫而空。",
+        participantsText: "全家",
+        tasteRating: 5,
+        difficultyRating: 2,
+        isCoverCandidate: true,
+        createdById: adminId,
+        images: {
+          create: [
+            {
+              mediaAssetId: asset.id,
+              sortOrder: 0,
+            },
+          ],
+        },
+      },
+    });
+
+    const stats = await tx.moment.aggregate({
+      where: {
+        householdId,
+        recipeId,
+        deletedAt: null,
+      },
+      _count: {
+        _all: true,
+      },
+      _max: {
+        createdAt: true,
+        occurredOn: true,
+      },
+    });
+
+    await tx.recipe.update({
+      where: {
+        id: recipeId,
+      },
+      data: {
+        momentCount: stats._count._all,
+        latestMomentAt: stats._max.createdAt ?? null,
+        latestCookedAt: stats._max.occurredOn ?? null,
+        coverImageId: asset.id,
+        coverSource: "moment_latest",
+      },
+    });
+
+    return moment;
+  });
+
+  return {
+    momentId: created.id,
+    created: true,
+  };
+}
+
+async function ensureDemoMealPlan(householdId, adminId, recipeId) {
+  const existingWeek = await prisma.mealPlanWeek.findFirst({
+    where: {
+      householdId,
+      weekStartDate: new Date(`${DEMO_MEAL_PLAN_WEEK_START}T00:00:00.000Z`),
+    },
+    include: {
+      items: true,
+    },
+  });
+
+  if (existingWeek && existingWeek.items.length > 0) {
+    return {
+      weekId: existingWeek.id,
+      itemCount: existingWeek.items.length,
+      created: false,
+    };
+  }
+
+  const recipe = await prisma.recipe.findUniqueOrThrow({
+    where: {
+      id: recipeId,
+    },
+    include: {
+      currentVersion: true,
+    },
+  });
+
+  if (!recipe.currentVersion) {
+    throw new Error("Demo recipe is missing currentVersion, cannot create demo meal plan.");
+  }
+
+  const createdWeek = await prisma.mealPlanWeek.upsert({
+    where: {
+      householdId_weekStartDate: {
+        householdId,
+        weekStartDate: new Date(`${DEMO_MEAL_PLAN_WEEK_START}T00:00:00.000Z`),
+      },
+    },
+    create: {
+      householdId,
+      weekStartDate: new Date(`${DEMO_MEAL_PLAN_WEEK_START}T00:00:00.000Z`),
+      status: "draft",
+      createdById: adminId,
+    },
+    update: {},
+  });
+
+  const existingItems = await prisma.mealPlanItem.findMany({
+    where: {
+      mealPlanWeekId: createdWeek.id,
+    },
+  });
+
+  if (existingItems.length === 0) {
+    await prisma.mealPlanItem.create({
+      data: {
+        mealPlanWeekId: createdWeek.id,
+        recipeId: recipe.id,
+        recipeVersionId: recipe.currentVersion.id,
+        plannedDate: new Date("2026-04-22T00:00:00.000Z"),
+        mealSlot: "dinner",
+        sortOrder: 0,
+        sourceType: "manual",
+        note: "演示周菜单",
+      },
+    });
+  }
+
+  const itemCount = await prisma.mealPlanItem.count({
+    where: {
+      mealPlanWeekId: createdWeek.id,
+    },
+  });
+
+  return {
+    weekId: createdWeek.id,
+    itemCount,
+    created: existingItems.length === 0,
+  };
+}
+
 async function main() {
   const household = await ensureDefaultHousehold();
   const admin = await ensureDefaultAdmin(household.id);
@@ -340,8 +542,10 @@ async function main() {
   await ensureDefaultCategories(household.id);
   await ensureDefaultTags(household.id);
   const demoRecipe = await ensureDemoRecipe(household.id, admin.id);
+  const demoMoment = await ensureDemoMoment(household.id, admin.id, demoRecipe.recipeId);
+  const demoMealPlan = await ensureDemoMealPlan(household.id, admin.id, demoRecipe.recipeId);
 
-  const [categoryCount, tagCount, recipeCount, recipeVersionCount] = await Promise.all([
+  const [categoryCount, tagCount, recipeCount, recipeVersionCount, momentCount, mealPlanWeekCount, mealPlanItemCount] = await Promise.all([
     prisma.category.count({
       where: {
         householdId: household.id,
@@ -365,6 +569,24 @@ async function main() {
         householdId: household.id,
       },
     }),
+    prisma.moment.count({
+      where: {
+        householdId: household.id,
+        deletedAt: null,
+      },
+    }),
+    prisma.mealPlanWeek.count({
+      where: {
+        householdId: household.id,
+      },
+    }),
+    prisma.mealPlanItem.count({
+      where: {
+        mealPlanWeek: {
+          householdId: household.id,
+        },
+      },
+    }),
   ]);
 
   console.log("Seed completed");
@@ -374,9 +596,14 @@ async function main() {
   console.log(`Tags: ${tagCount}`);
   console.log(`Recipes: ${recipeCount}`);
   console.log(`Recipe Versions: ${recipeVersionCount}`);
+  console.log(`Moments: ${momentCount}`);
+  console.log(`Meal Plan Weeks: ${mealPlanWeekCount}`);
+  console.log(`Meal Plan Items: ${mealPlanItemCount}`);
   console.log(
     `Demo Recipe: ${demoRecipe.recipeId} (${demoRecipe.created ? "created" : "existing"}, versions=${demoRecipe.versionCount})`,
   );
+  console.log(`Demo Moment: ${demoMoment.momentId} (${demoMoment.created ? "created" : "existing"})`);
+  console.log(`Demo Meal Plan: ${demoMealPlan.weekId} (${demoMealPlan.created ? "created" : "existing"}, items=${demoMealPlan.itemCount})`);
 }
 
 main()

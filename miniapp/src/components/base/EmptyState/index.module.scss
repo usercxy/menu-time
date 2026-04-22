@@ -22,3 +22,19 @@
   font-size: 22px;
   line-height: 1.6;
 }
+
+.action {
+  margin: 18px auto 0;
+  min-width: 160px;
+  min-height: 64px;
+  padding: 0 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: theme('color-primary');
+  color: theme('color-on-primary');
+  font-size: 22px;
+  font-weight: 700;
+  box-shadow: theme('shadow-primary');
+}

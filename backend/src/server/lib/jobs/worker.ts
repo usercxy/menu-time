@@ -1,6 +1,7 @@
 import { getLogger } from "@/server/lib/logger";
 import { getJobQueue } from "@/server/lib/jobs/client";
 import { jobNames } from "@/server/lib/jobs/job-names";
+import { refreshRecipeCoverFromMoments } from "@/server/modules/moments/moments.service";
 
 const logger = getLogger({ module: "jobs" });
 
@@ -12,8 +13,20 @@ export async function startJobWorker() {
     return null;
   }
 
-  await boss.work(jobNames.recipeCoverRefresh, async () => {
-    logger.info({ jobName: jobNames.recipeCoverRefresh }, "received placeholder job");
+  await boss.work(jobNames.recipeCoverRefresh, async (jobs) => {
+    for (const job of jobs) {
+      const data = job.data as { householdId?: string; recipeId?: string } | undefined;
+
+      if (!data?.householdId || !data.recipeId) {
+        logger.warn({ jobName: jobNames.recipeCoverRefresh }, "received invalid recipe cover refresh job");
+        continue;
+      }
+
+      await refreshRecipeCoverFromMoments({
+        householdId: data.householdId,
+        recipeId: data.recipeId,
+      });
+    }
   });
 
   await boss.work(jobNames.shoppingShareImageGenerate, async () => {

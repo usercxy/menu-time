@@ -45,7 +45,7 @@
 }
 ```
 - 受保护接口统一从 token 中解析 `userId`、`householdId`
-- 当前 recipes、taxonomy 接口均已接入统一 `createRouteHandler`
+- 当前 auth、taxonomy、recipes、files、moments 接口均已接入统一 `createRouteHandler`
 
 常用错误码：
 
@@ -627,9 +627,10 @@ recipes 模块统一错误码补充：
 
 返回字段：
 
-- `week.id`
-- `week.weekStartDate`
-- `week.status`
+- `id`
+- `weekStartDate`
+- `status`
+- `plannedItemCount`
 - `items`
 
 ### `GET /api/v1/menu-plans/weeks/:weekStartDate`
@@ -639,6 +640,11 @@ recipes 模块统一错误码补充：
 路径参数：
 
 - `weekStartDate: YYYY-MM-DD`
+
+说明：
+
+- 若该周菜单不存在，后端会懒创建空周计划并返回。
+- `weekStartDate` 必须为周一，否则返回 `BUSINESS_RULE_VIOLATION`。
 
 ### `POST /api/v1/menu-plans/weeks/:weekStartDate/items`
 
@@ -661,6 +667,7 @@ recipes 模块统一错误码补充：
 
 - `plannedDate` 必须落在目标周内
 - `recipeVersionId` 必须属于 `recipeId`
+- 若目标周不存在，后端会自动初始化空周计划
 
 ### `PATCH /api/v1/menu-plans/items/:id`
 
@@ -672,14 +679,22 @@ recipes 模块统一错误码补充：
 {
   "recipeVersionId": "uuid",
   "plannedDate": "2026-03-25",
-  "mealSlot": "dinner",
+  "mealSlot": "lunch",
   "note": "改到周三"
 }
 ```
 
+说明：
+
+- 若 `plannedDate` 或 `mealSlot` 发生变化，后端会把该项移动到新桶末尾，并自动重排旧桶和新桶的 `sortOrder`。
+
 ### `DELETE /api/v1/menu-plans/items/:id`
 
 用途：删除菜单项。
+
+说明：
+
+- 删除后会自动压紧同日同餐次下剩余菜单项的 `sortOrder`。
 
 ### `POST /api/v1/menu-plans/weeks/:weekStartDate/reorder`
 
@@ -697,6 +712,11 @@ recipes 模块统一错误码补充：
   ]
 }
 ```
+
+说明：
+
+- `items` 必须覆盖目标 `plannedDate + mealSlot` 桶内的全部菜单项。
+- 后端会按提交顺序重新归一化为从 `0` 开始的连续 `sortOrder`。
 
 ## 7. 随机点菜接口
 
@@ -831,9 +851,9 @@ recipes 模块统一错误码补充：
 - `taskAccepted`
 - `imageAssetId`
 
-## 9. 媒体接口
+## 9. 文件接口
 
-### `POST /api/v1/media/upload-token`
+### `POST /api/v1/files/upload-token`
 
 用途：获取上传签名或临时凭证。
 
@@ -841,10 +861,9 @@ recipes 模块统一错误码补充：
 
 ```json
 {
-  "filename": "IMG_001.jpg",
+  "fileName": "IMG_001.jpg",
   "contentType": "image/jpeg",
-  "sizeBytes": 345678,
-  "purpose": "moment"
+  "sizeBytes": 345678
 }
 ```
 
@@ -853,9 +872,15 @@ recipes 模块统一错误码补充：
 - `uploadUrl`
 - `assetKey`
 - `headers`
-- `expiresIn`
+- `expiresInSeconds`
+- `maxSizeBytes`
 
-### `POST /api/v1/media/complete`
+说明：
+
+- 当前后端实现沿用项目既有 `files` 两段式上传链路，不额外引入 `media/*` 新路由。
+- 当前图片文件 `purpose` 由后端固定登记为 `image`，前端请求体无需再传 `purpose`。
+
+### `POST /api/v1/files/assets`
 
 用途：上传完成后登记媒体资源。
 
@@ -863,20 +888,21 @@ recipes 模块统一错误码补充：
 
 ```json
 {
-  "assetKey": "moments/2026/03/uuid.jpg",
-  "assetUrl": "https://cdn.example.com/moments/2026/03/uuid.jpg",
+  "assetKey": "households/{householdId}/files/images/2026/04/uuid.jpg",
   "mimeType": "image/jpeg",
   "sizeBytes": 345678,
   "width": 1280,
-  "height": 960,
-  "purpose": "moment"
+  "height": 960
 }
 ```
 
 成功响应：
 
-- `assetId`
+- `id`
+- `assetKey`
 - `assetUrl`
+- `mimeType`
+- `sizeBytes`
 
 ## 10. 健康检查
 
@@ -892,7 +918,7 @@ recipes 模块统一错误码补充：
 ## 11. 联调约定
 
 - 前端不要自行计算版本号、差异摘要、购物清单聚合结果、随机点菜规则。
-- 图片上传统一走“两段式”：先拿凭证，再回调登记。
+- 图片上传统一走“两段式”：先调用 `/files/upload-token` 拿凭证，再上传对象存储，最后调用 `/files/assets` 登记资源。
 - 日期字段统一传 `YYYY-MM-DD`，不要混用本地时间字符串。
 - 小程序端统一走 `wx.login -> /auth/wechat-login -> Authorization Bearer Token` 链路，不以 Cookie 作为默认登录态假设。
 - 首期建议联调顺序：微信登录 -> 分类标签 -> 菜谱版本 -> 时光记录 -> 周菜单 -> 购物清单 -> 随机点菜。

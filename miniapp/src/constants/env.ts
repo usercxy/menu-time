@@ -1,6 +1,6 @@
 const LOCAL_API_BASE_URL = 'http://127.0.0.1:3000'
 const PLACEHOLDER_API_HOST = 'api.example.com'
-const ALL_MOCK_SCOPES = ['auth', 'taxonomy', 'recipes', 'meal-plan'] as const
+const ALL_MOCK_SCOPES = ['auth', 'taxonomy', 'recipes', 'moments', 'media', 'meal-plan'] as const
 
 export type MockScope = (typeof ALL_MOCK_SCOPES)[number]
 
@@ -55,6 +55,8 @@ function shouldMockPath(path: string, mockScopes: MockScope[]) {
     auth: [/^\/api\/v1\/auth\//],
     taxonomy: [/^\/api\/v1\/categories/, /^\/api\/v1\/tags/],
     recipes: [/^\/api\/v1\/recipes/],
+    moments: [/^\/api\/v1\/moments/],
+    media: [/^\/api\/v1\/files/],
     'meal-plan': [/^\/api\/v1\/menu-plans/]
   }
 

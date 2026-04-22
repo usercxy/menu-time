@@ -1,61 +1,141 @@
 @use '@/styles/theme' as *;
 
-.calendarSection {
-  margin-bottom: 32px;
+.heroCard,
+.composerCard,
+.slotPanel {
+  padding: 32px;
+  border-radius: 28px;
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
+  border: 1px solid theme('color-outline-variant');
 }
 
-.calendarTitle {
+.heroCard {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  padding: 0 8px;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.weekLabel {
-  font-size: 22px;
-  font-weight: 500;
-  color: theme('color-tertiary');
-  padding: 8px 24px;
-  background: theme('color-surface-container');
+.weekSwitchRow,
+.summaryRow,
+.weekActions,
+.calendarTitle,
+.slotHeader,
+.cardActions,
+.composerActions,
+.linkTitleRow {
+  display: flex;
+  align-items: center;
+}
+
+.weekSwitchRow,
+.calendarTitle,
+.slotHeader {
+  justify-content: space-between;
+}
+
+.summaryRow,
+.weekActions,
+.cardActions,
+.composerActions {
+  gap: 16px;
+}
+
+.weekSwitchButton,
+.weekBadge,
+.primaryAction,
+.secondaryAction,
+.inlineAction,
+.mealEdit,
+.readonlyField,
+.pickerField,
+.optionChip {
+  min-height: 56px;
+  padding: 0 20px;
   border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.weekSwitchButton,
+.secondaryAction,
+.inlineAction,
+.mealEdit,
+.readonlyField,
+.pickerField,
+.optionChip {
+  background: theme('color-action-container');
+  color: theme('color-primary');
+  border: 1px solid theme('color-action-border');
+}
+
+.weekBadge,
+.primaryAction,
+.optionChipActive {
+  background: theme('color-primary');
+  color: theme('color-on-primary');
+  border: 1px solid theme('color-primary');
+}
+
+.primaryAction,
+.secondaryAction {
+  flex: 1;
+}
+
+.summaryText,
+.calendarSubtitle,
+.sectionHint,
+.fieldHint,
+.slotSubtitle,
+.mealNote,
+.mealVersion,
+.slotEmpty {
+  color: theme('color-on-surface-variant');
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.calendarSection,
+.randomSection,
+.daySection {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .dateList {
   display: flex;
-  gap: 24px;
-  overflow-x: auto;
-  padding-bottom: 16px;
-  
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  gap: 20px;
+  white-space: nowrap;
 }
 
 .dateItem {
   flex-shrink: 0;
-  width: 112px;
-  height: 160px;
+  width: 120px;
+  height: 164px;
+  border-radius: 24px;
+  background: theme('color-surface-container-high');
+  color: theme('color-on-surface-variant');
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 24px;
-  background: theme('color-surface-container-high');
-  color: theme('color-on-surface-variant');
-  
-  &--active {
-    background: theme('color-primary-deep');
-    color: theme('color-on-primary');
-    box-shadow: theme('shadow-primary');
-  }
+  gap: 8px;
+}
+
+.dateItem--active {
+  background: theme('color-primary-deep');
+  color: theme('color-on-primary');
+  box-shadow: theme('shadow-primary');
 }
 
 .dayName {
   font-size: 20px;
-  text-transform: uppercase;
   letter-spacing: 2px;
-  opacity: 0.6;
+  opacity: 0.72;
 }
 
 .dayDate {
@@ -63,29 +143,25 @@
   font-weight: 700;
 }
 
-.randomSection {
-  margin-bottom: 48px;
+.dayMeta {
+  font-size: 20px;
 }
 
 .randomButton {
   width: 100%;
-  padding: 40px;
+  padding: 36px;
   background: theme('color-tertiary-container');
   border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border: 1px solid theme('color-tertiary-fixed-dim');
-  
-  &:active {
-    transform: scale(0.98);
-  }
 }
 
 .randomInfo {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 28px;
 }
 
 .randomIcon {
@@ -96,7 +172,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
+}
+
+.randomIconImage,
+.arrowIcon,
+.linkTitleIcon,
+.linkArrowIcon {
+  width: 28px;
+  height: 28px;
 }
 
 .randomIconImage {
@@ -119,7 +202,7 @@
 .randomSubtitle {
   font-size: 24px;
   color: theme('color-on-tertiary-container');
-  opacity: 0.7;
+  opacity: 0.76;
 }
 
 .arrowButton {
@@ -127,125 +210,113 @@
   height: 80px;
   border-radius: 50%;
   background: theme('color-on-tertiary-container');
-  color: theme('color-on-tertiary');
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
 }
 
-.arrowIcon {
-  width: 28px;
-  height: 28px;
-}
-
-.mealHeader {
+.sectionHeader,
+.fieldCard,
+.slotStack,
+.mealMeta {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  padding: 0 8px;
-  margin-bottom: 24px;
+  flex-direction: column;
 }
 
-.mealCount {
+.sectionHeader,
+.fieldCard,
+.slotStack,
+.mealMeta {
+  gap: 16px;
+}
+
+.fieldLabel,
+.slotTitle,
+.mealTitle {
+  color: theme('color-on-surface');
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.optionWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 180px;
+  box-sizing: border-box;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: theme('color-input-background');
+  border: 1px solid theme('color-outline-variant');
+  color: theme('color-on-surface');
   font-size: 24px;
-  font-weight: 500;
-  color: theme('color-secondary');
+}
+
+.slotStack {
+  gap: 20px;
 }
 
 .mealGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .mealCard {
-  background: theme('color-surface-container-lowest');
-  border-radius: 24px;
-  overflow: hidden;
   display: flex;
-  height: 256px;
-  box-shadow: theme('shadow-soft');
+  gap: 20px;
+  padding: 20px;
+  border-radius: 24px;
+  background: theme('color-surface-container-low');
   border: 1px solid theme('color-outline-variant');
 }
 
 .mealCoverWrap {
-  width: 33.333%;
+  width: 180px;
+  flex-shrink: 0;
   position: relative;
 }
 
 .mealTypeBadge {
   position: absolute;
-  top: 16px;
-  left: 16px;
-  background: theme('color-surface-container-lowest');
-  padding: 4px 16px;
-  border-radius: 8px;
-  font-size: 20px;
-  font-weight: 700;
+  top: 12px;
+  left: 12px;
+  min-height: 42px;
+  padding: 0 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
   color: theme('color-primary');
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .mealInfo {
   flex: 1;
-  padding: 32px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 18px;
 }
 
-.mealTitle {
-  font-size: 32px;
-  font-weight: 700;
-  color: theme('color-on-surface');
-  display: block;
+.mealEditGhost {
+  background: theme('color-surface-container-lowest');
 }
 
-.mealNote {
-  font-size: 24px;
-  color: theme('color-on-surface-variant');
-  margin-top: 8px;
-  display: block;
+.mealDelete {
+  background: theme('color-error-container');
+  color: theme('color-on-error-container');
+  border-color: rgba(186, 26, 26, 0.18);
 }
 
-.mealEdit {
-  align-self: flex-end;
-  min-height: 56px;
-  padding: 0 20px;
-  border-radius: theme('radius-pill');
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: theme('color-action-container');
-  border: 1px solid theme('color-action-border');
-  color: theme('color-primary');
-  font-size: 22px;
-  font-weight: 700;
-  gap: 8px;
-}
-
-.mealEditIcon {
-  width: 20px;
-  height: 20px;
-}
-
-.mealEdit text {
-  color: inherit;
-}
-
-.linkTitleRow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.linkTitleIcon {
-  width: 26px;
-  height: 26px;
-}
-
-.linkArrowIcon {
-  width: 28px;
-  height: 28px;
-  opacity: 0.8;
+.slotEmpty {
+  padding: 22px 24px;
+  border-radius: 20px;
+  background: theme('color-surface-container-low');
 }

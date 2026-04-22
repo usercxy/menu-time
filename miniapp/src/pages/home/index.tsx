@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { Image, Text, View } from '@tarojs/components'
+import dayjs from 'dayjs'
 import { SvgIcon } from '@/components/base/SvgIcon'
 import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import { routes } from '@/constants/routes'
@@ -10,12 +11,15 @@ import { LoadingState } from '@/components/base/LoadingState'
 import { useSessionQuery } from '@/features/auth/query'
 import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
 import { mealPlanService } from '@/services/modules/meal-plan'
-import { recipeService } from '@/services/modules/recipe'
+import { momentService } from '@/services/modules/moment'
 import { useSessionStore } from '@/store/session'
+import { getSafeImageUrl } from '@/utils/media-url'
 import { navigateToRoute } from '@/utils/navigation'
 import styles from './index.module.scss'
 
-const EMPTY_RECIPES: Awaited<ReturnType<typeof recipeService.getRecipes>>['items'] = []
+const EMPTY_MOMENTS: Awaited<ReturnType<typeof momentService.getLatestMoments>>['items'] = []
+const DEFAULT_MEMORY_COVER_URL =
+  'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80'
 
 export default function HomePage() {
   const sessionStatus = useSessionStore((state) => state.status)
@@ -28,25 +32,24 @@ export default function HomePage() {
     enabled: sessionReady
   })
   
-  const latestRecipesQuery = useQuery({
-    queryKey: ['recipes', 'home-latest'],
-    queryFn: () => recipeService.getRecipes({ page: 1, pageSize: 2 }),
+  const latestMomentsQuery = useQuery({
+    queryKey: ['moments', 'latest'],
+    queryFn: () => momentService.getLatestMoments({ limit: 3 }),
     enabled: sessionReady
   })
 
-  usePageShowRefetch([sessionQuery, weekQuery, latestRecipesQuery])
+  usePageShowRefetch([sessionQuery, weekQuery, latestMomentsQuery])
 
   const weekSummary = weekQuery.data?.summary
-  const latestRecipes = latestRecipesQuery.data?.items ?? EMPTY_RECIPES
+  const latestMoments = latestMomentsQuery.data?.items ?? EMPTY_MOMENTS
 
-  // Generate random rotations for cards to give a scrapbook feel
   const cardStyles = useMemo(() => {
-    return latestRecipes.map((_, i) => ({
+    return latestMoments.map((_, i) => ({
       transform: `rotate(${i % 2 === 0 ? (Math.random() * -2 - 0.5) : (Math.random() * 2 + 0.5)}deg)`,
       marginLeft: i % 2 === 0 ? '0' : '32px',
       marginRight: i % 2 === 0 ? '32px' : '0'
     }))
-  }, [latestRecipes])
+  }, [latestMoments])
 
   if (sessionStatus === 'anonymous') {
     return (
@@ -119,56 +122,70 @@ export default function HomePage() {
         </View>
 
         {/* Memory Feed */}
-        {!sessionReady || latestRecipesQuery.isLoading ? (
-          <LoadingState title="正在翻开菜谱记忆" description="最近做过的菜谱正在赶来首页。" />
-        ) : latestRecipesQuery.isError ? (
+        {!sessionReady || latestMomentsQuery.isLoading ? (
+          <LoadingState title="正在翻开菜谱记忆" description="最近的时光记录正在赶来首页。" />
+        ) : latestMomentsQuery.isError ? (
           <ErrorState
-            title="菜谱卡片加载失败"
-            description="这次没取到最近菜谱，你可以稍后重试，或者先去菜谱库查看全部。"
-            onAction={() => void latestRecipesQuery.refetch()}
+            title="时光流加载失败"
+            description="这次没取到最新食光，你可以稍后重试，或者先去菜谱库查看全部。"
+            onAction={() => void latestMomentsQuery.refetch()}
+          />
+        ) : !latestMoments.length ? (
+          <ErrorState
+            title="还没有最新食光"
+            description="去菜谱详情记下一笔，首页就会把新的回忆钉在这里。"
+            actionText="去菜谱库"
+            onAction={() => navigateToRoute(routes.recipeLibrary)}
           />
         ) : (
           <View className={styles.memoryGrid}>
-            {latestRecipes.map((recipe, index) => (
+            {latestMoments.map((moment, index) => (
               <View
                 className={styles.memoryCard}
-                key={recipe.id}
-                onClick={() => navigateToRoute(routes.recipeDetail, { id: recipe.id })}
+                key={moment.momentId}
+                onClick={() =>
+                  navigateToRoute(routes.recipeDetail, {
+                    id: moment.recipeId,
+                    tab: 'moments',
+                    momentId: moment.momentId
+                  })
+                }
                 style={cardStyles[index]}
               >
                 <View className={styles.memoryImageWrap}>
-                  <Image 
-                    className="recipe-cover" 
-                    mode="aspectFill" 
-                    src={recipe.coverImageUrl || ''} 
+                  <Image
+                    className="recipe-cover"
+                    mode="aspectFill"
+                    src={getSafeImageUrl(moment.coverImageUrl, DEFAULT_MEMORY_COVER_URL)}
                     style={{ height: index % 2 === 0 ? '480px' : '400px' }}
                   />
-                  <View className={styles.memoryDateBadge} style={{ transform: index % 2 === 0 ? 'rotate(1.2deg)' : 'rotate(-3deg)' }}>
+                  <View
+                    className={styles.memoryDateBadge}
+                    style={{ transform: index % 2 === 0 ? 'rotate(1.2deg)' : 'rotate(-3deg)' }}
+                  >
                     <Text className={styles.memoryDateText}>
-                      {new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '.')}
+                      {dayjs(moment.occurredOn).format('YYYY.MM.DD')}
                     </Text>
                   </View>
                 </View>
-                
+
                 <View className={styles.memoryBody}>
                   <View className={styles.memoryTitleRow}>
                     <View className={styles.memoryLine} />
-                    <Text className="recipe-name" style={{ fontSize: '36px' }}>{recipe.name}</Text>
+                    <Text className="recipe-name" style={{ fontSize: '36px' }}>
+                      {moment.recipeName}
+                    </Text>
                   </View>
-                  
-                  <Text className={styles.memoryNote}>
-                    “{recipe.currentVersion?.versionName || '这道菜的味道，值得被时光铭记。'}”
-                  </Text>
-                  
-                  <View className="chip-row">
+
+                  <Text className={styles.memoryNote}>“{moment.previewText || '这道菜的味道，值得被时光铭记。'}”</Text>
+
+                  <View className={styles.memoryFooter}>
                     <View className="chip">
-                      <Text>#{recipe.currentVersion?.category?.name || '未分类'}</Text>
+                      <Text>#{dayjs(moment.occurredOn).format('M 月 D 日')}</Text>
                     </View>
-                    {(recipe.currentVersion?.tags || []).slice(0, 1).map((tag) => (
-                      <View className="chip chip--soft" key={tag.id}>
-                        <Text>#{tag.name}</Text>
-                      </View>
-                    ))}
+                    <View className="chip chip--soft">
+                      <Text>点击查看时光轴</Text>
+                    </View>
                   </View>
                 </View>
               </View>

@@ -6,7 +6,8 @@ import { getNetworkTransportErrorInfo } from '@/utils/network-error'
 
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
 const DEFAULT_MAX_SIZE_BYTES = 50 * 1024 * 1024
-const COVER_UPLOAD_TIMEOUT_MS = 60_000
+const DEFAULT_UPLOAD_TIMEOUT_MS = 60_000
+const MAX_MOMENT_IMAGE_COUNT = 9
 
 type AllowedImageMimeType = (typeof ALLOWED_IMAGE_TYPES)[number]
 
@@ -50,22 +51,23 @@ function inferMimeType(filePath: string, typeHint?: string | null) {
   return buildMimeType(extension)
 }
 
-function ensureFileName(filePath: string, mimeType: AllowedImageMimeType) {
+function ensureFileName(filePath: string, mimeType: AllowedImageMimeType, prefix: string) {
   const existingFileName = filePath.split('/').pop()?.trim()
   if (existingFileName) {
     return existingFileName
   }
 
   const extension = mimeType === 'image/jpeg' ? 'jpg' : mimeType.replace('image/', '')
-  return `recipe-cover-${Date.now()}.${extension}`
+  return `${prefix}-${Date.now()}.${extension}`
 }
 
 function ensureLocalImage(
   mimeType: AllowedImageMimeType | null,
-  sizeBytes: number
+  sizeBytes: number,
+  label: string
 ): asserts mimeType is AllowedImageMimeType {
   if (!mimeType) {
-    throw new Error('封面仅支持 JPG、PNG、WEBP 格式')
+    throw new Error(`${label}仅支持 JPG、PNG、WEBP 格式`)
   }
 
   if (sizeBytes > DEFAULT_MAX_SIZE_BYTES) {
@@ -89,12 +91,12 @@ function formatSizeLimit(sizeBytes: number) {
   return Number.isInteger(sizeInMb) ? `${sizeInMb}MB` : `${sizeInMb.toFixed(1)}MB`
 }
 
-function normalizeCoverUploadError(error: unknown) {
+function normalizeUploadError(error: unknown, operation: string) {
   if (error instanceof RequestError) {
     return error
   }
 
-  const transportError = getNetworkTransportErrorInfo(error, '封面上传')
+  const transportError = getNetworkTransportErrorInfo(error, operation)
   if (transportError) {
     return new RequestError({
       code: transportError.code,
@@ -110,7 +112,11 @@ function normalizeCoverUploadError(error: unknown) {
   return error
 }
 
-export function getRecipeCoverUploadErrorMessage(error: unknown) {
+function isMockUploadUrl(url: string) {
+  return url.startsWith('mock://')
+}
+
+function getUploadErrorMessage(error: unknown, fallbackMessage: string) {
   if (error instanceof RequestError) {
     const details = (error.details || {}) as { maxSizeBytes?: number }
 
@@ -118,14 +124,94 @@ export function getRecipeCoverUploadErrorMessage(error: unknown) {
       return `图片不能超过 ${formatSizeLimit(details.maxSizeBytes)}，请压缩后重试`
     }
 
-    return error.message || '封面上传失败，请稍后重试'
+    return error.message || fallbackMessage
   }
 
   if (error instanceof Error && error.message) {
     return error.message
   }
 
-  return '封面上传失败，请稍后重试'
+  return fallbackMessage
+}
+
+function normalizeAssetUrl(asset: MediaAssetDTO, draft: LocalImageDraft) {
+  if (!asset.assetUrl || asset.assetUrl.includes('placehold.co')) {
+    return {
+      ...asset,
+      assetUrl: draft.filePath
+    }
+  }
+
+  return asset
+}
+
+async function createLocalImageDraft(file: Taro.chooseMedia.SuccessCallbackResult['tempFiles'][number], prefix: string) {
+  const imageInfo = await Taro.getImageInfo({
+    src: file.tempFilePath
+  })
+  const mimeType = inferMimeType(file.tempFilePath, imageInfo.type || file.fileType)
+
+  ensureLocalImage(mimeType, file.size, '图片')
+
+  return {
+    filePath: file.tempFilePath,
+    fileName: ensureFileName(file.tempFilePath, mimeType, prefix),
+    mimeType,
+    sizeBytes: file.size,
+    width: imageInfo.width,
+    height: imageInfo.height
+  }
+}
+
+async function uploadImageDraft(draft: LocalImageDraft, operation: string) {
+  const uploadToken = await mediaService.createUploadToken({
+    fileName: draft.fileName,
+    contentType: draft.mimeType,
+    sizeBytes: draft.sizeBytes
+  })
+
+  if (!isMockUploadUrl(uploadToken.uploadUrl)) {
+    const uploadHeaders = {
+      ...uploadToken.headers,
+      'Content-Type': uploadToken.headers?.['Content-Type'] || uploadToken.headers?.['content-type'] || draft.mimeType
+    }
+
+    let uploadResponse: Taro.request.SuccessCallbackResult<Record<string, unknown>>
+
+    try {
+      uploadResponse = await Taro.request({
+        url: uploadToken.uploadUrl,
+        method: 'PUT',
+        data: readLocalFileAsArrayBuffer(draft.filePath),
+        header: uploadHeaders,
+        timeout: DEFAULT_UPLOAD_TIMEOUT_MS
+      })
+    } catch (error) {
+      throw normalizeUploadError(error, operation)
+    }
+
+    if (![200, 204].includes(uploadResponse.statusCode)) {
+      throw new Error('图片上传到存储服务失败，请稍后重试')
+    }
+  }
+
+  const asset = await mediaService.registerAsset({
+    assetKey: uploadToken.assetKey,
+    mimeType: draft.mimeType,
+    sizeBytes: draft.sizeBytes,
+    width: draft.width,
+    height: draft.height
+  })
+
+  return normalizeAssetUrl(asset, draft)
+}
+
+export function getRecipeCoverUploadErrorMessage(error: unknown) {
+  return getUploadErrorMessage(error, '封面上传失败，请稍后重试')
+}
+
+export function getMomentUploadErrorMessage(error: unknown) {
+  return getUploadErrorMessage(error, '图片上传失败，请稍后重试')
 }
 
 export async function chooseRecipeCoverDraft(): Promise<LocalImageDraft | null> {
@@ -140,57 +226,41 @@ export async function chooseRecipeCoverDraft(): Promise<LocalImageDraft | null> 
     return null
   }
 
-  const imageInfo = await Taro.getImageInfo({
-    src: file.tempFilePath
-  })
-  const mimeType = inferMimeType(file.tempFilePath, imageInfo.type || file.fileType)
+  return createLocalImageDraft(file, 'recipe-cover')
+}
 
-  ensureLocalImage(mimeType, file.size)
+export async function chooseMomentImageDrafts(existingCount: number): Promise<LocalImageDraft[]> {
+  const remainingCount = Math.max(MAX_MOMENT_IMAGE_COUNT - existingCount, 0)
 
-  return {
-    filePath: file.tempFilePath,
-    fileName: ensureFileName(file.tempFilePath, mimeType),
-    mimeType,
-    sizeBytes: file.size,
-    width: imageInfo.width,
-    height: imageInfo.height
+  if (!remainingCount) {
+    throw new Error(`最多上传 ${MAX_MOMENT_IMAGE_COUNT} 张图片`)
   }
+
+  const media = await Taro.chooseMedia({
+    count: remainingCount,
+    mediaType: ['image'],
+    sizeType: ['compressed']
+  })
+
+  const drafts = await Promise.all(media.tempFiles.map((file) => createLocalImageDraft(file, 'moment-image')))
+
+  if (existingCount + drafts.length > MAX_MOMENT_IMAGE_COUNT) {
+    throw new Error(`最多上传 ${MAX_MOMENT_IMAGE_COUNT} 张图片`)
+  }
+
+  return drafts
 }
 
 export async function uploadRecipeCover(draft: LocalImageDraft): Promise<MediaAssetDTO> {
-  const uploadToken = await mediaService.createUploadToken({
-    fileName: draft.fileName,
-    contentType: draft.mimeType,
-    sizeBytes: draft.sizeBytes
-  })
-  const uploadHeaders = {
-    ...uploadToken.headers,
-    'Content-Type': uploadToken.headers?.['Content-Type'] || uploadToken.headers?.['content-type'] || draft.mimeType
+  return uploadImageDraft(draft, '封面上传')
+}
+
+export async function uploadMomentImages(drafts: LocalImageDraft[]): Promise<MediaAssetDTO[]> {
+  const result: MediaAssetDTO[] = []
+
+  for (const draft of drafts) {
+    result.push(await uploadImageDraft(draft, '时光图片上传'))
   }
 
-  let uploadResponse: Taro.request.SuccessCallbackResult<Record<string, unknown>>
-
-  try {
-    uploadResponse = await Taro.request({
-      url: uploadToken.uploadUrl,
-      method: 'PUT',
-      data: readLocalFileAsArrayBuffer(draft.filePath),
-      header: uploadHeaders,
-      timeout: COVER_UPLOAD_TIMEOUT_MS
-    })
-  } catch (error) {
-    throw normalizeCoverUploadError(error)
-  }
-
-  if (![200, 204].includes(uploadResponse.statusCode)) {
-    throw new Error('图片上传到存储服务失败，请稍后重试')
-  }
-
-  return mediaService.registerAsset({
-    assetKey: uploadToken.assetKey,
-    mimeType: draft.mimeType,
-    sizeBytes: draft.sizeBytes,
-    width: draft.width,
-    height: draft.height
-  })
+  return result
 }

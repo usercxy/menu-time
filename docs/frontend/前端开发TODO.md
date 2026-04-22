@@ -18,17 +18,19 @@
 - 前端可以先基于 mock 和类型骨架推进页面与交互，不必完全阻塞在后端实现上。
 - 真接口联调顺序以“后端阶段完成一个能力域，前端就立即接入并关闭 mock”为主，避免长期双轨。
 
-## 当前进度快照（2026-04-09）
+## 当前进度快照（2026-04-22）
 
 本次已按 `miniapp/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、类型检查和构建结果，不含真机复测。
 
 ### 总体判断
 
-- 粗略完成度约为 **65% ~ 70%**。
+- 粗略完成度约为 **84% ~ 88%**。
 - **阶段 0** 基本完成：工程、路由、请求层、类型层、mock、Provider、基础组件已落地。
 - **阶段 1** 已完成：登录初始化、session 管理、分类/标签字典、管理页和通用空/错/加载态组件都已落地。
-- **阶段 2** 已完成：菜谱库分页/筛选/视图切换、mock 菜谱创建、基础信息编辑、详情三段式 Tab、版本创建与对比主链路已跑通。
-- **阶段 3 ~ 7** 仍以预留路由和占位页为主，尚未进入真实业务交互阶段。
+- **阶段 2** 已完成：菜谱库分页/筛选/视图切换、菜谱创建、基础信息编辑、详情三段式 Tab、版本创建与对比主链路已跑通。
+- **阶段 3** 已完成：已按后端接口清单接入时光记录 CRUD、文件两段式上传、详情时光轴分页和首页最新时光流。
+- **阶段 4** 已完成：当前周/按周菜单、周切换、手动点菜、编辑、删除、轻量排序、首页摘要和菜谱详情入口已联调打通。
+- **阶段 5 ~ 7** 仍以展示型壳页或入口预留为主，尚未进入完整业务交互阶段。
 
 ### 验证记录
 
@@ -44,8 +46,8 @@
 | 阶段 0 | 已完成 | 工程骨架、分包、请求层、类型层、mock、基础组件都已存在 |
 | 阶段 1 | 已完成 | 登录、session、分类/标签字典、管理页和通用状态组件已就绪 |
 | 阶段 2 | 已完成 | 菜谱库分页/视图切换、创建/编辑、详情 Tab、版本链路和跳转失效策略已补齐 |
-| 阶段 3 | 未开始 | 仅保留 `moment-edit` 占位页 |
-| 阶段 4 | 部分完成 | 首页和点菜台已接当前周 mock 数据，但周切换与增删改查未开始 |
+| 阶段 3 | 已完成 | 时光记录表单、图片上传、详情时光轴、首页动态和定位回跳已接上 |
+| 阶段 4 | 已完成 | 周菜单视图、周切换、增删改排、首页摘要和菜谱详情入口已联调打通 |
 | 阶段 5 | 未开始 | 仅有购物清单入口和占位页 |
 | 阶段 6 | 未开始 | 仅有随机点菜入口和占位页 |
 | 阶段 7 | 未开始 | 仅有 `EmptyState` / `ConfirmDialog` 等基础组件，未进入收尾阶段 |
@@ -58,7 +60,7 @@
 - [ ] 前端不自行生成版本号、差异摘要、购物清单聚合结果、随机点菜结果。
 - [ ] 页面路由、分包、跳转关系以 `docs/frontend/页面路由与跳转图.md` 为准。
 - [ ] DTO、VM、mock 数据结构以 `docs/frontend/接口类型定义与Mock数据清单.md` 为准。
-- [ ] MVP 先完成“菜谱 -> 版本 -> 时光记录 -> 点菜 -> 购物清单”主闭环。
+- [x] MVP 先完成“菜谱 -> 版本 -> 时光记录 -> 点菜 -> 购物清单”中的前 3 段闭环，即“菜谱 -> 版本 -> 时光记录”。
 - [ ] 家庭协作、全局时光轴、打印导出、复杂拖拽排序不作为首期阻塞项。
 
 ## 协同节奏
@@ -225,29 +227,32 @@
 
 完成时光记录表单、图片上传链路、详情页时光轴和首页动态流。
 
-- [ ] 实现图片选择、预览、删除和上传队列。
-- [ ] 对接 `upload-token -> uploadFile -> media/complete` 两段式上传。
-- [ ] 实现记一笔页面的新建模式。
-- [ ] 实现记一笔页面的编辑模式。
-- [ ] 实现评分组件、参与人输入、日期选择。
-- [ ] 对接菜谱时光轴接口。
-- [ ] 实现时光轴卡片和分页加载。
-- [ ] 实现首页最新时光流。
-- [ ] 支持从首页时光流跳到菜谱详情并定位时光记录。
-- [ ] 完成上传失败、超张数、表单校验、保存成功回跳处理。
-- [ ] 新增时光记录后刷新首页和菜谱详情缓存。
+- [x] 实现图片选择、预览、删除和上传队列。
+- [x] 对接 `upload-token -> uploadFile -> files/assets` 两段式上传。
+- [x] 实现记一笔页面的新建模式。
+- [x] 实现记一笔页面的编辑模式。
+- [x] 实现评分组件、参与人输入、日期选择。
+- [x] 对接菜谱时光轴接口。
+- [x] 实现时光轴卡片和分页加载。
+- [x] 实现首页最新时光流。
+- [x] 支持从首页时光流跳到菜谱详情并定位时光记录。
+- [x] 完成上传失败、超张数、表单校验、保存成功回跳处理。
+- [x] 新增时光记录后刷新首页和菜谱详情缓存。
 
-**当前代码状态（2026-04-09）**
+**当前代码状态（2026-04-22）**
 
-- `src/packages/recipe/moment-edit/index.tsx` 仍为占位页，图片上传、评分、日期、参与人输入尚未开始。
-- 首页当前“时光锦囊”区域实际消费的是菜谱 mock 列表，不是 `GET /api/v1/moments/latest` 的首页动态流。
+- `src/packages/recipe/moment-edit/index.tsx` 已落地新建 / 编辑双模式表单，支持版本选择、日期选择、参与人、风味评分、难度评分、封面候选开关、图片队列选择与预览。
+- `src/services/modules/moment.ts`、`src/services/types/moment.ts`、`src/mocks/moment.mock.ts` 已补齐时光记录、首页动态和文件上传联调所需 service / DTO / mock。
+- `src/packages/recipe/detail/index.tsx` 已接 `GET /api/v1/recipes/:id/moments`、`PATCH /api/v1/moments/:id`、`DELETE /api/v1/moments/:id`，支持分页、编辑、删除与 `momentId` 高亮定位。
+- `src/pages/home/index.tsx` 已切到 `GET /api/v1/moments/latest` 驱动首页“时光锦囊”，并支持跳转菜谱详情 `tab=moments&momentId=...`。
+- 图片上传链路已按后端接口清单改为 `POST /api/v1/files/upload-token -> 上传文件 -> POST /api/v1/files/assets`。
 
 **与后端协同**
 
 - 对应后端阶段 4。
-- 阻塞接口：
-  - `POST /api/v1/media/upload-token`
-  - `POST /api/v1/media/complete`
+- 已完成联调接口：
+  - `POST /api/v1/files/upload-token`
+  - `POST /api/v1/files/assets`
   - `GET /api/v1/recipes/:id/moments`
   - `POST /api/v1/recipes/:id/moments`
   - `PATCH /api/v1/moments/:id`
@@ -266,34 +271,42 @@
 
 完成周菜单视图、菜单项新增/更新/删除/重排，以及首页本周摘要联动。
 
-- [ ] 实现点菜台周视图。
-- [ ] 支持切换当前周、上一周、下一周。
-- [ ] 对接当前周菜单接口和按周菜单接口。
-- [ ] 实现点菜入口和选择菜谱/版本交互。
-- [ ] 对接新增菜单项接口。
-- [ ] 对接更新菜单项接口。
-- [ ] 对接删除菜单项接口。
-- [ ] 实现同日同餐次的轻量排序交互。
-- [ ] 对接重排接口。
-- [ ] 首页展示“本周已规划 X 道菜”摘要并跳转点菜台。
-- [ ] 处理空周菜单、空餐次、周切换中的加载态和错误态。
+- [x] 实现点菜台周视图。
+- [x] 支持切换当前周、上一周、下一周。
+- [x] 对接当前周菜单接口和按周菜单接口。
+- [x] 实现点菜入口和选择菜谱/版本交互。
+- [x] 对接新增菜单项接口。
+- [x] 对接更新菜单项接口。
+- [x] 对接删除菜单项接口。
+- [x] 实现同日同餐次的轻量排序交互。
+- [x] 对接重排接口。
+- [x] 首页展示“本周已规划 X 道菜”摘要并跳转点菜台。
+- [x] 处理空周菜单、空餐次、周切换中的加载态和错误态。
 
-**当前代码状态（2026-04-09）**
+**当前代码状态（2026-04-22）**
 
-- `src/pages/home/index.tsx` 和 `src/pages/meal-planner/index.tsx` 已接入 `mealPlanService.getCurrentWeekPlan()` 的 mock 数据。
-- 点菜台页面已有展示型周视图和今日餐单，但周切换、按周查询、增删改查、排序都还没开始。
-- 当前已预留前往随机点菜和购物清单的入口，但尚未形成从菜谱详情加入周菜单的链路。
+- `src/services/modules/meal-plan.ts` 已接入 `GET /api/v1/menu-plans/current-week`、`GET /api/v1/menu-plans/weeks/:weekStartDate`、`POST /api/v1/menu-plans/weeks/:weekStartDate/items`、`PATCH /api/v1/menu-plans/items/:id`、`DELETE /api/v1/menu-plans/items/:id`、`POST /api/v1/menu-plans/weeks/:weekStartDate/reorder`，并统一映射成点菜台页面所需 VM。
+- `src/pages/meal-planner/index.tsx` 已支持周切换、按天查看、手动点菜、版本选择、编辑、删除、同餐次内上移/下移排序和空态/错误态处理。
+- `src/packages/recipe/detail/index.tsx` 已新增“加入点菜台”入口，并通过本地草稿把当前菜谱/版本带到点菜台编辑器。
+- `src/pages/home/index.tsx` 的首页摘要已消费真实周菜单统计，不再依赖阶段 1 的展示型假数据。
+- `miniapp/config/dev.ts` 已切到 `TARO_APP_MOCK_SCOPES=\"none\"`，开发环境默认走真实后端联调。
 
 **与后端协同**
 
 - 对应后端阶段 5。
-- 阻塞接口：
+- 已完成联调接口：
   - `GET /api/v1/menu-plans/current-week`
   - `GET /api/v1/menu-plans/weeks/:weekStartDate`
   - `POST /api/v1/menu-plans/weeks/:weekStartDate/items`
   - `PATCH /api/v1/menu-plans/items/:id`
   - `DELETE /api/v1/menu-plans/items/:id`
   - `POST /api/v1/menu-plans/weeks/:weekStartDate/reorder`
+
+**验证记录（2026-04-22）**
+
+- [x] 使用开发态 `mock:` 微信 code 走真实后端登录，获取 access token。
+- [x] 通过真实 HTTP 请求验证 `current-week / week / create / update / reorder / delete` 全链路。
+- [x] 创建、更新、重排、删除后再次查询周菜单，结果与预期一致。
 
 **联调完成标准**
 

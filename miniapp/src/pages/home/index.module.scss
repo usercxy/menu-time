@@ -124,6 +124,12 @@
   gap: 16px;
 }
 
+.memoryFooter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .memoryTitleRow {
   display: flex;
   align-items: center;

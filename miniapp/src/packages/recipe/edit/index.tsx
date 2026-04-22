@@ -19,9 +19,13 @@ import {
   uploadRecipeCover,
   type LocalImageDraft
 } from '@/utils/media-upload'
+import { getSafeImageUrl } from '@/utils/media-url'
 import { validateCreateRecipeForm } from '@/utils/recipe-form'
 import type { RecipeDetailDTO, UpdateRecipePayload } from '@/services/types/recipe'
 import styles from './index.module.scss'
+
+const DEFAULT_RECIPE_COVER_URL =
+  'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80'
 
 export default function RecipeEditPage() {
   const router = useRouter()
@@ -370,7 +374,7 @@ export default function RecipeEditPage() {
   }
 
   const detail = detailQuery.data
-  const coverPreviewUrl = coverDraft?.filePath || detail?.coverImageUrl || ''
+  const coverPreviewUrl = coverDraft?.filePath || getSafeImageUrl(detail?.coverImageUrl, DEFAULT_RECIPE_COVER_URL)
   const hasRemoteCover = Boolean(detail?.coverImageUrl)
   const coverStatusText = coverDraft
     ? `待上传 · ${coverDraft.width} x ${coverDraft.height}`

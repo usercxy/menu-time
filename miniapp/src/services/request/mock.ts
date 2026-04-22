@@ -1,5 +1,21 @@
 import { envConfig } from '@/constants/env'
-import { mockCurrentWeekPlan } from '@/mocks/meal-plan.mock'
+import {
+  createMockMealPlanItem,
+  deleteMockMealPlanItem,
+  getMockCurrentWeekPlan,
+  getMockWeekPlan,
+  reorderMockMealPlanItems,
+  updateMockMealPlanItem
+} from '@/mocks/meal-plan.mock'
+import {
+  createMockMediaAsset,
+  createMockMoment,
+  createMockUploadToken,
+  deleteMockMoment,
+  getMockLatestMoments,
+  getMockRecipeMoments,
+  updateMockMoment
+} from '@/mocks/moment.mock'
 import {
   createMockRecipe,
   updateMockRecipe,
@@ -20,6 +36,21 @@ import {
   updateMockCategory,
   updateMockTag
 } from '@/mocks/taxonomy.mock'
+import type {
+  CreateUploadTokenPayload,
+  RegisterMediaAssetPayload
+} from '@/services/types/media'
+import type {
+  CreateMealPlanItemPayload,
+  ReorderMealPlanItemsPayload,
+  UpdateMealPlanItemPayload
+} from '@/services/types/meal-plan'
+import type {
+  CreateMomentPayload,
+  GetLatestMomentsQuery,
+  GetRecipeMomentsQuery,
+  UpdateMomentPayload
+} from '@/services/types/moment'
 import type {
   CreateRecipePayload,
   CreateVersionPayload,
@@ -146,7 +177,73 @@ const routes: MockRoute[] = [
       )
     }
   },
-  { method: 'GET', matcher: /^\/api\/v1\/menu-plans\/current-week$/, handler: () => mockCurrentWeekPlan }
+  {
+    method: 'GET',
+    matcher: /^\/api\/v1\/recipes\/[^/]+\/moments$/,
+    handler: ({ url, data }) => {
+      const segments = url.split('/')
+      return getMockRecipeMoments(segments[4] || 'recipe_braised_pork', (data || {}) as GetRecipeMomentsQuery)
+    }
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/recipes\/[^/]+\/moments$/,
+    handler: ({ url, data }) => {
+      const segments = url.split('/')
+      return createMockMoment(segments[4] || 'recipe_braised_pork', data as CreateMomentPayload)
+    }
+  },
+  {
+    method: 'GET',
+    matcher: /^\/api\/v1\/moments\/latest$/,
+    handler: ({ data }) => getMockLatestMoments((data || {}) as GetLatestMomentsQuery)
+  },
+  {
+    method: 'PATCH',
+    matcher: /^\/api\/v1\/moments\/[^/]+$/,
+    handler: ({ url, data }) => updateMockMoment(url.split('/').pop() || '', data as UpdateMomentPayload)
+  },
+  {
+    method: 'DELETE',
+    matcher: /^\/api\/v1\/moments\/[^/]+$/,
+    handler: ({ url }) => deleteMockMoment(url.split('/').pop() || '')
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/files\/upload-token$/,
+    handler: ({ data }) => createMockUploadToken(data as CreateUploadTokenPayload)
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/files\/assets$/,
+    handler: ({ data }) => createMockMediaAsset(data as RegisterMediaAssetPayload)
+  },
+  { method: 'GET', matcher: /^\/api\/v1\/menu-plans\/current-week$/, handler: () => getMockCurrentWeekPlan() },
+  {
+    method: 'GET',
+    matcher: /^\/api\/v1\/menu-plans\/weeks\/\d{4}-\d{2}-\d{2}$/,
+    handler: ({ url }) => getMockWeekPlan(url.split('/').pop() || '')
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/menu-plans\/weeks\/\d{4}-\d{2}-\d{2}\/items$/,
+    handler: ({ url, data }) => createMockMealPlanItem(url.split('/')[5] || '', data as CreateMealPlanItemPayload)
+  },
+  {
+    method: 'PATCH',
+    matcher: /^\/api\/v1\/menu-plans\/items\/[^/]+$/,
+    handler: ({ url, data }) => updateMockMealPlanItem(url.split('/').pop() || '', data as UpdateMealPlanItemPayload)
+  },
+  {
+    method: 'DELETE',
+    matcher: /^\/api\/v1\/menu-plans\/items\/[^/]+$/,
+    handler: ({ url }) => deleteMockMealPlanItem(url.split('/').pop() || '')
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/menu-plans\/weeks\/\d{4}-\d{2}-\d{2}\/reorder$/,
+    handler: ({ url, data }) => reorderMockMealPlanItems(url.split('/')[5] || '', data as ReorderMealPlanItemsPayload)
+  }
 ]
 
 export interface MockResponse<T> {

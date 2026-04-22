@@ -27,6 +27,7 @@ interface MockRecipeRecord {
   name: string
   coverImageUrl?: string
   momentCount: number
+  latestMomentAt?: string
   latestCookedAt?: string
   currentVersionId: string
   versions: RecipeVersionDetailDTO[]
@@ -55,6 +56,7 @@ const recipeStore: MockRecipeRecord[] = [
     coverImageUrl:
       'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80',
     momentCount: 12,
+    latestMomentAt: '2026-03-20T18:30:00.000Z',
     latestCookedAt: '2026-03-20',
     currentVersionId: 'version_3',
     versions: [
@@ -107,6 +109,7 @@ const recipeStore: MockRecipeRecord[] = [
     coverImageUrl:
       'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80',
     momentCount: 4,
+    latestMomentAt: '2026-03-24T11:00:00.000Z',
     latestCookedAt: '2026-03-24',
     currentVersionId: 'version_soup_1',
     versions: [
@@ -133,6 +136,7 @@ const recipeStore: MockRecipeRecord[] = [
     coverImageUrl:
       'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=1200&q=80',
     momentCount: 9,
+    latestMomentAt: '2026-03-18T12:30:00.000Z',
     latestCookedAt: '2026-03-18',
     currentVersionId: 'version_salad_2',
     versions: [
@@ -250,6 +254,7 @@ function buildRecipeListItem(recipe: MockRecipeRecord): RecipeListItemDTO {
     },
     versionCount: recipe.versions.length,
     momentCount: recipe.momentCount,
+    latestMomentAt: recipe.latestMomentAt,
     latestCookedAt: recipe.latestCookedAt
   }
 }
@@ -265,9 +270,49 @@ function buildRecipeDetail(recipe: MockRecipeRecord): RecipeDetailDTO {
     versionCount: recipe.versions.length,
     momentCount: recipe.momentCount,
     latestCookedAt: recipe.latestCookedAt || null,
-    latestMomentAt: null,
+    latestMomentAt: recipe.latestMomentAt || null,
     status: 'active',
     currentVersion
+  }
+}
+
+export function getMockRecipeRecord(recipeId: string) {
+  return findRecipe(recipeId) || null
+}
+
+export function getMockRecipeVersion(recipeId: string, versionId?: string | null) {
+  const recipe = findRecipe(recipeId)
+  if (!recipe) {
+    return null
+  }
+
+  if (!versionId) {
+    return getCurrentVersion(recipe)
+  }
+
+  return recipe.versions.find((version) => version.id === versionId) || null
+}
+
+export function updateMockRecipeMomentState(
+  recipeId: string,
+  payload: {
+    momentCount: number
+    latestCookedAt?: string | null
+    latestMomentAt?: string | null
+    coverImageUrl?: string
+  }
+) {
+  const recipe = findRecipe(recipeId)
+  if (!recipe) {
+    return
+  }
+
+  recipe.momentCount = payload.momentCount
+  recipe.latestCookedAt = payload.latestCookedAt || undefined
+  recipe.latestMomentAt = payload.latestMomentAt || undefined
+
+  if (payload.coverImageUrl) {
+    recipe.coverImageUrl = payload.coverImageUrl
   }
 }
 
@@ -427,6 +472,7 @@ export function createMockRecipe(payload: CreateRecipePayload): CreateRecipeResu
     name: payload.name.trim(),
     coverImageUrl: DEFAULT_COVER_URL,
     momentCount: 0,
+    latestMomentAt: undefined,
     currentVersionId,
     versions: [currentVersion]
   })

@@ -1,0 +1,169 @@
+@use '@/styles/theme' as *;
+
+.sectionCard {
+  padding: 32px;
+  border-radius: 28px;
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sectionHeader,
+.fieldGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fieldRow {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.fieldCard {
+  padding: 24px;
+  border-radius: 24px;
+  background: theme('color-surface-container-low');
+  border: 1px solid theme('color-outline-variant');
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldLabel {
+  color: theme('color-on-surface');
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.fieldHint {
+  color: theme('color-on-surface-variant');
+  font-size: 20px;
+  line-height: 1.6;
+}
+
+.optionWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.optionChip {
+  min-height: 56px;
+  padding: 0 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: theme('color-surface-container-lowest');
+  color: theme('color-primary-deep');
+  border: 1px solid theme('color-outline-variant');
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.optionChipActive {
+  background: theme('color-primary');
+  color: theme('color-on-primary');
+  border-color: theme('color-primary');
+}
+
+.pickerField,
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px 22px;
+  border-radius: 20px;
+  background: theme('color-input-background');
+  border: 1px solid theme('color-outline-variant');
+  color: theme('color-on-surface');
+  font-size: 24px;
+}
+
+.textarea {
+  min-height: 220px;
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.imageCard,
+.addImageCard {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  background: theme('color-surface-container-high');
+  min-height: 210px;
+}
+
+.image {
+  width: 100%;
+  height: 210px;
+}
+
+.addImageCard {
+  border: 2px dashed theme('color-outline');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.addImageText {
+  color: theme('color-primary');
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.removeBadge,
+.pendingBadge {
+  position: absolute;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.removeBadge {
+  top: 12px;
+  right: 12px;
+  background: rgba(26, 28, 25, 0.7);
+  color: #fff;
+}
+
+.pendingBadge {
+  left: 12px;
+  bottom: 12px;
+  background: rgba(168, 85, 7, 0.9);
+  color: #fff;
+}
+
+.errorBanner {
+  padding: 22px 24px;
+  border-radius: 24px;
+  background: theme('color-error-container');
+  color: theme('color-on-error-container');
+  font-size: 22px;
+  line-height: 1.6;
+}
+
+.actionRow {
+  display: flex;
+  gap: 16px;
+}
+
+.actionButton {
+  flex: 1;
+}

@@ -14,6 +14,8 @@ model Household {
   createdAt      DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   categories     Category[]
   mediaAssets    MediaAsset[]
+  mealPlanWeeks  MealPlanWeek[]
+  moments        Moment[]
   recipes        Recipe[]
   recipeVersions RecipeVersion[]
   users          User[]
@@ -66,6 +68,8 @@ model User {
   createdAt             DateTime        @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt             DateTime        @updatedAt @map("updated_at") @db.Timestamptz(6)
   createdMediaAssets    MediaAsset[]    @relation("MediaAssetCreatedBy")
+  createdMealPlanWeeks  MealPlanWeek[]  @relation("MealPlanWeekCreatedBy")
+  createdMoments        Moment[]        @relation("MomentCreatedBy")
   createdRecipes        Recipe[]        @relation("RecipeCreatedBy")
   createdRecipeVersions RecipeVersion[] @relation("RecipeVersionCreatedBy")
   household             Household       @relation(fields: [householdId], references: [id], onDelete: Restrict)
@@ -91,6 +95,7 @@ model MediaAsset {
   household    Household @relation(fields: [householdId], references: [id], onDelete: Restrict)
   createdBy    User      @relation("MediaAssetCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
   coverRecipes Recipe[]  @relation("RecipeCoverImage")
+  momentImages MomentImage[]
 
   @@index([householdId, purpose, createdAt(sort: Desc)], map: "idx_media_assets_household_purpose")
   @@map("media_assets")
@@ -117,6 +122,8 @@ model Recipe {
   currentVersion   RecipeVersion?  @relation("RecipeCurrentVersion", fields: [currentVersionId], references: [id], onDelete: SetNull)
   coverImage       MediaAsset?     @relation("RecipeCoverImage", fields: [coverImageId], references: [id], onDelete: SetNull)
   createdBy        User            @relation("RecipeCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  mealPlanItems    MealPlanItem[]
+  moments          Moment[]
   versions         RecipeVersion[] @relation("RecipeVersions")
 
   @@index([householdId, updatedAt(sort: Desc)], map: "idx_recipes_household_updated")
@@ -146,6 +153,8 @@ model RecipeVersion {
   currentForRecipe Recipe?                   @relation("RecipeCurrentVersion")
   sourceVersion    RecipeVersion?            @relation("RecipeVersionSource", fields: [sourceVersionId], references: [id], onDelete: SetNull)
   derivedVersions  RecipeVersion[]           @relation("RecipeVersionSource")
+  mealPlanItems    MealPlanItem[]
+  moments          Moment[]
   steps            RecipeVersionStep[]
   ingredients      RecipeVersionIngredient[]
   tagLinks         RecipeVersionTag[]
@@ -192,6 +201,84 @@ model RecipeVersionTag {
   @@id([recipeVersionId, tagId])
   @@index([tagId], map: "idx_recipe_version_tags_tag_id")
   @@map("recipe_version_tags")
+}
+
+model Moment {
+  id               String         @id @default(uuid()) @db.Uuid
+  householdId      String         @map("household_id") @db.Uuid
+  recipeId         String         @map("recipe_id") @db.Uuid
+  recipeVersionId  String?        @map("recipe_version_id") @db.Uuid
+  occurredOn       DateTime       @map("occurred_on") @db.Date
+  content          String?
+  participantsText String?        @map("participants_text") @db.VarChar(200)
+  tasteRating      Int?           @map("taste_rating") @db.SmallInt
+  difficultyRating Int?           @map("difficulty_rating") @db.SmallInt
+  isCoverCandidate Boolean        @default(true) @map("is_cover_candidate")
+  createdById      String         @map("created_by") @db.Uuid
+  createdAt        DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt        DateTime?      @map("deleted_at") @db.Timestamptz(6)
+  household        Household      @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  recipe           Recipe         @relation(fields: [recipeId], references: [id], onDelete: Restrict)
+  recipeVersion    RecipeVersion? @relation(fields: [recipeVersionId], references: [id], onDelete: SetNull)
+  createdBy        User           @relation("MomentCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  images           MomentImage[]
+
+  @@index([recipeId, occurredOn(sort: Desc), createdAt(sort: Desc)], map: "idx_moments_recipe_occurred")
+  @@index([householdId, createdAt(sort: Desc)], map: "idx_moments_household_created")
+  @@map("moments")
+}
+
+model MomentImage {
+  id           String     @id @default(uuid()) @db.Uuid
+  momentId     String     @map("moment_id") @db.Uuid
+  mediaAssetId String     @map("media_asset_id") @db.Uuid
+  sortOrder    Int        @default(0) @map("sort_order")
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  moment       Moment     @relation(fields: [momentId], references: [id], onDelete: Cascade)
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [id], onDelete: Restrict)
+
+  @@unique([momentId, sortOrder], map: "uq_moment_images_order")
+  @@unique([momentId, mediaAssetId], map: "uq_moment_images_asset")
+  @@map("moment_images")
+}
+
+model MealPlanWeek {
+  id            String         @id @default(uuid()) @db.Uuid
+  householdId   String         @map("household_id") @db.Uuid
+  weekStartDate DateTime       @map("week_start_date") @db.Date
+  status        String         @default("draft") @db.VarChar(20)
+  createdById   String         @map("created_by") @db.Uuid
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+  household     Household      @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  createdBy     User           @relation("MealPlanWeekCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  items         MealPlanItem[]
+
+  @@unique([householdId, weekStartDate], map: "uq_meal_plan_weeks_household_week")
+  @@map("meal_plan_weeks")
+}
+
+model MealPlanItem {
+  id              String       @id @default(uuid()) @db.Uuid
+  mealPlanWeekId  String       @map("meal_plan_week_id") @db.Uuid
+  recipeId        String       @map("recipe_id") @db.Uuid
+  recipeVersionId String       @map("recipe_version_id") @db.Uuid
+  plannedDate     DateTime     @map("planned_date") @db.Date
+  mealSlot        String       @map("meal_slot") @db.VarChar(20)
+  sortOrder       Int          @default(0) @map("sort_order")
+  sourceType      String       @default("manual") @map("source_type") @db.VarChar(20)
+  randomSessionId String?      @map("random_session_id") @db.Uuid
+  note            String?      @db.VarChar(200)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  mealPlanWeek    MealPlanWeek @relation(fields: [mealPlanWeekId], references: [id], onDelete: Cascade)
+  recipe          Recipe       @relation(fields: [recipeId], references: [id], onDelete: Restrict)
+  recipeVersion   RecipeVersion @relation(fields: [recipeVersionId], references: [id], onDelete: Restrict)
+
+  @@index([mealPlanWeekId, plannedDate, mealSlot, sortOrder], map: "idx_meal_plan_items_week_date_slot_sort")
+  @@index([recipeId, recipeVersionId], map: "idx_meal_plan_items_recipe_version")
+  @@map("meal_plan_items")
 }
 
 model WechatAccount {

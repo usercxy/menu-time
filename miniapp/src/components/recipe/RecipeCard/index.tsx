@@ -2,6 +2,7 @@ import { Image, Text, View } from '@tarojs/components'
 import { SvgIcon } from '@/components/base/SvgIcon'
 import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import type { RecipeListItemDTO } from '@/services/types/recipe'
+import { getSafeImageUrl } from '@/utils/media-url'
 import styles from './index.module.scss'
 
 interface RecipeCardProps {
@@ -9,6 +10,9 @@ interface RecipeCardProps {
   viewMode: 'list' | 'grid'
   onClick?: () => void
 }
+
+const DEFAULT_RECIPE_COVER_URL =
+  'https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=1200&q=80'
 
 export function RecipeCard({ recipe, viewMode, onClick }: RecipeCardProps) {
   const rootClassName = `${styles.root} ${viewMode === 'grid' ? styles.rootGrid : styles.rootList}`
@@ -20,7 +24,11 @@ export function RecipeCard({ recipe, viewMode, onClick }: RecipeCardProps) {
   return (
     <View className={rootClassName} onClick={onClick}>
       <View className={coverClassName}>
-        <Image className={styles.coverImage} mode="aspectFill" src={recipe.coverImageUrl || ''} />
+        <Image
+          className={styles.coverImage}
+          mode="aspectFill"
+          src={getSafeImageUrl(recipe.coverImageUrl, DEFAULT_RECIPE_COVER_URL)}
+        />
         <View className={styles.versionBadge}>
           <Text>{currentVersionLabel}</Text>
         </View>

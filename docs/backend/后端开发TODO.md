@@ -16,18 +16,20 @@
 - 每个阶段完成后，至少完成一次接口自测和一轮联调验证。
 - 表结构、接口路径、事务规则、工程分层约定以后端方案与三份补充文档为准，本清单主要负责“做什么、先做什么、做到什么程度算完成”。
 
-## 当前进度快照（2026-04-09）
+## 当前进度快照（2026-04-22）
 
 本次已按 `backend/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、Prisma schema、migration、环境模板以及本地 `npm run typecheck` / `npm run lint` / `npm run build`、Prisma migration 本地库验证结果，不含接口集成测试和微信真链路验收。
 
 ### 总体判断
 
-- 粗略完成度约为 **68% ~ 72%**。
+- 粗略完成度约为 **76% ~ 80%**。
 - **阶段 0** 已完成：工程骨架、环境校验、统一响应/错误、Prisma、日志、鉴权基础设施、健康检查都已落地。
-- **阶段 1** 部分完成：已完成鉴权相关基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions` 及其子表模型，并补齐第二个 migration；`moments / meal_plan / shopping / random` 等表待实现。
+- **阶段 1** 部分完成：已完成鉴权相关基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions`、`moments / moment_images`、`meal_plan_weeks / meal_plan_items` 模型与四个 migration；`shopping / random` 等表待实现。
 - **阶段 2** 已完成：微信登录、刷新、退出、当前会话 4 个接口与 taxonomy（分类/标签）主数据接口均已落地，`household_id` 在接口层和查询层已按约束隔离。
 - **阶段 3** 已完成：里程碑 A/B/C/D/E/F 已完成，recipes 域数据模型、migration、模块抽象、菜谱 CRUD、版本管理、API 路由、seed、自测与阶段验收均已落地。
-- **阶段 4 ~ 10** 尚未进入实质开发，当前仍以目录骨架或占位结构为主。
+- **阶段 4** 已完成：时光记录 CRUD、时光轴、首页最新动态、图片绑定、菜谱统计回填、封面回填入口均已落地，并通过真实 HTTP 烟测。
+- **阶段 5** 已完成：周菜单懒创建、菜单项增删改、同餐次重排、版本绑定校验与周计划统计字段均已落地，并通过真实 HTTP 烟测。
+- **阶段 6 ~ 10** 尚未进入实质开发，当前仍以目录骨架或占位结构为主。
 
 ### 验证记录
 
@@ -54,17 +56,23 @@
 - [x] `cd backend && npm run build`
 - [x] `cd backend && npm run prisma:seed`（脚本自动加载 `.env.local`，包含 recipes 演示数据）
 - [x] `cd backend && npm run dev -- --port 3146` 并通过真实 HTTP 请求验证 recipes API：未登录、列表、创建、详情、更新、版本列表、版本创建、版本详情、版本对比、切换当前版本、删除
+- [x] `cd backend && npx prisma migrate deploy --schema prisma/schema.prisma`（新增 `moments / moment_images` migration）
+- [x] `cd backend && npm run prisma:seed`（新增 demo moment / demo media asset）
+- [x] `cd backend && npm run dev -- --port 3148` 并通过真实 HTTP 请求验证阶段 4：`files/upload-token`、时光记录图片数校验、创建、时光轴、首页最新动态、编辑、删除、菜谱统计回填、封面回填
+- [x] `cd backend && npx prisma migrate deploy --schema prisma/schema.prisma`（新增 `meal_plan_weeks / meal_plan_items` migration）
+- [x] `cd backend && npm run prisma:seed`（新增 demo meal plan / meal plan item）
+- [x] `cd backend && npm run dev -- --port 3148` 并通过真实 HTTP 请求验证阶段 5：当前周菜单、指定周懒创建、周一校验、周范围校验、菜谱版本绑定校验、菜单项创建、跨桶更新、同餐次重排、删除后顺序压紧、周计划数量统计
 
 ### 当前阶段结论
 
 | 阶段 | 当前状态 | 说明 |
 | --- | --- | --- |
 | 阶段 0 | 已完成 | `src/app/api/v1`、`src/server` 分层、统一路由包装器、日志、错误处理、鉴权和健康检查均已存在 |
-| 阶段 1 | 部分完成 | 已完成 auth 基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions` 及其子表、两次 migration 与基础 seed；`moments / plans / shopping / random` 相关表和演示数据待实现 |
+| 阶段 1 | 部分完成 | 已完成 auth 基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions` 及其子表、`moments / moment_images`、`meal_plan_weeks / meal_plan_items`、四次 migration 与基础 seed；`shopping / random` 相关表待实现 |
 | 阶段 2 | 已完成 | auth 主链路、taxonomy 模块与分类/标签 API（列表/新建/更新/删除/重排）均已完成，并通过临时库接口级验证 |
 | 阶段 3 | 已完成 | 已完成阶段 3 里程碑 A/B/C/D/E/F：recipes 域数据模型、索引、双向关系、migration、模块抽象、菜谱 CRUD、版本主链路 service、API 路由、recipes seed、自测与阶段验收均已落地 |
-| 阶段 4 | 未开始 | `moments/`、`media/` 目录只有 README，占位未进入业务实现 |
-| 阶段 5 | 未开始 | `plans/` 目录只有 README，占位未进入业务实现 |
+| 阶段 4 | 已完成 | 已完成时光记录 CRUD、时光轴、首页最新动态、图片绑定、菜谱统计回填、封面回填异步入口与 smoke test |
+| 阶段 5 | 已完成 | 已完成周菜单懒创建、菜单项 CRUD、跨桶移动、同餐次重排、版本绑定校验、排序维护与 smoke test |
 | 阶段 6 | 未开始 | `shopping/` 目录只有 README，占位未进入业务实现 |
 | 阶段 7 | 未开始 | `random/` 目录只有 README，占位未进入业务实现 |
 | 阶段 8 | 未开始 | 用户角色仍停留在 auth 基础字段，未扩展成员协作接口 |
@@ -130,7 +138,7 @@
 - [x] 定义 `recipes` 主表，包含 `current_version_id`、封面信息、统计字段。
 - [x] 定义 `recipe_versions` 表及 `source_version_id`、差异摘要字段。
 - [x] 定义 `recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags` 子表。
-- [ ] 定义 `moments`、`moment_images` 表。
+- [x] 定义 `moments`、`moment_images` 表。
 - [ ] 定义 `meal_plan_weeks`、`meal_plan_items` 表。
 - [ ] 定义 `shopping_lists`、`shopping_list_items` 表。
 - [ ] 定义 `random_pick_sessions`、`random_pick_results` 表。
@@ -140,7 +148,7 @@
 - [x] 处理 `recipes.current_version_id` 与 `recipe_versions.recipe_id` 的双向关系映射。
 - [x] 编写首批 migration，并验证空库可完整初始化。
 - [x] 编写 seed 数据，包含默认家庭、管理员、分类、标签样例。
-- [ ] 准备一套开发联调用演示数据。
+- [x] 准备一套开发联调用演示数据。
 
 **完成标准**
 
@@ -217,20 +225,20 @@
 
 完成时光记录、图片资源、封面回填和首页动态数据来源，形成“做法 + 回忆”的核心体验。
 
-- [ ] 实现上传签名或上传令牌接口。
-- [ ] 实现媒体资源登记接口，写入 `media_assets`。
-- [ ] 实现时光记录创建接口，支持菜谱绑定、可选版本绑定。
-- [ ] 支持记录日期回填和历史补记。
-- [ ] 支持参与人文本、好吃程度评分、难度评分。
-- [ ] 支持最多 9 张图片的后端校验。
-- [ ] 在事务内写入 `moments` 与 `moment_images`。
-- [ ] 实现时光记录编辑接口。
-- [ ] 实现时光记录删除接口，采用软删除。
-- [ ] 实现某菜谱时光轴接口，按 `occurred_on desc, created_at desc` 输出。
-- [ ] 实现首页最新时光动态接口，输出卡片所需摘要信息。
-- [ ] 时光记录新增、编辑、删除后维护 `recipes.latest_moment_at`、`latest_cooked_at`、`moment_count`。
-- [ ] 新增封面回填逻辑：若未设置自定义封面，则使用最新时光图片。
-- [ ] 将封面回填逻辑抽成异步任务入口，避免耦合在主请求内。
+- [x] 实现上传签名或上传令牌接口。
+- [x] 实现媒体资源登记接口，写入 `media_assets`。
+- [x] 实现时光记录创建接口，支持菜谱绑定、可选版本绑定。
+- [x] 支持记录日期回填和历史补记。
+- [x] 支持参与人文本、好吃程度评分、难度评分。
+- [x] 支持最多 9 张图片的后端校验。
+- [x] 在事务内写入 `moments` 与 `moment_images`。
+- [x] 实现时光记录编辑接口。
+- [x] 实现时光记录删除接口，采用软删除。
+- [x] 实现某菜谱时光轴接口，按 `occurred_on desc, created_at desc` 输出。
+- [x] 实现首页最新时光动态接口，输出卡片所需摘要信息。
+- [x] 时光记录新增、编辑、删除后维护 `recipes.latest_moment_at`、`latest_cooked_at`、`moment_count`。
+- [x] 新增封面回填逻辑：若未设置自定义封面，则使用最新时光图片。
+- [x] 将封面回填逻辑抽成异步任务入口，避免耦合在主请求内。
 
 **完成标准**
 
@@ -244,19 +252,19 @@
 
 完成按周维护的点菜计划能力，让菜谱和具体版本进入实际计划场景。
 
-- [ ] 实现获取当前周菜单接口。
-- [ ] 实现按周起始日期获取周菜单接口。
-- [ ] 若某周菜单不存在，支持懒创建或初始化空周计划。
-- [ ] 实现新增菜单项接口。
-- [ ] 新增菜单项时强制要求绑定 `recipe_id` 和 `recipe_version_id`。
-- [ ] 支持按日期和 `meal_slot` 录入菜单项。
-- [ ] 校验 `week_start_date` 必须为周一，`planned_date` 必须落在目标周范围内。
-- [ ] 实现菜单项更新接口，支持修改日期、版本、备注。
-- [ ] 实现菜单项删除接口。
-- [ ] 实现同一天内菜单项重排接口。
-- [ ] 统一维护 `sort_order`。
-- [ ] 实现首页“本周已规划 X 道菜”统计接口或统计字段查询逻辑。
-- [ ] 对引用已删除菜谱或无效版本的菜单项做容错处理。
+- [x] 实现获取当前周菜单接口。
+- [x] 实现按周起始日期获取周菜单接口。
+- [x] 若某周菜单不存在，支持懒创建或初始化空周计划。
+- [x] 实现新增菜单项接口。
+- [x] 新增菜单项时强制要求绑定 `recipe_id` 和 `recipe_version_id`。
+- [x] 支持按日期和 `meal_slot` 录入菜单项。
+- [x] 校验 `week_start_date` 必须为周一，`planned_date` 必须落在目标周范围内。
+- [x] 实现菜单项更新接口，支持修改日期、版本、备注。
+- [x] 实现菜单项删除接口。
+- [x] 实现同一天内菜单项重排接口。
+- [x] 统一维护 `sort_order`。
+- [x] 实现首页“本周已规划 X 道菜”统计接口或统计字段查询逻辑。
+- [x] 对引用已删除菜谱或无效版本的菜单项做容错处理。
 
 **完成标准**
 
