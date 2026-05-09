@@ -14,6 +14,7 @@ import { useAppQuery as useQuery } from '@/hooks/useAppQuery'
 import { usePageShowRefetch } from '@/hooks/usePageShowRefetch'
 import { mealPlanService, getCurrentWeekStartDate } from '@/services/modules/meal-plan'
 import { recipeService } from '@/services/modules/recipe'
+import { shoppingService } from '@/services/modules/shopping'
 import type { MealPlanItemDTO, MealPlanSlotKey } from '@/services/types/meal-plan'
 import { getSafeImageUrl } from '@/utils/media-url'
 import { clearMealPlanDraft, getMealPlanDraft } from '@/utils/meal-plan-draft'
@@ -116,6 +117,9 @@ export default function MealPlannerPage() {
   const reorderMutation = useMutation({
     mutationFn: (payload: { plannedDate: string; mealSlot: MealPlanSlotKey; items: Array<{ id: string; sortOrder: number }> }) =>
       mealPlanService.reorderMealPlanItems(selectedWeekStartDate, payload)
+  })
+  const generateShoppingMutation = useMutation({
+    mutationFn: () => shoppingService.generateShoppingList({ weekStartDate: selectedWeekStartDate, generatedFrom: 'manual' })
   })
 
   const plan = planQuery.data
@@ -320,6 +324,45 @@ export default function MealPlannerPage() {
     }
   }
 
+  const handleGenerateShoppingList = async () => {
+    if (!plan?.plannedItemCount) {
+      Taro.showToast({
+        title: '先为本周添加菜谱',
+        icon: 'none'
+      })
+      return
+    }
+
+    const result = await Taro.showModal({
+      title: '生成购物清单？',
+      content: '会根据当前周菜单生成原料和调料清单；如果已有清单，后端会生成新版并归档旧版。',
+      confirmText: '生成'
+    })
+
+    if (!result.confirm) {
+      return
+    }
+
+    try {
+      const generated = await generateShoppingMutation.mutateAsync()
+      await queryClient.invalidateQueries({ queryKey: ['shopping-list'] })
+      Taro.showToast({
+        title: `已生成 V${generated.versionNo}`,
+        icon: 'success'
+      })
+      await navigateToRoute(routes.shoppingList, {
+        id: generated.shoppingListId,
+        weekStartDate: selectedWeekStartDate
+      })
+    } catch (error) {
+      Taro.showModal({
+        title: '购物清单生成失败',
+        content: error instanceof Error ? error.message : '请确认本周菜单可用后再试。',
+        showCancel: false
+      })
+    }
+  }
+
   if (planQuery.isLoading) {
     return (
       <PageContainer title="点菜台" subtitle="正在整理本周餐单">
@@ -406,7 +449,7 @@ export default function MealPlannerPage() {
         </View>
 
         <View className={styles.randomSection}>
-          <View className={styles.randomButton} onClick={() => navigateToRoute(routes.randomPick)}>
+          <View className={styles.randomButton} onClick={() => navigateToRoute(routes.randomPick, { weekStartDate: selectedWeekStartDate })}>
             <View className={styles.randomInfo}>
               <View className={styles.randomIcon}>
                 <SvgIcon
@@ -642,13 +685,15 @@ export default function MealPlannerPage() {
           </View>
         </View>
 
-        <View className="surface-card" onClick={() => navigateToRoute(routes.shoppingList, { weekStartDate: plan.weekStartDate })}>
+        <View className="surface-card" onClick={() => void handleGenerateShoppingList()}>
           <View className="profile-link__meta">
             <View className={styles.linkTitleRow}>
               <SvgIcon className={styles.linkTitleIcon} name="wenjian" size={26} color={svgIconColors.primary} />
-              <Text className="profile-link__title">购物清单</Text>
+              <Text className="profile-link__title">
+                {generateShoppingMutation.isPending ? '正在生成购物清单' : '生成购物清单'}
+              </Text>
             </View>
-            <Text className="profile-link__subtitle">阶段 5 会从这里继续接入生成清单与勾选逻辑。</Text>
+            <Text className="profile-link__subtitle">按本周菜单聚合原料和调料；已有清单时会生成新版并继承可匹配的勾选备注。</Text>
           </View>
           <SvgIcon
             className={styles.linkArrowIcon}

@@ -1,0 +1,249 @@
+@use '@/styles/theme' as *;
+
+.heroCard,
+.filterCard,
+.resultStage,
+.resultCard,
+.historyCard {
+  padding: 32px;
+  border-radius: 28px;
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
+  border: 1px solid theme('color-outline-variant');
+}
+
+.heroCard,
+.filterCard,
+.resultStage,
+.historyCard,
+.resultBody,
+.fieldBlock,
+.acceptPanel,
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.heroCard {
+  background:
+    radial-gradient(circle at top right, theme('color-tertiary-state-soft'), transparent 36%),
+    radial-gradient(circle at bottom left, theme('color-primary-state-soft'), transparent 42%),
+    theme('color-surface-container-lowest');
+}
+
+.heroTitle {
+  color: theme('color-on-surface');
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.heroDescription,
+.stageSubtitle,
+.versionText,
+.optionText {
+  color: theme('color-on-surface-variant');
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.modeSwitch,
+.chipWrap,
+.chipWrapCompact,
+.optionRow,
+.stageHeader,
+.resultTitleRow,
+.resultActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.modeSwitch,
+.chipWrap,
+.chipWrapCompact {
+  flex-wrap: wrap;
+}
+
+.stageHeader,
+.resultTitleRow {
+  justify-content: space-between;
+}
+
+.modePill,
+.filterChip,
+.primaryAction,
+.secondaryAction,
+.ghostAction,
+.decisionPill,
+.decisionPillMuted,
+.pickerField,
+.pickerFieldWide,
+.startAction {
+  min-height: 56px;
+  padding: 0 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.modePill,
+.filterChip,
+.secondaryAction,
+.ghostAction,
+.decisionPillMuted,
+.pickerField,
+.pickerFieldWide {
+  background: theme('color-action-container');
+  color: theme('color-primary');
+  border: 1px solid theme('color-action-border');
+}
+
+.modePillActive,
+.filterChipActive,
+.primaryAction,
+.decisionPill,
+.startAction {
+  background: theme('color-primary');
+  color: theme('color-on-primary');
+  border: 1px solid theme('color-primary');
+}
+
+.ghostAction {
+  background: theme('color-surface-container-low');
+}
+
+.actionDisabled {
+  opacity: 0.62;
+}
+
+.fieldLabel {
+  color: theme('color-on-surface');
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.textInput,
+.noteInput {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 22px;
+  border-radius: 20px;
+  background: theme('color-input-background');
+  border: 1px solid theme('color-outline-variant');
+  color: theme('color-on-surface');
+  font-size: 24px;
+}
+
+.textInput {
+  min-height: 64px;
+}
+
+.noteInput {
+  min-height: 128px;
+  padding-top: 18px;
+}
+
+.checkDot {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: theme('color-on-primary');
+  background: theme('color-surface-container-high');
+  border: 2px solid theme('color-outline-variant');
+}
+
+.checkDotActive {
+  background: theme('color-primary');
+  border-color: theme('color-primary');
+}
+
+.startAction {
+  width: 100%;
+  min-height: 88px;
+  gap: 12px;
+  font-size: 28px;
+  box-shadow: theme('shadow-primary');
+}
+
+.startIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.resultStageRolling {
+  animation: roll-pulse 0.42s ease-in-out;
+}
+
+.resultCard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background:
+    linear-gradient(180deg, theme('color-surface-container-lowest'), theme('color-surface-container-low'));
+}
+
+.resultCardFeatured {
+  border-color: theme('color-primary');
+  box-shadow: theme('shadow-floating');
+}
+
+.resultImage {
+  width: 100%;
+  height: 360px;
+  border-radius: 24px;
+  background: theme('color-surface-container-high');
+}
+
+.recipeName {
+  color: theme('color-on-surface');
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.acceptPanel {
+  gap: 16px;
+}
+
+.pickerFieldWide {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.resultActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@keyframes roll-pulse {
+  0% {
+    transform: rotate(-1deg) scale(0.98);
+    opacity: 0.72;
+  }
+
+  50% {
+    transform: rotate(1.2deg) scale(1.02);
+    opacity: 1;
+  }
+
+  100% {
+    transform: rotate(0) scale(1);
+  }
+}

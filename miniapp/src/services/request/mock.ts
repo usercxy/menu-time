@@ -27,7 +27,21 @@ import {
   getMockRecipeVersions,
   setMockCurrentRecipeVersion
 } from '@/mocks/recipe.mock'
+import {
+  acceptMockRandomPickResult,
+  createMockRandomPickSession,
+  getMockRandomPickSessionDetail,
+  redrawMockRandomPickSession,
+  skipMockRandomPickResult
+} from '@/mocks/random.mock'
 import { mockSession, mockTokenBundle, mockWechatLogin } from '@/mocks/session.mock'
+import {
+  createMockShoppingListCopyText,
+  createMockShoppingListShareImage,
+  generateMockShoppingList,
+  getMockShoppingListDetail,
+  updateMockShoppingListItem
+} from '@/mocks/shopping.mock'
 import {
   createMockCategory,
   createMockTag,
@@ -57,6 +71,14 @@ import type {
   GetRecipesQuery,
   UpdateRecipePayload
 } from '@/services/types/recipe'
+import type {
+  RandomPickResultAcceptPayload,
+  RandomPickSessionCreatePayload
+} from '@/services/types/random'
+import type {
+  ShoppingListGeneratePayload,
+  ShoppingListItemUpdatePayload
+} from '@/services/types/shopping'
 import type { CategoryMutationPayload, TagMutationPayload } from '@/services/types/taxonomy'
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE'
@@ -243,6 +265,66 @@ const routes: MockRoute[] = [
     method: 'POST',
     matcher: /^\/api\/v1\/menu-plans\/weeks\/\d{4}-\d{2}-\d{2}\/reorder$/,
     handler: ({ url, data }) => reorderMockMealPlanItems(url.split('/')[5] || '', data as ReorderMealPlanItemsPayload)
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/shopping-lists\/generate$/,
+    handler: ({ data }) => generateMockShoppingList(data as ShoppingListGeneratePayload)
+  },
+  {
+    method: 'GET',
+    matcher: /^\/api\/v1\/shopping-lists\/[^/]+$/,
+    handler: ({ url }) => getMockShoppingListDetail(url.split('/').pop() || '')
+  },
+  {
+    method: 'PATCH',
+    matcher: /^\/api\/v1\/shopping-lists\/items\/[^/]+$/,
+    handler: ({ url, data }) => updateMockShoppingListItem(url.split('/').pop() || '', data as ShoppingListItemUpdatePayload)
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/shopping-lists\/[^/]+\/copy-text$/,
+    handler: ({ url }) => createMockShoppingListCopyText(url.split('/')[4] || '')
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/shopping-lists\/[^/]+\/share-image$/,
+    handler: ({ url }) => createMockShoppingListShareImage(url.split('/')[4] || '')
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/random-picks\/sessions$/,
+    handler: ({ data }) => createMockRandomPickSession(data as RandomPickSessionCreatePayload)
+  },
+  {
+    method: 'GET',
+    matcher: /^\/api\/v1\/random-picks\/sessions\/[^/]+$/,
+    handler: ({ url }) => getMockRandomPickSessionDetail(url.split('/')[5] || '')
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/random-picks\/sessions\/[^/]+\/redraw$/,
+    handler: ({ url }) => redrawMockRandomPickSession(url.split('/')[5] || '')
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/random-picks\/sessions\/[^/]+\/results\/[^/]+\/accept$/,
+    handler: ({ url, data }) => {
+      const segments = url.split('/')
+      return acceptMockRandomPickResult(
+        segments[5] || '',
+        segments[7] || '',
+        data as RandomPickResultAcceptPayload
+      )
+    }
+  },
+  {
+    method: 'POST',
+    matcher: /^\/api\/v1\/random-picks\/sessions\/[^/]+\/results\/[^/]+\/skip$/,
+    handler: ({ url }) => {
+      const segments = url.split('/')
+      return skipMockRandomPickResult(segments[5] || '', segments[7] || '')
+    }
   }
 ]
 

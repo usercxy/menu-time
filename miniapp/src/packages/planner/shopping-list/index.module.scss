@@ -1,0 +1,217 @@
+@use '@/styles/theme' as *;
+
+.generateHero,
+.summaryCard,
+.itemCard,
+.actionPanel,
+.shareCard {
+  padding: 32px;
+  border-radius: 28px;
+  background: theme('color-surface-container-lowest');
+  box-shadow: theme('shadow-soft');
+  border: 1px solid theme('color-outline-variant');
+}
+
+.generateHero,
+.itemList,
+.actionPanel,
+.shareCard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.generateHero {
+  background:
+    radial-gradient(circle at top right, theme('color-tertiary-state-soft'), transparent 40%),
+    theme('color-surface-container-lowest');
+}
+
+.heroTitle,
+.summaryTitle {
+  display: block;
+  color: theme('color-on-surface');
+  font-size: 38px;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+.heroDescription,
+.summaryMeta,
+.itemMeta,
+.warningText {
+  color: theme('color-on-surface-variant');
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.summaryHeader,
+.itemMain,
+.noteRow,
+.shareHeader {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.summaryHeader {
+  justify-content: space-between;
+}
+
+.statusPill,
+.statusPillMuted,
+.primaryAction,
+.secondaryAction,
+.dangerAction,
+.noteSave,
+.tabItem {
+  min-height: 56px;
+  padding: 0 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.statusPill,
+.primaryAction,
+.tabItemActive,
+.noteSaveActive {
+  background: theme('color-primary');
+  color: theme('color-on-primary');
+  border: 1px solid theme('color-primary');
+}
+
+.statusPillMuted,
+.secondaryAction,
+.noteSave,
+.tabItem {
+  background: theme('color-action-container');
+  color: theme('color-primary');
+  border: 1px solid theme('color-action-border');
+}
+
+.dangerAction {
+  background: theme('color-error-container');
+  color: theme('color-on-error-container');
+  border: 1px solid rgba(186, 26, 26, 0.24);
+}
+
+.actionDisabled {
+  opacity: 0.7;
+}
+
+.progressTrack {
+  height: 18px;
+  margin-top: 28px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: theme('color-surface-container-high');
+}
+
+.progressFill {
+  height: 100%;
+  min-width: 8px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, theme('color-primary'), theme('color-tertiary'));
+}
+
+.warningText {
+  display: block;
+  margin-top: 16px;
+  color: theme('color-tertiary');
+  font-weight: 700;
+}
+
+.tabBar,
+.actionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.actionGrid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.itemCard {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.checkBox {
+  width: 54px;
+  height: 54px;
+  flex-shrink: 0;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: theme('color-on-primary');
+  font-size: 28px;
+  font-weight: 700;
+  background: theme('color-surface-container-high');
+  border: 2px solid theme('color-outline-variant');
+}
+
+.checkBoxChecked {
+  background: theme('color-primary');
+  border-color: theme('color-primary');
+}
+
+.itemContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.itemName {
+  color: theme('color-on-surface');
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.itemNameChecked {
+  color: theme('color-on-surface-variant');
+  text-decoration: line-through;
+}
+
+.noteRow {
+  align-items: stretch;
+}
+
+.noteInput {
+  flex: 1;
+  min-height: 64px;
+  box-sizing: border-box;
+  padding: 0 22px;
+  border-radius: 20px;
+  background: theme('color-input-background');
+  border: 1px solid theme('color-outline-variant');
+  color: theme('color-on-surface');
+  font-size: 24px;
+}
+
+.shareIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.shareTitle {
+  color: theme('color-primary');
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.sharePreview {
+  width: 100%;
+  height: 420px;
+  border-radius: 22px;
+  background: theme('color-surface-container');
+}
