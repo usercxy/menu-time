@@ -32,6 +32,18 @@ import {
   taxonomyListQuerySchema,
   taxonomyReorderBodySchema,
 } from "@/server/modules/taxonomy/taxonomy.schema";
+import {
+  shoppingListGenerateBodySchema,
+  shoppingListItemParamsSchema,
+  shoppingListItemUpdateBodySchema,
+  shoppingListParamsSchema,
+} from "@/server/modules/shopping/shopping.schema";
+import {
+  randomPickResultAcceptBodySchema,
+  randomPickResultParamsSchema,
+  randomPickSessionCreateBodySchema,
+  randomPickSessionParamsSchema,
+} from "@/server/modules/random/random.schema";
 
 type HttpMethod = "get" | "post" | "patch" | "delete";
 type AuthMode = "public" | "required";
@@ -337,6 +349,90 @@ const operations: OperationDefinition[] = [
     paramsSchema: fileIdParamSchema,
     querySchema: fileDownloadQuerySchema,
   },
+  {
+    method: "post",
+    path: "/api/v1/shopping-lists/generate",
+    tag: "Shopping Lists",
+    summary: "根据周菜单生成购物清单",
+    auth: "required",
+    successStatus: 201,
+    bodySchema: shoppingListGenerateBodySchema,
+  },
+  {
+    method: "get",
+    path: "/api/v1/shopping-lists/{id}",
+    tag: "Shopping Lists",
+    summary: "获取购物清单详情",
+    auth: "required",
+    paramsSchema: shoppingListParamsSchema,
+  },
+  {
+    method: "patch",
+    path: "/api/v1/shopping-lists/items/{id}",
+    tag: "Shopping Lists",
+    summary: "更新购物清单项",
+    auth: "required",
+    paramsSchema: shoppingListItemParamsSchema,
+    bodySchema: shoppingListItemUpdateBodySchema,
+  },
+  {
+    method: "post",
+    path: "/api/v1/shopping-lists/{id}/copy-text",
+    tag: "Shopping Lists",
+    summary: "生成购物清单文本",
+    auth: "required",
+    paramsSchema: shoppingListParamsSchema,
+  },
+  {
+    method: "post",
+    path: "/api/v1/shopping-lists/{id}/share-image",
+    tag: "Shopping Lists",
+    summary: "生成购物清单分享图",
+    auth: "required",
+    paramsSchema: shoppingListParamsSchema,
+  },
+  {
+    method: "post",
+    path: "/api/v1/random-picks/sessions",
+    tag: "Random Picks",
+    summary: "创建随机点菜 session",
+    auth: "required",
+    successStatus: 201,
+    bodySchema: randomPickSessionCreateBodySchema,
+  },
+  {
+    method: "post",
+    path: "/api/v1/random-picks/sessions/{id}/redraw",
+    tag: "Random Picks",
+    summary: "同条件再抽一次",
+    auth: "required",
+    paramsSchema: randomPickSessionParamsSchema,
+  },
+  {
+    method: "post",
+    path: "/api/v1/random-picks/sessions/{id}/results/{resultId}/accept",
+    tag: "Random Picks",
+    summary: "接受随机结果并写入周菜单",
+    auth: "required",
+    paramsSchema: randomPickResultParamsSchema,
+    bodySchema: randomPickResultAcceptBodySchema,
+  },
+  {
+    method: "post",
+    path: "/api/v1/random-picks/sessions/{id}/results/{resultId}/skip",
+    tag: "Random Picks",
+    summary: "跳过随机结果",
+    auth: "required",
+    paramsSchema: randomPickResultParamsSchema,
+  },
+  {
+    method: "get",
+    path: "/api/v1/random-picks/sessions/{id}",
+    tag: "Random Picks",
+    summary: "查看随机点菜 session 详情",
+    auth: "required",
+    paramsSchema: randomPickSessionParamsSchema,
+  },
 ];
 
 function toOpenApiSchema(schema: ZodTypeAny) {
@@ -482,6 +578,8 @@ export function buildOpenApiDocument() {
       { name: "Recipes" },
       { name: "Recipe Versions" },
       { name: "Files" },
+      { name: "Shopping Lists" },
+      { name: "Random Picks" },
     ],
     components: {
       securitySchemes: {

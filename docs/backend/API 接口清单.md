@@ -45,7 +45,7 @@
 }
 ```
 - 受保护接口统一从 token 中解析 `userId`、`householdId`
-- 当前 auth、taxonomy、recipes、files、moments 接口均已接入统一 `createRouteHandler`
+- 当前 auth、taxonomy、recipes、files、moments、menu-plans、shopping-lists、random-picks 接口均已接入统一 `createRouteHandler`
 
 常用错误码：
 
@@ -728,10 +728,11 @@ recipes 模块统一错误码补充：
 
 ```json
 {
-  "mode": "single",
+  "mode": "week",
+  "weekStartDate": "2026-04-20",
   "filters": {
-    "categoryIds": ["uuid"],
-    "tagIds": ["uuid"],
+    "categoryIds": ["uuid-1", "uuid-2"],
+    "tagIds": ["uuid-3"],
     "maxDifficulty": 3,
     "excludeRecentDays": 7,
     "excludeCurrentWeekPlanned": true,
@@ -740,17 +741,85 @@ recipes 模块统一错误码补充：
 }
 ```
 
+请求字段说明：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `mode` | `single \| week` | `single` 单抽，`week` 连抽 7 天 |
+| `weekStartDate` | `string` | 可选，`YYYY-MM-DD`，传入时必须是周一；`week` 模式建议显式传值 |
+| `filters.categoryIds` | `uuid[]` | 可选，分类多选 |
+| `filters.tagIds` | `uuid[]` | 可选，标签多选 |
+| `filters.maxDifficulty` | `1-5` | 可选，后端按标签/分类/步骤数推断难度后过滤 |
+| `filters.excludeRecentDays` | `number` | 可选，排除最近 N 天吃过的菜 |
+| `filters.excludeCurrentWeekPlanned` | `boolean` | 可选，排除目标周已在菜单中的菜 |
+| `filters.preferredMemberTags` | `string[]` | 可选，成员偏好标签预留位，当前作为加权匹配信号参与抽取 |
+
 返回字段：
 
 - `sessionId`
 - `mode`
-- `results`
+- `status`
+- `weekStartDate`
+- `filterSnapshot`
+- `results[]`
+
+`filterSnapshot` 返回字段：
+
+- `weekStartDate`
+- `categoryIds`
+- `tagIds`
+- `maxDifficulty`
+- `excludeRecentDays`
+- `excludeCurrentWeekPlanned`
+- `preferredMemberTags`
+
+`results[]` 返回字段：
+
+- `id`
+- `sequenceNo`
+- `pickedForDate`
+- `decision`
+- `reasonMeta.strategy`
+- `reasonMeta.inferredDifficulty`
+- `reasonMeta.categoryMatch`
+- `reasonMeta.tagMatch`
+- `reasonMeta.preferredMemberTagsMatched`
+- `reasonMeta.classification`
+- `recipe.id`
+- `recipe.name`
+- `recipe.coverImageUrl`
+- `recipeVersion.id`
+- `recipeVersion.versionNumber`
+- `recipeVersion.versionName`
+- `recipeVersion.category`
+- `recipeVersion.tags`
+- `recipeVersion.difficultyRating`
+- `availableVersions[]`
+- `createdAt`
+
+业务规则：
+
+- `single` 模式返回 1 条结果；`week` 模式返回目标周 7 条结果。
+- 候选池会排除已软删除菜谱、无当前版本菜谱、最近吃过菜谱、本周已入菜单菜谱，以及当前 session 已跳过菜谱。
+- 当严格筛选无结果时，会按“同分类 / 同标签 / 偏好标签命中”的类似推荐逻辑兜底；若仍无候选，返回 `BUSINESS_RULE_VIOLATION`。
+- `week` 模式要求至少存在 7 道可用菜谱，并在结果内自动去重，优先保证至少 1 汤 1 素。
 
 ### `POST /api/v1/random-picks/sessions/:id/redraw`
 
 用途：同条件再抽一次。
 
 请求体：无
+
+成功响应：
+
+- `sessionId`
+- `result`
+
+业务规则：
+
+- 仅 `single` 模式支持重抽。
+- 重抽前会把当前 session 中仍处于 `pending` 的结果自动标记为 `skipped`。
+- 新结果会复用原 `filterSnapshot`，并排除本次 session 已跳过的菜谱。
 
 ### `POST /api/v1/random-picks/sessions/:id/results/:resultId/accept`
 
@@ -761,20 +830,45 @@ recipes 模块统一错误码补充：
 ```json
 {
   "plannedDate": "2026-03-26",
-  "mealSlot": "dinner"
+  "mealSlot": "dinner",
+  "recipeVersionId": "uuid-alt-version",
+  "note": "想安排在周四晚上"
 }
 ```
+
+说明：
+
+- `plannedDate` 在 `single` 模式下必填；在 `week` 模式下可省略，后端默认使用该结果的 `pickedForDate`
+- `mealSlot` 可选，默认 `dinner`
+- `recipeVersionId` 可选，用于“换版本”；必须属于本次命中 `recipeId`
+- `note` 可选，最长 200 字
 
 成功响应：
 
 - `accepted`
 - `mealPlanItemId`
 
+业务规则：
+
+- 接受后会自动懒创建目标周 `meal_plan_weeks`，并写入 `meal_plan_items`
+- 写入菜单项时 `sourceType = random`，并回填 `randomSessionId`
+- `single` 模式接受后 session 会转为 `completed`
+- `week` 模式仅在所有结果都已被接受或跳过后转为 `completed`
+
 ### `POST /api/v1/random-picks/sessions/:id/results/:resultId/skip`
 
 用途：跳过结果。
 
 请求体：无
+
+成功响应：
+
+- `skipped`
+
+业务规则：
+
+- 已接受结果不能再次跳过
+- `single` 模式跳过后 session 保持 `running`，可继续调用 `redraw`
 
 ### `GET /api/v1/random-picks/sessions/:id`
 
@@ -785,8 +879,15 @@ recipes 模块统一错误码补充：
 - `session.id`
 - `session.mode`
 - `session.status`
+- `session.weekStartDate`
 - `session.filterSnapshot`
+- `session.resultCount`
 - `results[]`
+
+说明：
+
+- `results[]` 按 `sequenceNo asc` 返回完整抽取历史，已接受、已跳过、重抽产生的结果都会保留。
+- `availableVersions[]` 可用于前端在接受前展示“换版本”选项。
 
 ## 8. 购物清单接口
 
@@ -807,6 +908,14 @@ recipes 模块统一错误码补充：
 
 - `shoppingListId`
 - `versionNo`
+- `archivedListIds[]`
+
+业务规则：
+
+- 仅接受周一格式的 `weekStartDate`
+- 若目标周没有菜单项，返回 `BUSINESS_RULE_VIOLATION`
+- 若该周已有 `active` 清单，重新生成时旧版本会切换为 `archived`
+- 新版本会按 `itemType + normalizedName` 继承上一版仍可匹配项的勾选状态与数量备注
 
 ### `GET /api/v1/shopping-lists/:id`
 
@@ -816,10 +925,30 @@ recipes 模块统一错误码补充：
 
 - `id`
 - `weekStartDate`
+- `generatedFrom`
+- `status`
 - `versionNo`
 - `generatedAt`
+- `menuLastUpdatedAt`
+- `menuChangedAfterGenerated`
+- `totalItemCount`
+- `checkedItemCount`
 - `ingredientItems`
 - `seasoningItems`
+
+清单项返回字段：
+
+- `id`
+- `itemType`
+- `displayName`
+- `normalizedName`
+- `quantityNote`
+- `sourceCount`
+- `isChecked`
+- `sortOrder`
+- `sourceRecipeRefs[]`
+- `createdAt`
+- `updatedAt`
 
 ### `PATCH /api/v1/shopping-lists/items/:id`
 
@@ -834,6 +963,15 @@ recipes 模块统一错误码补充：
 }
 ```
 
+成功响应：
+
+- 返回更新后的清单项 DTO
+
+业务规则：
+
+- 请求体至少要包含 `isChecked / quantityNote` 之一
+- `quantityNote` 允许传空字符串，服务端会归一化为 `null`
+
 ### `POST /api/v1/shopping-lists/:id/copy-text`
 
 用途：生成可复制文本。
@@ -844,12 +982,21 @@ recipes 模块统一错误码补充：
 
 ### `POST /api/v1/shopping-lists/:id/share-image`
 
-用途：触发生成分享图。
+用途：生成分享图。
 
 成功响应：
 
 - `taskAccepted`
 - `imageAssetId`
+- `imageDataUrl`
+- `mimeType`
+
+当前实现说明：
+
+- 阶段 6 先同步返回 SVG `data URL`
+- `taskAccepted = false`
+- `imageAssetId = null`
+- 后续可在异步任务阶段切换为真正图片产物和对象存储资源
 
 ## 9. 文件接口
 

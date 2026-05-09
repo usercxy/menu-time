@@ -18,18 +18,20 @@
 
 ## 当前进度快照（2026-04-22）
 
-本次已按 `backend/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、Prisma schema、migration、环境模板以及本地 `npm run typecheck` / `npm run lint` / `npm run build`、Prisma migration 本地库验证结果，不含接口集成测试和微信真链路验收。
+本次已按 `backend/` 现有代码重新盘点 TODO 勾选状态，结论基于源码、Prisma schema、migration、环境模板以及本地 `npm run typecheck` / `npm run lint` / `npm run build`、Prisma migration 本地库验证结果，含阶段 4 / 5 / 6 / 7 的真实 HTTP 烟测，不含微信真链路验收。
 
 ### 总体判断
 
-- 粗略完成度约为 **76% ~ 80%**。
+- 粗略完成度约为 **82% ~ 85%**。
 - **阶段 0** 已完成：工程骨架、环境校验、统一响应/错误、Prisma、日志、鉴权基础设施、健康检查都已落地。
-- **阶段 1** 部分完成：已完成鉴权相关基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions`、`moments / moment_images`、`meal_plan_weeks / meal_plan_items` 模型与四个 migration；`shopping / random` 等表待实现。
+- **阶段 1** 部分完成：已完成鉴权相关基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions`、`moments / moment_images`、`meal_plan_weeks / meal_plan_items`、`shopping_lists / shopping_list_items`、`random_pick_sessions / random_pick_results` 模型与六个 migration；仍有部分通用 SQL 约束和索引增强项待继续补齐。
 - **阶段 2** 已完成：微信登录、刷新、退出、当前会话 4 个接口与 taxonomy（分类/标签）主数据接口均已落地，`household_id` 在接口层和查询层已按约束隔离。
 - **阶段 3** 已完成：里程碑 A/B/C/D/E/F 已完成，recipes 域数据模型、migration、模块抽象、菜谱 CRUD、版本管理、API 路由、seed、自测与阶段验收均已落地。
 - **阶段 4** 已完成：时光记录 CRUD、时光轴、首页最新动态、图片绑定、菜谱统计回填、封面回填入口均已落地，并通过真实 HTTP 烟测。
 - **阶段 5** 已完成：周菜单懒创建、菜单项增删改、同餐次重排、版本绑定校验与周计划统计字段均已落地，并通过真实 HTTP 烟测。
-- **阶段 6 ~ 10** 尚未进入实质开发，当前仍以目录骨架或占位结构为主。
+- **阶段 6** 已完成：购物清单快照表、聚合生成、勾选/备注维护、文本导出、分享图数据接口与版本归档策略均已落地，并通过真实 HTTP 烟测。
+- **阶段 7** 已完成：随机点菜 session、候选过滤、单抽/连抽、再来一次、接受/跳过、写入周菜单、换版本与历史追踪均已落地，并通过真实 HTTP 烟测。
+- **阶段 8 ~ 10** 尚未进入实质开发，当前仍以鉴权基础字段、任务骨架和扩展预留为主。
 
 ### 验证记录
 
@@ -62,19 +64,34 @@
 - [x] `cd backend && npx prisma migrate deploy --schema prisma/schema.prisma`（新增 `meal_plan_weeks / meal_plan_items` migration）
 - [x] `cd backend && npm run prisma:seed`（新增 demo meal plan / meal plan item）
 - [x] `cd backend && npm run dev -- --port 3148` 并通过真实 HTTP 请求验证阶段 5：当前周菜单、指定周懒创建、周一校验、周范围校验、菜谱版本绑定校验、菜单项创建、跨桶更新、同餐次重排、删除后顺序压紧、周计划数量统计
+- [x] `cd backend && npx prisma generate --schema prisma/schema.prisma`（新增 `shopping_lists / shopping_list_items` Prisma Client）
+- [x] `cd backend && npx prisma validate --schema prisma/schema.prisma`
+- [x] `cd backend && npx prisma migrate deploy --schema prisma/schema.prisma`（新增 `shopping_lists / shopping_list_items` migration）
+- [x] `cd backend && npm run prisma:seed`
+- [x] `cd backend && npm run typecheck`
+- [x] `cd backend && npm run lint`
+- [x] `cd backend && npm run build`
+- [x] `cd backend && npm run dev -- --port 3156` 并通过真实 HTTP 请求验证阶段 6：mock 登录、按周生成购物清单、详情查询、清单项勾选与备注更新、文本导出、SVG 分享图数据返回、空菜单提示、重新生成新版本时旧版本归档与勾选/备注继承
+- [x] `cd backend && npx prisma validate --schema prisma/schema.prisma`
+- [x] `cd backend && npx prisma migrate deploy --schema prisma/schema.prisma`（新增 `random_pick_sessions / random_pick_results` migration）
+- [x] `cd backend && npm run prisma:seed`（补充随机点菜阶段演示分类与菜谱数据）
+- [x] `cd backend && npm run typecheck`
+- [x] `cd backend && npm run lint`
+- [x] `cd backend && npm run build`
+- [x] `cd backend && npm run dev -- --port 3157` 并通过真实 HTTP 请求验证阶段 7：single session 创建、接受结果写入周菜单并支持换版本、single redraw、skip、session 历史查询、week 7 天连抽、week 结果接受、空候选池提示
 
 ### 当前阶段结论
 
 | 阶段 | 当前状态 | 说明 |
 | --- | --- | --- |
 | 阶段 0 | 已完成 | `src/app/api/v1`、`src/server` 分层、统一路由包装器、日志、错误处理、鉴权和健康检查均已存在 |
-| 阶段 1 | 部分完成 | 已完成 auth 基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions` 及其子表、`moments / moment_images`、`meal_plan_weeks / meal_plan_items`、四次 migration 与基础 seed；`shopping / random` 相关表待实现 |
+| 阶段 1 | 部分完成 | 已完成 auth 基础表、`categories / tags`、`media_assets`、`recipes`、`recipe_versions` 及其子表、`moments / moment_images`、`meal_plan_weeks / meal_plan_items`、`shopping_lists / shopping_list_items`、`random_pick_sessions / random_pick_results`、六次 migration 与基础 seed；仍有部分通用 SQL 约束增强项待补齐 |
 | 阶段 2 | 已完成 | auth 主链路、taxonomy 模块与分类/标签 API（列表/新建/更新/删除/重排）均已完成，并通过临时库接口级验证 |
 | 阶段 3 | 已完成 | 已完成阶段 3 里程碑 A/B/C/D/E/F：recipes 域数据模型、索引、双向关系、migration、模块抽象、菜谱 CRUD、版本主链路 service、API 路由、recipes seed、自测与阶段验收均已落地 |
 | 阶段 4 | 已完成 | 已完成时光记录 CRUD、时光轴、首页最新动态、图片绑定、菜谱统计回填、封面回填异步入口与 smoke test |
 | 阶段 5 | 已完成 | 已完成周菜单懒创建、菜单项 CRUD、跨桶移动、同餐次重排、版本绑定校验、排序维护与 smoke test |
-| 阶段 6 | 未开始 | `shopping/` 目录只有 README，占位未进入业务实现 |
-| 阶段 7 | 未开始 | `random/` 目录只有 README，占位未进入业务实现 |
+| 阶段 6 | 已完成 | 已完成购物清单快照表、按周生成、`normalized_name` 聚合、原料/调料分类、详情、勾选/备注更新、文本导出、SVG 分享图数据返回、版本归档与重新生成继承策略，并通过 smoke test |
+| 阶段 7 | 已完成 | 已完成随机点菜 session、候选过滤、单抽/连抽、重抽、接受/跳过、换版本、会话历史、写入周菜单与 smoke test |
 | 阶段 8 | 未开始 | 用户角色仍停留在 auth 基础字段，未扩展成员协作接口 |
 | 阶段 9 | 未开始 | 仅预留 pg-boss client/worker 骨架，未接入真实任务、Sentry 和审计日志 |
 | 阶段 10 | 未开始 | 仍未见导出、推荐、节气、营养等扩展预留字段或接口 |
@@ -139,9 +156,9 @@
 - [x] 定义 `recipe_versions` 表及 `source_version_id`、差异摘要字段。
 - [x] 定义 `recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags` 子表。
 - [x] 定义 `moments`、`moment_images` 表。
-- [ ] 定义 `meal_plan_weeks`、`meal_plan_items` 表。
-- [ ] 定义 `shopping_lists`、`shopping_list_items` 表。
-- [ ] 定义 `random_pick_sessions`、`random_pick_results` 表。
+- [x] 定义 `meal_plan_weeks`、`meal_plan_items` 表。
+- [x] 定义 `shopping_lists`、`shopping_list_items` 表。
+- [x] 定义 `random_pick_sessions`、`random_pick_results` 表。
 - [ ] 补齐关键唯一索引、组合索引、外键关系和默认值。
 - [ ] 通过 SQL migration 补齐部分唯一索引与 check 约束，如软删除唯一、评分范围、版本号合法性等。
 - [ ] 明确软删除表和非软删除快照表的处理方式。
@@ -278,22 +295,22 @@
 
 完成周菜单到购物清单的快照生成能力，使后端具备完整备餐闭环。
 
-- [ ] 实现根据周菜单生成购物清单接口。
-- [ ] 拉取菜单项对应版本的食材明细。
-- [ ] 建立调料关键词规则表或常量定义。
-- [ ] 实现原料/调料分类逻辑，优先用结构化字段，规则关键词兜底。
-- [ ] 实现基于 `normalized_name` 的去重聚合。
-- [ ] 记录每个清单项来自哪些菜谱版本，写入 `source_recipe_refs`。
-- [ ] 生成 `shopping_lists` 快照记录，维护 `version_no`。
-- [ ] 生成 `shopping_list_items` 快照项。
-- [ ] 实现购物清单详情接口。
-- [ ] 实现清单项勾选状态更新接口。
-- [ ] 实现清单项数量备注更新接口。
-- [ ] 实现购物清单文本导出接口。
-- [ ] 实现购物清单分享图接口，允许同步生成或转异步任务处理。
-- [ ] 生成新清单版本时，明确旧清单 `active / archived` 状态切换策略。
-- [ ] 明确菜单变更后重新生成新版本清单的触发策略。
-- [ ] 对空菜单生成清单场景返回明确业务提示。
+- [x] 实现根据周菜单生成购物清单接口。
+- [x] 拉取菜单项对应版本的食材明细。
+- [x] 建立调料关键词规则表或常量定义。
+- [x] 实现原料/调料分类逻辑，优先用结构化字段，规则关键词兜底。
+- [x] 实现基于 `normalized_name` 的去重聚合。
+- [x] 记录每个清单项来自哪些菜谱版本，写入 `source_recipe_refs`。
+- [x] 生成 `shopping_lists` 快照记录，维护 `version_no`。
+- [x] 生成 `shopping_list_items` 快照项。
+- [x] 实现购物清单详情接口。
+- [x] 实现清单项勾选状态更新接口。
+- [x] 实现清单项数量备注更新接口。
+- [x] 实现购物清单文本导出接口。
+- [x] 实现购物清单分享图接口，允许同步生成或转异步任务处理。
+- [x] 生成新清单版本时，明确旧清单 `active / archived` 状态切换策略。
+- [x] 明确菜单变更后重新生成新版本清单的触发策略。
+- [x] 对空菜单生成清单场景返回明确业务提示。
 
 **完成标准**
 
@@ -307,25 +324,25 @@
 
 实现 PRD 中的随机点菜核心规则版，包括筛选、抽取、历史记录、接受结果和连抽模式。
 
-- [ ] 实现创建随机点菜 session 接口。
-- [ ] 定义并保存筛选条件快照 `filter_snapshot`。
-- [ ] 实现候选池查询逻辑，支持分类多选、标签多选、难度上限。
-- [ ] 实现“排除最近 N 天吃过的菜”规则。
-- [ ] 实现“排除本周已加入菜单的菜”规则。
-- [ ] 实现“排除本次 session 已跳过的菜”规则。
-- [ ] 预留“特定成员偏好标签”过滤位。
-- [ ] 实现单抽模式，返回 1 个候选结果。
-- [ ] 实现“再来一次”接口，沿用同条件重抽。
-- [ ] 实现接受结果接口，将结果直接加入周菜单。
-- [ ] 实现跳过结果接口，更新 `decision = skipped`。
-- [ ] 实现查看本次抽取历史接口。
-- [ ] 维护 `random_pick_sessions.status` 和 `result_count`，保证会话状态可追踪。
-- [ ] 实现换版本能力，允许在命中菜谱的其他版本中切换。
-- [ ] 实现类似推荐的基础候选逻辑，至少支持同分类或同标签兜底。
-- [ ] 实现连抽 7 天模式。
-- [ ] 连抽场景实现自动去重。
-- [ ] 连抽场景实现规则均衡，至少保障 1 汤 1 素。
-- [ ] 候选池为空时返回“放宽条件”的明确提示。
+- [x] 实现创建随机点菜 session 接口。
+- [x] 定义并保存筛选条件快照 `filter_snapshot`。
+- [x] 实现候选池查询逻辑，支持分类多选、标签多选、难度上限。
+- [x] 实现“排除最近 N 天吃过的菜”规则。
+- [x] 实现“排除本周已加入菜单的菜”规则。
+- [x] 实现“排除本次 session 已跳过的菜”规则。
+- [x] 预留“特定成员偏好标签”过滤位。
+- [x] 实现单抽模式，返回 1 个候选结果。
+- [x] 实现“再来一次”接口，沿用同条件重抽。
+- [x] 实现接受结果接口，将结果直接加入周菜单。
+- [x] 实现跳过结果接口，更新 `decision = skipped`。
+- [x] 实现查看本次抽取历史接口。
+- [x] 维护 `random_pick_sessions.status` 和 `result_count`，保证会话状态可追踪。
+- [x] 实现换版本能力，允许在命中菜谱的其他版本中切换。
+- [x] 实现类似推荐的基础候选逻辑，至少支持同分类或同标签兜底。
+- [x] 实现连抽 7 天模式。
+- [x] 连抽场景实现自动去重。
+- [x] 连抽场景实现规则均衡，至少保障 1 汤 1 素。
+- [x] 候选池为空时返回“放宽条件”的明确提示。
 
 **完成标准**
 
@@ -407,9 +424,9 @@
 - [x] 版本对比摘要覆盖主料变化、标签变化、步骤数变化。
 - [ ] 新增时光记录后，可在菜谱详情的时光轴中按时间倒序看到。
 - [ ] 首页最新时光动态接口能返回菜谱名称、日期、封面和摘要。
-- [ ] 指定版本加入周菜单后，生成购物清单时引用的仍是加入时的版本数据。
-- [ ] 购物清单生成后可勾选、改备注、导出文本。
-- [ ] 随机点菜接受结果后，结果能写入周菜单。
+- [x] 指定版本加入周菜单后，生成购物清单时引用的仍是加入时的版本数据。
+- [x] 购物清单生成后可勾选、改备注、导出文本。
+- [x] 随机点菜接受结果后，结果能写入周菜单。
 
 ### 边界规则测试
 
@@ -417,8 +434,8 @@
 - [x] 主料为空、步骤为空时菜谱仍可保存。
 - [x] 同一道菜并发创建多个版本时版本号不冲突。
 - [ ] 同名食材在多个菜谱版本中出现时只保留一个清单项。
-- [ ] 菜单为空时生成购物清单返回清晰提示。
-- [ ] 随机点菜候选池为空时返回“放宽条件”提示。
+- [x] 菜单为空时生成购物清单返回清晰提示。
+- [x] 随机点菜候选池为空时返回“放宽条件”提示。
 - [ ] 删除菜谱后，版本、时光记录、周菜单引用策略与接口返回一致。
 
 ### 权限与隔离测试

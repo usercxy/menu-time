@@ -16,8 +16,10 @@ model Household {
   mediaAssets    MediaAsset[]
   mealPlanWeeks  MealPlanWeek[]
   moments        Moment[]
+  randomPickSessions RandomPickSession[]
   recipes        Recipe[]
   recipeVersions RecipeVersion[]
+  shoppingLists  ShoppingList[]
   users          User[]
   wechatAccounts WechatAccount[]
   refreshTokens  RefreshToken[]
@@ -70,8 +72,10 @@ model User {
   createdMediaAssets    MediaAsset[]    @relation("MediaAssetCreatedBy")
   createdMealPlanWeeks  MealPlanWeek[]  @relation("MealPlanWeekCreatedBy")
   createdMoments        Moment[]        @relation("MomentCreatedBy")
+  createdRandomPickSessions RandomPickSession[] @relation("RandomPickSessionCreatedBy")
   createdRecipes        Recipe[]        @relation("RecipeCreatedBy")
   createdRecipeVersions RecipeVersion[] @relation("RecipeVersionCreatedBy")
+  createdShoppingLists  ShoppingList[]  @relation("ShoppingListCreatedBy")
   household             Household       @relation(fields: [householdId], references: [id], onDelete: Restrict)
   wechatAccounts        WechatAccount[]
   refreshTokens         RefreshToken[]
@@ -124,6 +128,7 @@ model Recipe {
   createdBy        User            @relation("RecipeCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
   mealPlanItems    MealPlanItem[]
   moments          Moment[]
+  randomPickResults RandomPickResult[]
   versions         RecipeVersion[] @relation("RecipeVersions")
 
   @@index([householdId, updatedAt(sort: Desc)], map: "idx_recipes_household_updated")
@@ -155,6 +160,7 @@ model RecipeVersion {
   derivedVersions  RecipeVersion[]           @relation("RecipeVersionSource")
   mealPlanItems    MealPlanItem[]
   moments          Moment[]
+  randomPickResults RandomPickResult[]
   steps            RecipeVersionStep[]
   ingredients      RecipeVersionIngredient[]
   tagLinks         RecipeVersionTag[]
@@ -254,6 +260,7 @@ model MealPlanWeek {
   household     Household      @relation(fields: [householdId], references: [id], onDelete: Restrict)
   createdBy     User           @relation("MealPlanWeekCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
   items         MealPlanItem[]
+  shoppingLists ShoppingList[]
 
   @@unique([householdId, weekStartDate], map: "uq_meal_plan_weeks_household_week")
   @@map("meal_plan_weeks")
@@ -275,10 +282,87 @@ model MealPlanItem {
   mealPlanWeek    MealPlanWeek @relation(fields: [mealPlanWeekId], references: [id], onDelete: Cascade)
   recipe          Recipe       @relation(fields: [recipeId], references: [id], onDelete: Restrict)
   recipeVersion   RecipeVersion @relation(fields: [recipeVersionId], references: [id], onDelete: Restrict)
+  randomSession   RandomPickSession? @relation(fields: [randomSessionId], references: [id], onDelete: SetNull)
 
   @@index([mealPlanWeekId, plannedDate, mealSlot, sortOrder], map: "idx_meal_plan_items_week_date_slot_sort")
   @@index([recipeId, recipeVersionId], map: "idx_meal_plan_items_recipe_version")
   @@map("meal_plan_items")
+}
+
+model RandomPickSession {
+  id             String             @id @default(uuid()) @db.Uuid
+  householdId    String             @map("household_id") @db.Uuid
+  mode           String             @default("single") @db.VarChar(20)
+  filterSnapshot Json               @default("{}") @map("filter_snapshot")
+  status         String             @default("running") @db.VarChar(20)
+  resultCount    Int                @default(0) @map("result_count")
+  createdById    String             @map("created_by") @db.Uuid
+  createdAt      DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  household      Household          @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  createdBy      User               @relation("RandomPickSessionCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  results        RandomPickResult[]
+  mealPlanItems  MealPlanItem[]
+
+  @@index([householdId, createdAt(sort: Desc)], map: "idx_random_pick_sessions_household_created")
+  @@map("random_pick_sessions")
+}
+
+model RandomPickResult {
+  id              String            @id @default(uuid()) @db.Uuid
+  sessionId       String            @map("session_id") @db.Uuid
+  recipeId        String            @map("recipe_id") @db.Uuid
+  recipeVersionId String            @map("recipe_version_id") @db.Uuid
+  pickedForDate   DateTime?         @map("picked_for_date") @db.Date
+  sequenceNo      Int               @map("sequence_no")
+  decision        String            @default("pending") @db.VarChar(20)
+  reasonMeta      Json?             @map("reason_meta")
+  createdAt       DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  session         RandomPickSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  recipe          Recipe            @relation(fields: [recipeId], references: [id], onDelete: Restrict)
+  recipeVersion   RecipeVersion     @relation(fields: [recipeVersionId], references: [id], onDelete: Restrict)
+
+  @@unique([sessionId, sequenceNo], map: "uq_random_pick_results_session_sequence")
+  @@index([sessionId, decision, createdAt(sort: Desc)], map: "idx_random_pick_results_session_decision")
+  @@map("random_pick_results")
+}
+
+model ShoppingList {
+  id            String             @id @default(uuid()) @db.Uuid
+  householdId   String             @map("household_id") @db.Uuid
+  mealPlanWeekId String            @map("meal_plan_week_id") @db.Uuid
+  generatedFrom String             @default("manual") @map("generated_from") @db.VarChar(20)
+  status        String             @default("active") @db.VarChar(20)
+  versionNo     Int                @map("version_no")
+  generatedAt   DateTime           @default(now()) @map("generated_at") @db.Timestamptz(6)
+  createdById   String             @map("created_by") @db.Uuid
+  household     Household          @relation(fields: [householdId], references: [id], onDelete: Restrict)
+  mealPlanWeek  MealPlanWeek       @relation(fields: [mealPlanWeekId], references: [id], onDelete: Cascade)
+  createdBy     User               @relation("ShoppingListCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  items         ShoppingListItem[]
+
+  @@unique([mealPlanWeekId, versionNo], map: "uq_shopping_lists_week_version")
+  @@index([mealPlanWeekId, generatedAt(sort: Desc)], map: "idx_shopping_lists_week_generated")
+  @@map("shopping_lists")
+}
+
+model ShoppingListItem {
+  id               String       @id @default(uuid()) @db.Uuid
+  shoppingListId   String       @map("shopping_list_id") @db.Uuid
+  itemType         String       @map("item_type") @db.VarChar(20)
+  displayName      String       @map("display_name") @db.VarChar(100)
+  normalizedName   String       @map("normalized_name") @db.VarChar(100)
+  quantityNote     String?      @map("quantity_note") @db.VarChar(50)
+  sourceCount      Int          @default(1) @map("source_count")
+  isChecked        Boolean      @default(false) @map("is_checked")
+  sortOrder        Int          @default(0) @map("sort_order")
+  sourceRecipeRefs Json         @default("[]") @map("source_recipe_refs")
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime     @updatedAt @map("updated_at") @db.Timestamptz(6)
+  shoppingList     ShoppingList @relation(fields: [shoppingListId], references: [id], onDelete: Cascade)
+
+  @@index([shoppingListId, itemType, sortOrder], map: "idx_shopping_list_items_list_type_sort")
+  @@index([shoppingListId, isChecked], map: "idx_shopping_list_items_list_checked")
+  @@map("shopping_list_items")
 }
 
 model WechatAccount {

@@ -5,12 +5,14 @@
 ## 当前进度
 
 - 阶段 0 已完成：工程底座、统一响应 / 错误、日志、健康检查、Prisma、鉴权基础设施已落地。
-- 阶段 1 部分完成：已落地 `households`、`users`、`wechat_accounts`、`refresh_tokens`、`categories`、`tags`、`media_assets`、`recipes`、`recipe_versions`、`recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags`、`moments`、`moment_images`、`meal_plan_weeks`、`meal_plan_items` 共 16 个 Prisma 模型，并补齐四次 migration。
+- 阶段 1 部分完成：已落地 `households`、`users`、`wechat_accounts`、`refresh_tokens`、`categories`、`tags`、`media_assets`、`recipes`、`recipe_versions`、`recipe_version_steps`、`recipe_version_ingredients`、`recipe_version_tags`、`moments`、`moment_images`、`meal_plan_weeks`、`meal_plan_items`、`shopping_lists`、`shopping_list_items`、`random_pick_sessions`、`random_pick_results` 共 20 个 Prisma 模型，并补齐六次 migration。
 - 阶段 2 已完成：auth 主链路、taxonomy 的 household-scoped 查询基础设施、`schema / mapper / service / repository` 模块实现，以及分类 / 标签 API 路由均已可用。
 - 阶段 3 已完成：里程碑 A/B/C/D/E/F 已完成，recipes 域数据模型、索引、双向关系、migration、模块抽象、菜谱 CRUD、版本管理、API 路由、recipes 演示 seed、自测与阶段验收均已落地。
 - 阶段 3 补充完成：统一图片文件链路已落地，包含 COS/S3 兼容对象存储适配器、上传授权、资源登记、预览与下载能力。
 - 阶段 4 已完成：`moments / moment_images`、时光记录 CRUD、时光轴、首页最新动态、菜谱统计回填、封面回填入口和 demo seed 已落地。
 - 阶段 5 已完成：`meal_plan_weeks / meal_plan_items`、当前周菜单、指定周懒创建、菜单项 CRUD、跨桶移动、同餐次重排和 demo seed 已落地。
+- 阶段 6 已完成：`shopping_lists / shopping_list_items`、按周生成、聚合去重、勾选与备注维护、文本导出、SVG 分享图和版本归档策略已落地。
+- 阶段 7 已完成：`random_pick_sessions / random_pick_results`、随机点菜候选过滤、单抽/连抽、再来一次、接受/跳过、换版本、写入周菜单与 session 历史已落地。
 
 ## 当前已验证
 
@@ -34,6 +36,10 @@
 - `npm run dev -- --port 3148` 后通过真实 HTTP 请求验证阶段 4：`files/upload-token`、时光记录图片数校验、创建、时光轴、首页最新动态、编辑、删除、菜谱统计回填、封面回填
 - `npx prisma migrate deploy --schema prisma/schema.prisma` 已验证新增 `meal_plan_weeks / meal_plan_items` migration 可正常应用
 - `npm run dev -- --port 3148` 后通过真实 HTTP 请求验证阶段 5：当前周菜单、指定周懒创建、周一校验、周范围校验、菜谱版本绑定校验、菜单项创建、跨桶更新、同餐次重排、删除后顺序压紧、周计划数量统计
+- `npx prisma migrate deploy --schema prisma/schema.prisma` 已验证新增 `shopping_lists / shopping_list_items` migration 可正常应用
+- `npm run dev -- --port 3156` 后通过真实 HTTP 请求验证阶段 6：按周生成购物清单、详情查询、勾选/备注更新、文本导出、SVG 分享图数据返回、空菜单提示、重新生成新版本时旧版本归档与勾选备注继承
+- `npx prisma migrate deploy --schema prisma/schema.prisma` 已验证新增 `random_pick_sessions / random_pick_results` migration 可正常应用
+- `npm run dev -- --port 3157` 后通过真实 HTTP 请求验证阶段 7：single session 创建、接受结果写入周菜单并支持换版本、single redraw、skip、session 历史查询、week 7 天连抽、week 结果接受、空候选池提示
 
 ## 已完成基础能力
 
@@ -61,6 +67,8 @@
 - 已开放 files API：`/api/v1/files/upload-token`、`/api/v1/files/assets`、`/api/v1/files/:id/preview`、`/api/v1/files/:id/download`
 - 已开放 moments API：`/api/v1/recipes/:id/moments`、`/api/v1/moments/latest`、`/api/v1/moments/:id`
 - 已开放 menu-plans API：`/api/v1/menu-plans/current-week`、`/api/v1/menu-plans/weeks/:weekStartDate`、`/api/v1/menu-plans/weeks/:weekStartDate/items`、`/api/v1/menu-plans/items/:id`、`/api/v1/menu-plans/weeks/:weekStartDate/reorder`
+- 已开放 shopping-lists API：`/api/v1/shopping-lists/generate`、`/api/v1/shopping-lists/:id`、`/api/v1/shopping-lists/items/:id`、`/api/v1/shopping-lists/:id/copy-text`、`/api/v1/shopping-lists/:id/share-image`
+- 已开放 random-picks API：`/api/v1/random-picks/sessions`、`/api/v1/random-picks/sessions/:id`、`/api/v1/random-picks/sessions/:id/redraw`、`/api/v1/random-picks/sessions/:id/results/:resultId/accept`、`/api/v1/random-picks/sessions/:id/results/:resultId/skip`
 - 预留 pg-boss worker 启动结构
 - 增加 `/api/health` 健康检查接口
 
@@ -154,7 +162,7 @@ npm run dev
 说明：
 
 - `npm run prisma:seed` 会自动加载 `.env.local`。
-- seed 会补齐默认家庭、管理员、分类、标签，以及 1 条带 2 个版本、1 条时光记录和 1 周演示周菜单的数据，便于直接联调阶段 3/4/5 接口。
+- seed 会补齐默认家庭、管理员、分类、标签、多条演示菜谱/版本、1 条时光记录、1 周演示周菜单和随机点菜联调所需基础数据，便于直接联调阶段 3/4/5/6/7 接口。
 
 常用检查命令：
 
@@ -229,6 +237,16 @@ MEDIA_ALLOWED_IMAGE_TYPES=image/jpeg,image/png,image/webp
 - `PATCH /api/v1/menu-plans/items/:id`
 - `DELETE /api/v1/menu-plans/items/:id`
 - `POST /api/v1/menu-plans/weeks/:weekStartDate/reorder`
+- `POST /api/v1/shopping-lists/generate`
+- `GET /api/v1/shopping-lists/:id`
+- `PATCH /api/v1/shopping-lists/items/:id`
+- `POST /api/v1/shopping-lists/:id/copy-text`
+- `POST /api/v1/shopping-lists/:id/share-image`
+- `POST /api/v1/random-picks/sessions`
+- `GET /api/v1/random-picks/sessions/:id`
+- `POST /api/v1/random-picks/sessions/:id/redraw`
+- `POST /api/v1/random-picks/sessions/:id/results/:resultId/accept`
+- `POST /api/v1/random-picks/sessions/:id/results/:resultId/skip`
 
 文档入口：
 
@@ -309,6 +327,14 @@ backend/
         migration.sql              # 首次建库：auth + taxonomy
       20260409171000_add_recipe_domain_stage3/
         migration.sql              # 阶段3里程碑A：recipes 域表结构
+      20260422130000_add_moments_stage4/
+        migration.sql              # 阶段4：moments / moment_images
+      20260422150000_add_meal_plans_stage5/
+        migration.sql              # 阶段5：meal_plan_weeks / meal_plan_items
+      20260422170000_add_shopping_lists_stage6/
+        migration.sql              # 阶段6：shopping_lists / shopping_list_items
+      20260422190000_add_random_picks_stage7/
+        migration.sql              # 阶段7：random_pick_sessions / random_pick_results
       migration_lock.toml          # Prisma migration 锁文件
   public/                          # 静态资源目录
   src/
@@ -405,13 +431,23 @@ backend/
           files.repository.ts      # media_assets 数据访问
           files.service.ts         # 文件上传、登记、预览与下载业务逻辑
         moments/
-          README.md                # 时光记录模块占位
+          README.md                # 时光记录模块说明
         plans/
-          README.md                # 周菜单模块占位
+          README.md                # 周菜单模块说明
         shopping/
-          README.md                # 购物清单模块占位
+          README.md                # 购物清单模块说明
+          shopping.types.ts        # 购物清单 DTO 与输入类型
+          shopping.schema.ts       # 购物清单参数校验
+          shopping.mapper.ts       # 购物清单 DTO 映射
+          shopping.repository.ts   # 购物清单数据访问
+          shopping.service.ts      # 购物清单生成、导出与状态维护
         random/
-          README.md                # 随机点菜模块占位
+          README.md                # 随机点菜模块说明
+          random.types.ts          # 随机点菜 DTO 与输入类型
+          random.schema.ts         # 随机点菜参数校验
+          random.mapper.ts         # 随机点菜 DTO 映射
+          random.repository.ts     # 候选池 / session / result 数据访问
+          random.service.ts        # 单抽、连抽、重抽、接受/跳过业务逻辑
 ```
 
 ## 目录说明
@@ -426,6 +462,10 @@ backend/
 
 ## 后续开发方向
 
-- 阶段 4：实现时光记录、媒体登记、封面回填与首页动态链路
-- 阶段 5：实现周菜单与点菜台
-- 阶段 6：实现购物清单快照生成与导出
+- 阶段 4：已实现时光记录、媒体登记、封面回填与首页动态链路
+- 阶段 5：已实现周菜单与点菜台
+- 阶段 6：已实现购物清单快照生成、版本归档、勾选备注维护与导出
+- 阶段 7：已实现随机点菜规则版、重抽、换版本与写入周菜单
+- 阶段 8：待实现成员协作与权限扩展
+- 阶段 9：待完善 pg-boss 任务、监控、审计日志与幂等控制
+- 阶段 10：待补导出、推荐、节气、营养等扩展预留

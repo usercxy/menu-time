@@ -9,6 +9,7 @@ const DEFAULT_CATEGORIES = [
   { name: "Home Style", color: "#E07A5F", sortOrder: 0 },
   { name: "Soup", color: "#3A86FF", sortOrder: 1 },
   { name: "Staple", color: "#2A9D8F", sortOrder: 2 },
+  { name: "Vegetable", color: "#84A59D", sortOrder: 3 },
 ];
 
 const DEFAULT_TAGS = [
@@ -20,6 +21,140 @@ const DEFAULT_TAGS = [
 const DEMO_RECIPE_SLUG = "demo-braised-pork-ribs";
 const DEMO_MOMENT_ASSET_KEY_SUFFIX = "demo-braised-pork-ribs-moment.jpg";
 const DEMO_MEAL_PLAN_WEEK_START = "2026-04-20";
+const RANDOM_DEMO_RECIPES = [
+  {
+    slug: "demo-tomato-egg-soup",
+    name: "番茄鸡蛋汤",
+    categoryName: "Soup",
+    versionName: "家常快手版",
+    ingredientsText: "番茄 2 个、鸡蛋 2 个、葱花少许、盐 适量",
+    tips: "番茄先炒出汁，汤底会更香。",
+    tags: ["Quick", "Easy"],
+    ingredients: [
+      { sortOrder: 0, rawText: "番茄 2 个", normalizedName: "番茄", amountText: "2", unit: "个", isSeasoning: false },
+      { sortOrder: 1, rawText: "鸡蛋 2 个", normalizedName: "鸡蛋", amountText: "2", unit: "个", isSeasoning: false },
+      { sortOrder: 2, rawText: "盐 适量", normalizedName: "盐", amountText: null, unit: null, isSeasoning: true },
+    ],
+    steps: [
+      "番茄切块备用。",
+      "少油炒软番茄，加热水煮开。",
+      "淋入蛋液，撒葱花和盐调味。",
+    ],
+  },
+  {
+    slug: "demo-winter-melon-shrimp-soup",
+    name: "冬瓜虾皮汤",
+    categoryName: "Soup",
+    versionName: "清爽版",
+    ingredientsText: "冬瓜 300g、虾皮 1 小把、姜 2 片、盐 少许",
+    tips: "虾皮先冲洗，汤会更清。",
+    tags: ["Quick", "Comfort"],
+    ingredients: [
+      { sortOrder: 0, rawText: "冬瓜 300g", normalizedName: "冬瓜", amountText: "300", unit: "g", isSeasoning: false },
+      { sortOrder: 1, rawText: "虾皮 1 小把", normalizedName: "虾皮", amountText: "1", unit: "把", isSeasoning: false },
+      { sortOrder: 2, rawText: "姜 2 片", normalizedName: "姜", amountText: "2", unit: "片", isSeasoning: true },
+    ],
+    steps: [
+      "冬瓜去皮切薄片。",
+      "煮开后加入冬瓜和虾皮。",
+      "冬瓜透明后加盐即可。",
+    ],
+  },
+  {
+    slug: "demo-stir-fried-broccoli",
+    name: "清炒西兰花",
+    categoryName: "Vegetable",
+    versionName: "蒜香版",
+    ingredientsText: "西兰花 1 颗、蒜 3 瓣、盐 少许",
+    tips: "焯水后快炒，颜色更好看。",
+    tags: ["Quick", "Easy"],
+    ingredients: [
+      { sortOrder: 0, rawText: "西兰花 1 颗", normalizedName: "西兰花", amountText: "1", unit: "颗", isSeasoning: false },
+      { sortOrder: 1, rawText: "蒜 3 瓣", normalizedName: "蒜", amountText: "3", unit: "瓣", isSeasoning: true },
+      { sortOrder: 2, rawText: "盐 少许", normalizedName: "盐", amountText: null, unit: null, isSeasoning: true },
+    ],
+    steps: [
+      "西兰花掰小朵焯水。",
+      "蒜末爆香后下西兰花翻炒。",
+      "加盐调味后即可出锅。",
+    ],
+  },
+  {
+    slug: "demo-oyster-lettuce",
+    name: "蚝油生菜",
+    categoryName: "Vegetable",
+    versionName: "家常版",
+    ingredientsText: "生菜 1 棵、蒜 2 瓣、蚝油 1 勺",
+    tips: "生菜断生即可，不要炒太久。",
+    tags: ["Quick", "Easy"],
+    ingredients: [
+      { sortOrder: 0, rawText: "生菜 1 棵", normalizedName: "生菜", amountText: "1", unit: "棵", isSeasoning: false },
+      { sortOrder: 1, rawText: "蒜 2 瓣", normalizedName: "蒜", amountText: "2", unit: "瓣", isSeasoning: true },
+      { sortOrder: 2, rawText: "蚝油 1 勺", normalizedName: "蚝油", amountText: "1", unit: "勺", isSeasoning: true },
+    ],
+    steps: [
+      "热锅下蒜末爆香。",
+      "放入生菜快速翻炒。",
+      "加蚝油拌匀即可。",
+    ],
+  },
+  {
+    slug: "demo-garlic-bokchoy",
+    name: "蒜蓉小白菜",
+    categoryName: "Vegetable",
+    versionName: "清炒版",
+    ingredientsText: "小白菜 1 把、蒜 3 瓣、盐 少许",
+    tips: "梗和叶分开下锅，口感更好。",
+    tags: ["Quick", "Easy"],
+    ingredients: [
+      { sortOrder: 0, rawText: "小白菜 1 把", normalizedName: "小白菜", amountText: "1", unit: "把", isSeasoning: false },
+      { sortOrder: 1, rawText: "蒜 3 瓣", normalizedName: "蒜", amountText: "3", unit: "瓣", isSeasoning: true },
+    ],
+    steps: [
+      "小白菜洗净切段。",
+      "蒜末爆香后先下菜梗。",
+      "再下菜叶翻炒至断生。",
+    ],
+  },
+  {
+    slug: "demo-yangzhou-fried-rice",
+    name: "扬州炒饭",
+    categoryName: "Staple",
+    versionName: "家常版",
+    ingredientsText: "米饭 2 碗、鸡蛋 2 个、胡萝卜丁 少许、豌豆 少许",
+    tips: "隔夜饭更适合炒饭。",
+    tags: ["Quick", "Comfort"],
+    ingredients: [
+      { sortOrder: 0, rawText: "米饭 2 碗", normalizedName: "米饭", amountText: "2", unit: "碗", isSeasoning: false },
+      { sortOrder: 1, rawText: "鸡蛋 2 个", normalizedName: "鸡蛋", amountText: "2", unit: "个", isSeasoning: false },
+      { sortOrder: 2, rawText: "胡萝卜丁 少许", normalizedName: "胡萝卜", amountText: null, unit: null, isSeasoning: false },
+    ],
+    steps: [
+      "鸡蛋炒散备用。",
+      "下蔬菜丁炒香后加入米饭。",
+      "加入鸡蛋翻炒均匀调味。",
+    ],
+  },
+  {
+    slug: "demo-mapo-tofu",
+    name: "麻婆豆腐",
+    categoryName: "Home Style",
+    versionName: "下饭版",
+    ingredientsText: "嫩豆腐 1 盒、肉末 100g、豆瓣酱 1 勺、花椒 少许",
+    tips: "出锅前勾薄芡，口感更顺。",
+    tags: ["Comfort"],
+    ingredients: [
+      { sortOrder: 0, rawText: "嫩豆腐 1 盒", normalizedName: "豆腐", amountText: "1", unit: "盒", isSeasoning: false },
+      { sortOrder: 1, rawText: "肉末 100g", normalizedName: "肉末", amountText: "100", unit: "g", isSeasoning: false },
+      { sortOrder: 2, rawText: "豆瓣酱 1 勺", normalizedName: "豆瓣酱", amountText: "1", unit: "勺", isSeasoning: true },
+    ],
+    steps: [
+      "肉末炒散，加豆瓣酱炒香。",
+      "下豆腐轻推，加水煮入味。",
+      "出锅前撒花椒和葱花。",
+    ],
+  },
+];
 
 async function ensureDefaultHousehold() {
   const existing = await prisma.household.findFirst({
@@ -335,6 +470,106 @@ async function ensureDemoRecipe(householdId, adminId) {
   });
 }
 
+async function ensureAdditionalDemoRecipes(householdId, adminId) {
+  const categories = await prisma.category.findMany({
+    where: {
+      householdId,
+      deletedAt: null,
+    },
+  });
+  const tags = await prisma.tag.findMany({
+    where: {
+      householdId,
+      deletedAt: null,
+    },
+  });
+
+  const categoryMap = new Map(categories.map((item) => [item.name, item]));
+  const tagMap = new Map(tags.map((item) => [item.name, item]));
+
+  for (const blueprint of RANDOM_DEMO_RECIPES) {
+    const existing = await prisma.recipe.findFirst({
+      where: {
+        householdId,
+        slug: blueprint.slug,
+        deletedAt: null,
+      },
+    });
+
+    if (existing) {
+      continue;
+    }
+
+    const category = categoryMap.get(blueprint.categoryName);
+    const tagIds = blueprint.tags
+      .map((tagName) => tagMap.get(tagName)?.id)
+      .filter(Boolean);
+
+    if (!category) {
+      throw new Error(`Missing category for demo random recipe: ${blueprint.categoryName}`);
+    }
+
+    await prisma.$transaction(async (tx) => {
+      const recipe = await tx.recipe.create({
+        data: {
+          householdId,
+          name: blueprint.name,
+          slug: blueprint.slug,
+          createdById: adminId,
+          versionCount: 0,
+          momentCount: 0,
+          coverSource: "none",
+          status: "active",
+        },
+      });
+
+      const version = await tx.recipeVersion.create({
+        data: {
+          householdId,
+          recipeId: recipe.id,
+          versionNumber: 1,
+          versionName: blueprint.versionName,
+          categoryId: category.id,
+          ingredientsText: blueprint.ingredientsText,
+          tips: blueprint.tips,
+          diffSummaryText: null,
+          diffSummaryJson: null,
+          sourceVersionId: null,
+          isMajor: true,
+          createdById: adminId,
+          ingredients: {
+            create: blueprint.ingredients.map((ingredient) => ({
+              ...ingredient,
+              parseSource: "manual",
+            })),
+          },
+          steps: {
+            create: blueprint.steps.map((content, index) => ({
+              sortOrder: index,
+              content,
+            })),
+          },
+          tagLinks: {
+            create: tagIds.map((tagId) => ({
+              tagId,
+            })),
+          },
+        },
+      });
+
+      await tx.recipe.update({
+        where: {
+          id: recipe.id,
+        },
+        data: {
+          currentVersionId: version.id,
+          versionCount: 1,
+        },
+      });
+    });
+  }
+}
+
 async function ensureDemoMoment(householdId, adminId, recipeId) {
   const existing = await prisma.moment.findFirst({
     where: {
@@ -542,6 +777,7 @@ async function main() {
   await ensureDefaultCategories(household.id);
   await ensureDefaultTags(household.id);
   const demoRecipe = await ensureDemoRecipe(household.id, admin.id);
+  await ensureAdditionalDemoRecipes(household.id, admin.id);
   const demoMoment = await ensureDemoMoment(household.id, admin.id, demoRecipe.recipeId);
   const demoMealPlan = await ensureDemoMealPlan(household.id, admin.id, demoRecipe.recipeId);
 
