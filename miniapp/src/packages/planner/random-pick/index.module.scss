@@ -73,21 +73,31 @@
 
 .modePill,
 .filterChip,
-.primaryAction,
-.secondaryAction,
 .ghostAction,
 .decisionPill,
 .decisionPillMuted,
 .pickerField,
 .pickerFieldWide,
 .startAction {
-  min-height: 56px;
+  min-height: 72px;
   padding: 0 20px;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 22px;
+  font-weight: 700;
+}
+
+.primaryAction,
+.secondaryAction {
+  min-height: 88px;
+  padding: 0 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
   font-weight: 700;
 }
 
@@ -212,6 +222,10 @@
 }
 
 .recipeName {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   color: theme('color-on-surface');
   font-size: 34px;
   font-weight: 700;
@@ -229,7 +243,11 @@
 
 .resultActions {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.resultActions > view:first-child {
+  grid-column: 1 / -1;
 }
 
 @keyframes roll-pulse {

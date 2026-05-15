@@ -15,7 +15,7 @@ page {
 
 .page-shell {
   min-height: 100vh;
-  padding: 0 32px 64px;
+  padding: 0 32px calc(112px + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -37,11 +37,13 @@ page {
 }
 
 .editorial-title {
+  display: block;
+  overflow-wrap: anywhere;
   font-size: 48px;
   font-weight: 700;
   line-height: 1.2;
   color: theme('color-on-surface');
-  font-family: "Noto Serif SC", serif;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 }
 
 .section-title {
@@ -83,6 +85,11 @@ page {
 }
 
 .chip {
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding: 12px 22px;
   border-radius: theme('radius-pill');
   background: theme('color-primary-container');
@@ -137,6 +144,10 @@ page {
 }
 
 .recipe-name {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 34px;
   font-weight: 700;
   color: theme('color-text-main');
@@ -165,6 +176,10 @@ page {
 
 .menu-slot__title,
 .profile-link__title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 30px;
   font-weight: 700;
   color: theme('color-text-main');
@@ -172,8 +187,30 @@ page {
 
 .menu-slot__subtitle,
 .profile-link__subtitle {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
   color: theme('color-text-muted');
   font-size: 24px;
+}
+
+.menu-slot__meta {
+  min-width: 0;
+}
+
+.text-ellipsis {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-two-lines {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .stat-card {

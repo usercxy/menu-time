@@ -162,6 +162,7 @@ export default function RecipeDetailPage() {
             className={styles.heroImage}
             mode="aspectFill"
             src={getSafeImageUrl(detail.coverImageUrl, DEFAULT_RECIPE_COVER_URL)}
+            lazyLoad
           />
           <View className={styles.heroOverlay}>
             <Text className="eyebrow">Recipe Archive</Text>
@@ -448,6 +449,7 @@ export default function RecipeDetailPage() {
                           key={image.id}
                           mode="aspectFill"
                           src={getSafeImageUrl(image.assetUrl, DEFAULT_RECIPE_COVER_URL)}
+                          lazyLoad
                           onClick={() =>
                             isUsableImageUrl(image.assetUrl)
                               ? Taro.previewImage({

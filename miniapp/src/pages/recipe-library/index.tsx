@@ -15,7 +15,7 @@ import { recipeService } from '@/services/modules/recipe'
 import { navigateToRoute } from '@/utils/navigation'
 import styles from './index.module.scss'
 
-const PAGE_SIZE = 2
+const PAGE_SIZE = 10
 const RECIPE_LIBRARY_VIEW_MODE_KEY = 'recipe-library-view-mode'
 
 type RecipeViewMode = 'list' | 'grid'
@@ -60,6 +60,13 @@ export default function RecipeLibraryPage() {
 
   const result = recipesQuery.data
   const totalPages = result ? Math.max(1, Math.ceil(result.total / result.pageSize)) : 1
+  const paginationLocked = recipesQuery.isFetching
+
+  useEffect(() => {
+    if (result && page > totalPages) {
+      setPage(totalPages)
+    }
+  }, [page, result, totalPages])
 
   return (
     <PageContainer title="菜谱库" subtitle="发现你的家传味道">
@@ -97,20 +104,21 @@ export default function RecipeLibraryPage() {
               className={styles.searchInput}
               placeholder="搜索味蕾记忆..."
               value={keyword}
+              cursorSpacing={96}
               onInput={(event) => setKeyword(event.detail.value)}
             />
-            <View
-              className={styles.createAction}
-              onClick={() => navigateToRoute(routes.recipeEdit)}
-            >
-              <SvgIcon
-                className={styles.createActionIcon}
-                name="jiahao"
-                size={20}
-                color={svgIconColors.onPrimary}
-              />
-              <Text className={styles.createActionLabel}>新建</Text>
-            </View>
+          </View>
+          <View
+            className={styles.createAction}
+            onClick={() => navigateToRoute(routes.recipeEdit)}
+          >
+            <SvgIcon
+              className={styles.createActionIcon}
+              name="jiahao"
+              size={20}
+              color={svgIconColors.onPrimary}
+            />
+            <Text className={styles.createActionLabel}>新建菜谱</Text>
           </View>
         </View>
 
@@ -181,7 +189,7 @@ export default function RecipeLibraryPage() {
               <View
                 className={`${styles.paginationAction} ${page === 1 ? styles.paginationActionDisabled : ''}`}
                 onClick={() => {
-                  if (page > 1) {
+                  if (page > 1 && !paginationLocked) {
                     setPage((current) => current - 1)
                   }
                 }}
@@ -192,17 +200,17 @@ export default function RecipeLibraryPage() {
                   size={20}
                   color={svgIconColors.primary}
                 />
-                <Text>上一页</Text>
+                <Text>{paginationLocked && page > 1 ? '加载中' : '上一页'}</Text>
               </View>
               <View
                 className={`${styles.paginationAction} ${!result.hasMore ? styles.paginationActionDisabled : ''}`}
                 onClick={() => {
-                  if (result.hasMore) {
+                  if (result.hasMore && !paginationLocked) {
                     setPage((current) => current + 1)
                   }
                 }}
               >
-                <Text>下一页</Text>
+                <Text>{paginationLocked && result.hasMore ? '加载中' : '下一页'}</Text>
                 <SvgIcon
                   className={styles.paginationIcon}
                   name="youjiantou"

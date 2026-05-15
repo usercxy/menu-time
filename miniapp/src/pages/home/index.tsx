@@ -6,6 +6,7 @@ import { SvgIcon } from '@/components/base/SvgIcon'
 import { svgIconColors } from '@/components/base/SvgIcon/iconColors'
 import { routes } from '@/constants/routes'
 import { PageContainer } from '@/components/base/PageContainer'
+import { EmptyState } from '@/components/base/EmptyState'
 import { ErrorState } from '@/components/base/ErrorState'
 import { LoadingState } from '@/components/base/LoadingState'
 import { useSessionQuery } from '@/features/auth/query'
@@ -45,9 +46,9 @@ export default function HomePage() {
 
   const cardStyles = useMemo(() => {
     return latestMoments.map((_, i) => ({
-      transform: `rotate(${i % 2 === 0 ? (Math.random() * -2 - 0.5) : (Math.random() * 2 + 0.5)}deg)`,
-      marginLeft: i % 2 === 0 ? '0' : '32px',
-      marginRight: i % 2 === 0 ? '32px' : '0'
+      transform: `rotate(${i % 2 === 0 ? '-0.6deg' : '0.6deg'})`,
+      marginLeft: i % 2 === 0 ? '0' : '16px',
+      marginRight: i % 2 === 0 ? '16px' : '0'
     }))
   }, [latestMoments])
 
@@ -131,7 +132,7 @@ export default function HomePage() {
             onAction={() => void latestMomentsQuery.refetch()}
           />
         ) : !latestMoments.length ? (
-          <ErrorState
+          <EmptyState
             title="还没有最新食光"
             description="去菜谱详情记下一笔，首页就会把新的回忆钉在这里。"
             actionText="去菜谱库"
@@ -158,6 +159,7 @@ export default function HomePage() {
                     mode="aspectFill"
                     src={getSafeImageUrl(moment.coverImageUrl, DEFAULT_MEMORY_COVER_URL)}
                     style={{ height: index % 2 === 0 ? '480px' : '400px' }}
+                    lazyLoad
                   />
                   <View
                     className={styles.memoryDateBadge}

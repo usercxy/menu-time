@@ -324,6 +324,7 @@ export default function RandomPickPage() {
               value={draft.note}
               disabled={disabled}
               placeholder="加入点菜台的备注"
+              cursorSpacing={128}
               onInput={(event) => updateDraft(result.id, { note: event.detail.value })}
             />
           </View>
@@ -400,13 +401,13 @@ export default function RandomPickPage() {
             </View>
             <View className={styles.fieldBlock}>
               <Text className={styles.fieldLabel}>排除最近 N 天</Text>
-              <Input className={styles.textInput} type="number" value={excludeRecentDays} onInput={(event) => setExcludeRecentDays(event.detail.value)} />
+              <Input className={styles.textInput} type="number" value={excludeRecentDays} cursorSpacing={120} onInput={(event) => setExcludeRecentDays(event.detail.value)} />
             </View>
           </View>
 
           <View className={styles.fieldBlock}>
             <Text className={styles.fieldLabel}>成员偏好标签</Text>
-            <Input className={styles.textInput} placeholder="例如：孩子爱吃, 清淡" value={preferredMemberTagsInput} onInput={(event) => setPreferredMemberTagsInput(event.detail.value)} />
+            <Input className={styles.textInput} placeholder="例如：孩子爱吃, 清淡" value={preferredMemberTagsInput} cursorSpacing={120} onInput={(event) => setPreferredMemberTagsInput(event.detail.value)} />
           </View>
 
           <View className={styles.optionRow} onClick={() => setExcludeCurrentWeekPlanned((current) => !current)}>

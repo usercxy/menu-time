@@ -110,6 +110,11 @@
 }
 
 .filterChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  box-sizing: border-box;
   padding: 16px 32px;
   border-radius: theme('radius-pill');
   background: theme('color-surface-container-highest');
@@ -287,9 +292,15 @@
 }
 
 .footerActions {
+  position: sticky;
+  bottom: 0;
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 16px;
+  margin: 0 -32px -36px;
+  padding: 20px 32px calc(20px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(255, 251, 245, 0), theme('color-surface-container-lowest') 28%);
+  z-index: 10;
 }
 
 .submitButton {

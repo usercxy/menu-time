@@ -18,6 +18,7 @@ export default function SettingsPage() {
 
   const tokenBundle = storedTokenBundle || getTokenBundle()
   const authDebugDisabled = envConfig.isMockScopeEnabled('auth')
+  const pageSubtitle = envConfig.isDev ? '环境与调试信息' : '账号与应用信息'
 
   const showToast = (title: string, icon: 'none' | 'success' = 'none') =>
     Taro.showToast({
@@ -90,46 +91,48 @@ export default function SettingsPage() {
   }
 
   return (
-    <PageContainer title="设置" subtitle="环境与调试信息" showBack>
+    <PageContainer title="设置" subtitle={pageSubtitle} showBack>
       <View className="page-stack">
-        <View className="surface-card">
-          <Text className="section-title">开发环境</Text>
-          <View className="page-stack">
-            <View className="menu-slot">
-              <View className="menu-slot__meta">
-                <Text className="menu-slot__title">构建模式</Text>
-                <Text className="menu-slot__subtitle">{envConfig.modeName}</Text>
+        {envConfig.isDev ? (
+          <View className="surface-card">
+            <Text className="section-title">开发环境</Text>
+            <View className="page-stack">
+              <View className="menu-slot">
+                <View className="menu-slot__meta">
+                  <Text className="menu-slot__title">构建模式</Text>
+                  <Text className="menu-slot__subtitle">{envConfig.modeName}</Text>
+                </View>
               </View>
-            </View>
-            <View className="menu-slot">
-              <View className="menu-slot__meta">
-                <Text className="menu-slot__title">API 地址</Text>
-                <Text className="menu-slot__subtitle">{envConfig.apiBaseUrl}</Text>
+              <View className="menu-slot">
+                <View className="menu-slot__meta">
+                  <Text className="menu-slot__title">API 地址</Text>
+                  <Text className="menu-slot__subtitle">{envConfig.apiBaseUrl}</Text>
+                </View>
               </View>
-            </View>
-            <View className="menu-slot">
-              <View className="menu-slot__meta">
-                <Text className="menu-slot__title">Mock 开关</Text>
-                <Text className="menu-slot__subtitle">{envConfig.enableMock ? '已开启' : '已关闭'}</Text>
+              <View className="menu-slot">
+                <View className="menu-slot__meta">
+                  <Text className="menu-slot__title">Mock 开关</Text>
+                  <Text className="menu-slot__subtitle">{envConfig.enableMock ? '已开启' : '已关闭'}</Text>
+                </View>
               </View>
-            </View>
-            <View className="menu-slot">
-              <View className="menu-slot__meta">
-                <Text className="menu-slot__title">Mock 范围</Text>
-                <Text className="menu-slot__subtitle">
-                  {envConfig.mockScopes.length ? envConfig.mockScopes.join(', ') : '全部真实接口'}
-                </Text>
+              <View className="menu-slot">
+                <View className="menu-slot__meta">
+                  <Text className="menu-slot__title">Mock 范围</Text>
+                  <Text className="menu-slot__subtitle">
+                    {envConfig.mockScopes.length ? envConfig.mockScopes.join(', ') : '全部真实接口'}
+                  </Text>
+                </View>
               </View>
             </View>
           </View>
-        </View>
+        ) : null}
 
         <View className="surface-card">
           <Text className="section-title">登录状态</Text>
           <View className="page-stack">
             <View className="menu-slot">
               <View className="menu-slot__meta">
-                <Text className="menu-slot__title">当前会话状态</Text>
+                <Text className="menu-slot__title">会话状态</Text>
                 <Text className="menu-slot__subtitle">{status}</Text>
               </View>
             </View>
@@ -141,22 +144,75 @@ export default function SettingsPage() {
             </View>
             <View className="menu-slot">
               <View className="menu-slot__meta">
-                <Text className="menu-slot__title">Access Token</Text>
-                <Text className="menu-slot__subtitle">
-                  {tokenBundle?.accessToken ? `${tokenBundle.accessToken.slice(0, 18)}...` : '未持有'}
-                </Text>
+                <Text className="menu-slot__title">家庭空间</Text>
+                <Text className="menu-slot__subtitle">{session?.householdName || '暂无家庭空间'}</Text>
               </View>
             </View>
             <View className="menu-slot">
               <View className="menu-slot__meta">
-                <Text className="menu-slot__title">Refresh Token</Text>
-                <Text className="menu-slot__subtitle">
-                  {tokenBundle?.refreshToken ? `${tokenBundle.refreshToken.slice(0, 18)}...` : '未持有'}
-                </Text>
+                <Text className="menu-slot__title">账号权限</Text>
+                <Text className="menu-slot__subtitle">{session?.role === 'admin' ? '管理员' : '成员'}</Text>
               </View>
             </View>
+            {envConfig.isDev ? (
+              <>
+                <View className="menu-slot">
+                  <View className="menu-slot__meta">
+                    <Text className="menu-slot__title">Access Token</Text>
+                    <Text className="menu-slot__subtitle">
+                      {tokenBundle?.accessToken ? `${tokenBundle.accessToken.slice(0, 18)}...` : '未持有'}
+                    </Text>
+                  </View>
+                </View>
+                <View className="menu-slot">
+                  <View className="menu-slot__meta">
+                    <Text className="menu-slot__title">Refresh Token</Text>
+                    <Text className="menu-slot__subtitle">
+                      {tokenBundle?.refreshToken ? `${tokenBundle.refreshToken.slice(0, 18)}...` : '未持有'}
+                    </Text>
+                  </View>
+                </View>
+              </>
+            ) : null}
           </View>
         </View>
+
+        {!envConfig.isDev ? (
+          <>
+            <View className="surface-card">
+              <Text className="section-title">缓存与数据</Text>
+              <View className="page-stack">
+                <View className="menu-slot">
+                  <View className="menu-slot__meta">
+                    <Text className="menu-slot__title">本地登录态</Text>
+                    <Text className="menu-slot__subtitle">如遇登录异常，可清空后重新进入小程序。</Text>
+                  </View>
+                </View>
+                <View className="secondary-button" onClick={() => void handleClearAuthState()}>
+                  <Text>清空本地登录态</Text>
+                </View>
+              </View>
+            </View>
+
+            <View className="surface-card">
+              <Text className="section-title">关于食光记</Text>
+              <View className="page-stack">
+                <View className="menu-slot">
+                  <View className="menu-slot__meta">
+                    <Text className="menu-slot__title">隐私与数据</Text>
+                    <Text className="menu-slot__subtitle">仅展示业务必要信息；调试地址与 token 不会在生产设置页展示。</Text>
+                  </View>
+                </View>
+                <View className="menu-slot">
+                  <View className="menu-slot__meta">
+                    <Text className="menu-slot__title">当前版本</Text>
+                    <Text className="menu-slot__subtitle">MVP 体验版</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          </>
+        ) : null}
 
         {envConfig.isDev ? (
           <View className="surface-card">

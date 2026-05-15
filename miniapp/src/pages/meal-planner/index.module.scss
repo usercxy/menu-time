@@ -43,20 +43,30 @@
 
 .weekSwitchButton,
 .weekBadge,
-.primaryAction,
-.secondaryAction,
 .inlineAction,
 .mealEdit,
 .readonlyField,
 .pickerField,
 .optionChip {
-  min-height: 56px;
+  min-height: 72px;
   padding: 0 20px;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 22px;
+  font-weight: 700;
+}
+
+.primaryAction,
+.secondaryAction {
+  min-height: 88px;
+  padding: 0 28px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
   font-weight: 700;
 }
 
@@ -236,6 +246,14 @@
   color: theme('color-on-surface');
   font-size: 28px;
   font-weight: 700;
+}
+
+.slotTitle,
+.mealTitle {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .optionWrap {

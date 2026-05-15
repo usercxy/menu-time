@@ -373,6 +373,7 @@ export default function ShoppingListPage() {
                       className={styles.noteInput}
                       placeholder="数量备注，例如 500g / 一把"
                       value={noteValue}
+                      cursorSpacing={120}
                       onInput={(event) => {
                         setNoteDrafts((current) => ({
                           ...current,

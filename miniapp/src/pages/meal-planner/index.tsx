@@ -578,6 +578,7 @@ export default function MealPlannerPage() {
                 maxlength={200}
                 placeholder="比如：周三晚饭、孩子爱吃、想试新版"
                 value={composer.note}
+                cursorSpacing={128}
                 onInput={(event) =>
                   setComposer((current) => ({
                     ...current,

@@ -60,12 +60,22 @@
 
 .statusPill,
 .statusPillMuted,
-.primaryAction,
-.secondaryAction,
-.dangerAction,
 .noteSave,
 .tabItem {
-  min-height: 56px;
+  min-height: 72px;
+  padding: 0 20px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.primaryAction,
+.secondaryAction,
+.dangerAction {
+  min-height: 88px;
   padding: 0 20px;
   border-radius: 999px;
   display: inline-flex;
@@ -134,7 +144,11 @@
 }
 
 .actionGrid {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.actionGrid > view:last-child {
+  grid-column: 1 / -1;
 }
 
 .itemCard {
@@ -172,6 +186,10 @@
 }
 
 .itemName {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: theme('color-on-surface');
   font-size: 30px;
   font-weight: 700;
@@ -188,7 +206,7 @@
 
 .noteInput {
   flex: 1;
-  min-height: 64px;
+  min-height: 80px;
   box-sizing: border-box;
   padding: 0 22px;
   border-radius: 20px;

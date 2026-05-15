@@ -12,6 +12,7 @@ interface TopNavBarProps {
   rightAction?: ReactNode
   statusBarHeight: number
   navBarHeight: number
+  navSafeRight: number
 }
 
 function getLeadingIconName(title: string) {
@@ -36,12 +37,16 @@ export function TopNavBar({
   showBack,
   rightAction,
   statusBarHeight,
-  navBarHeight
+  navBarHeight,
+  navSafeRight
 }: TopNavBarProps) {
   const leadingIconName = getLeadingIconName(title)
 
   return (
-    <View className={styles.bar} style={{ paddingTop: `${statusBarHeight}px` }}>
+    <View
+      className={styles.bar}
+      style={{ paddingTop: `${statusBarHeight}px`, paddingRight: `${navSafeRight}px` }}
+    >
       <View className={styles.inner} style={{ height: `${navBarHeight}px` }}>
         <View className={styles.left}>
           {showBack ? (

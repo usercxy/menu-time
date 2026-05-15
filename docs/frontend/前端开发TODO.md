@@ -444,6 +444,62 @@
 - 管理员和成员权限表现一致且可解释。
 - 能完成一次完整真机业务闭环演示。
 
+### 阶段 7 补充：UI / UX 真机适配专项 TODO（2026-05-09 盘点）
+
+本节基于 `miniapp/` 当前 UI 源码做静态走查整理。2026-05-15 已完成 P0 代码调整，真机专项仍需复测；优先级以“真机上是否会遮挡、误触、难以完成核心操作”为主要依据。
+
+**P0 代码调整进度（2026-05-15）**
+
+- [x] 自定义导航已读取微信胶囊位置并为右侧胶囊预留安全区域；标题/副标题接入单行省略，避免长标题或右侧操作撞胶囊。
+- [x] 页面通用底部留白和首页 FAB 已叠加 `env(safe-area-inset-bottom)`，为 tabBar、手势条和底部导航预留空间。
+- [x] 核心按钮、次级操作、chip 和备注输入保存按钮已按真机触控热区抬升到 72rpx/88rpx 规格。
+- [x] 点菜台备注、随机点菜备注/筛选输入、购物清单备注等关键输入已补 `cursorSpacing`；菜谱编辑底部操作栏接入 sticky + 安全区。
+- [x] `ConfirmDialog` 和分类/标签底部 sheet 层级已高于自定义导航；底部 sheet 已接入最大高度、内部滚动和底部安全区。
+- [ ] P0 真机复测：仍需在 iOS 刘海屏、全面屏 Android、微信开发者工具模拟器上复核顶部胶囊、底部安全区、键盘弹起和弹窗滚动。
+
+**P1 代码调整进度（2026-05-15）**
+
+- [x] 菜谱库搜索区已把“新建菜谱”拆成独立主按钮，搜索输入在小屏下优先保留输入宽度。
+- [x] 购物清单和随机点菜的三列操作区已改为主次分层的两列/整行动作布局，降低窄屏挤压和误触风险。
+- [x] 已补全通用单行/两行省略工具，并为导航、菜谱卡片、点菜台菜名、购物清单条目、随机结果、设置页技术字段等长文本增加截断/换行策略。
+- [x] 菜谱库分页从调试规格改为每页 10 条，并在翻页请求中增加加载文案和防重复翻页保护。
+- [x] 字体策略已从未加载的 `"Noto Serif SC"` / `"Plus Jakarta Sans"` 统一回退到小程序稳定系统中文字体栈。
+- [x] 首页/详情/菜谱卡片图片已接入懒加载；首页时光卡旋转幅度收敛；大面积毛玻璃效果已降级，降低低端 Android 滚动压力。
+- [ ] P1 真机复测：仍需在窄屏机型和低端 Android 上复核搜索区、三列操作替代布局、长文本截断和滚动性能。
+
+**P2 代码调整进度（2026-05-15）**
+
+- [x] 首页“无最新食光”已从 `ErrorState` 改为 `EmptyState`，空态和异常态语义分离。
+- [x] “我的”页已移除硬编码头像、统计数字和家族文案；头像改为默认图标，昵称/家庭空间/角色来自 session，统计模块改为真实接口接入前的占位说明。
+- [x] 家族协作入口已改为“即将开放”不可点击状态，不再展示像真实功能的入口。
+- [x] 设置页生产态只展示账号、家庭空间、权限、缓存、隐私与关于信息；API 地址、Mock 范围、token 片段和调试按钮仅在开发态展示。
+- [x] “我的”页核心可点击项已接入按压反馈，未开放入口有禁用态；全局按钮已有统一 pressed/disabled/loading 样式约定。
+- [ ] P2 真机复测：仍需复核生产构建设置页、匿名/成员/管理员文案和未开放入口的可解释性。
+
+| 优先级 | 待调整问题 | 位置 | TODO |
+| --- | --- | --- | --- |
+| P0（代码已完成，待真机复测） | 自定义导航只计算高度，未按微信胶囊 `left/right` 约束标题和右侧操作，长标题或右上按钮可能撞到胶囊。 | `miniapp/src/app.config.ts`、`miniapp/src/components/base/PageContainer/index.tsx`、`miniapp/src/components/base/TopNavBar/index.module.scss` | 重构 `TopNavBar` 胶囊避让：读取 `getMenuButtonBoundingClientRect()` 的 `left/right/top/height`，限制标题区最大宽度；右侧操作区避免进入胶囊区域；长标题增加单行省略或两行降级策略。 |
+| P0（代码已完成，待真机复测） | 页面底部只留固定 `64px`，首页 FAB 固定 `bottom: 64px`，未叠加安全区和 tabBar 空间，iPhone 手势条或 Android 底部导航下可能贴边/遮挡。 | `miniapp/src/app.scss`、`miniapp/src/pages/home/index.module.scss` | 为 `page-shell`、固定 FAB、底部操作区统一接入 `env(safe-area-inset-bottom)`；tab 页底部按 tabBar/FAB 场景增加额外留白；验证 iPhone 刘海屏、全面屏 Android 和微信开发者工具模拟器。 |
+| P0（代码已完成，待真机复测） | 大量按钮/chip 最小高度为 `56px`（Taro 转 rpx 后真机约 28 CSS px），点击热区偏小，容易误触。 | `miniapp/src/pages/meal-planner/index.module.scss`、`miniapp/src/packages/planner/random-pick/index.module.scss`、`miniapp/src/packages/planner/shopping-list/index.module.scss`、`miniapp/src/styles/mixins.scss` | 建立统一触控尺寸规范：主按钮不低于 `88rpx`，常用次级操作不低于 `72-80rpx`，小 chip 只用于筛选展示时也要扩大点击 padding；封装或统一复用 `primary/secondary/pill` 样式。 |
+| P0（代码已完成，待真机复测） | 表单输入时缺少键盘避让，点菜台编辑器、随机点菜备注、购物清单备注等场景可能被键盘遮住保存按钮或输入框。 | `miniapp/src/pages/meal-planner/index.tsx`、`miniapp/src/packages/planner/random-pick/index.tsx`、`miniapp/src/packages/planner/shopping-list/index.tsx`、`miniapp/src/packages/recipe/edit/index.tsx` | 为关键 `Input/Textarea` 增加合理 `cursorSpacing`；长表单引入底部 sticky 操作栏并叠加安全区；保存按钮避免放在键盘可遮挡区域；真机验证 iOS/Android 键盘弹起、收起和滚动恢复。 |
+| P0（代码已完成，待真机复测） | 弹窗层级和底部弹层安全区不足：`ConfirmDialog` 的 `z-index` 低于顶部导航，分类/标签 sheet 没有最大高度滚动和底部安全区。 | `miniapp/src/components/base/ConfirmDialog/index.module.scss`、`miniapp/src/packages/profile/components/TaxonomyManager/index.module.scss` | 统一 overlay 层级高于导航；底部 sheet 增加 `max-height`、内部滚动、`padding-bottom: calc(... + env(safe-area-inset-bottom))`；键盘弹起时确认底部按钮可见。 |
+| P1（代码已完成，待真机复测） | 菜谱库搜索框同时放 icon、输入框和“新建”按钮，小屏下输入区域过窄。 | `miniapp/src/pages/recipe-library/index.tsx`、`miniapp/src/pages/recipe-library/index.module.scss` | 将“新建”改为独立主按钮或浮动按钮；搜索框保留输入能力优先；小屏下按钮换行或放到搜索区下方。 |
+| P1（代码已完成，待真机复测） | 购物清单、随机点菜存在三列操作区，长文案或窄屏会挤压，误触风险高。 | `miniapp/src/packages/planner/shopping-list/index.tsx`、`miniapp/src/packages/planner/shopping-list/index.module.scss`、`miniapp/src/packages/planner/random-pick/index.tsx`、`miniapp/src/packages/planner/random-pick/index.module.scss` | 调整操作层级：主操作独占一行，次级操作两列或横向滚动；危险操作与主操作拉开距离；长文案按钮改短文案并补说明文案。 |
+| P1（代码已完成，待真机复测） | 长文本缺少统一截断策略，长菜名、长标签、API 地址、token 片段可能撑开布局。 | `miniapp/src/components/base/TopNavBar/index.module.scss`、`miniapp/src/components/recipe/RecipeCard/index.module.scss`、`miniapp/src/packages/profile/settings/index.tsx`、`miniapp/src/pages/meal-planner/index.tsx` | 建立 `text-ellipsis` / 多行省略工具类；导航标题、卡片标题、标签串、设置页技术字段分别定义最大行数；必要时拆为可复制详情或调试态展示。 |
+| P1（代码已完成，待真机复测） | 菜谱库每页仅 2 条，真机浏览频繁点“下一页”，列表体验偏调试态。 | `miniapp/src/pages/recipe-library/index.tsx` | 将 `PAGE_SIZE` 调整到真实浏览规格，或改为触底加载/无限滚动；补加载中、防重复翻页、空结果回到第一页等交互。 |
+| P1（代码已完成，待真机复测） | 字体声明使用 `"Noto Serif SC"` / `"Plus Jakarta Sans"`，但未看到字体加载或资源引入，真机大概率回退系统字体，设计一致性不可控。 | `miniapp/src/app.scss`、`miniapp/src/styles/mixins.scss`、各页面 `*.module.scss` | 决定字体策略：要么通过小程序可用字体加载方案接入，要么统一改为系统字体下的字号/字重方案；避免依赖未加载字体决定排版高度。 |
+| P1（代码已完成，待真机复测） | 毛玻璃、阴影、大图和首页卡片旋转较多，低端 Android 微信滚动可能掉帧。 | `miniapp/src/components/base/TopNavBar/index.module.scss`、`miniapp/src/packages/recipe/detail/index.module.scss`、`miniapp/src/pages/home/index.tsx`、`miniapp/src/pages/home/index.module.scss` | 降级 `backdrop-filter` 使用范围；减少大阴影层数和大面积透明叠层；图片使用合适尺寸与懒加载策略；真机用低端 Android 做滚动性能走查。 |
+| P2（代码已完成，待真机复测） | 首页“无最新食光”使用 `ErrorState`，空态和异常态语义混淆。 | `miniapp/src/pages/home/index.tsx` | 将无数据场景改为 `EmptyState`，错误才使用 `ErrorState`；统一各页面空态、错误态、加载态文案风格。 |
+| P2（代码已完成，待真机复测） | “我的”页有硬编码头像、统计数和家族文案，真机用户会感到数据不真实。 | `miniapp/src/pages/my/index.tsx` | 接真实统计接口或隐藏统计模块；头像使用微信头像/默认头像；家族协作未上线时用“即将开放”状态表达，不展示像真实功能的入口。 |
+| P2（代码已完成，待真机复测） | 设置页展示 API 地址、token 片段等开发信息，生产体验和安全感不足。 | `miniapp/src/packages/profile/settings/index.tsx` | 将环境/API/token 信息限制在开发态；生产设置页只保留账号、缓存、隐私、关于等用户可理解项。 |
+| P2（代码已完成，待真机复测） | 可点击元素多用 `View`，pressed、disabled、loading、震动反馈不统一。 | 全局按钮与卡片交互：`miniapp/src/styles/mixins.scss`、各页面 `*.tsx` | 抽象统一 `Pressable` / `AppButton` 规范或样式约定；统一 `hover-class`、禁用态、防重复点击、loading 文案和关键操作震动反馈。 |
+
+**建议执行顺序**
+
+1. 先完成 P0：导航胶囊避让、底部安全区、触控尺寸、键盘避让、弹层层级。
+2. 再完成 P1：小屏布局、长文本、列表分页、字体策略、低端机性能。
+3. 最后完成 P2：空态语义、真实数据感、生产设置页、交互组件统一。
+
 ## Test Plan
 
 ### 当前构建与规范校验（2026-05-09）

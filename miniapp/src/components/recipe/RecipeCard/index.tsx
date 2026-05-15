@@ -28,6 +28,7 @@ export function RecipeCard({ recipe, viewMode, onClick }: RecipeCardProps) {
           className={styles.coverImage}
           mode="aspectFill"
           src={getSafeImageUrl(recipe.coverImageUrl, DEFAULT_RECIPE_COVER_URL)}
+          lazyLoad
         />
         <View className={styles.versionBadge}>
           <Text>{currentVersionLabel}</Text>

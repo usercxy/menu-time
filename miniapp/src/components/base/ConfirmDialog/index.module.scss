@@ -6,16 +6,18 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 40;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: 24px 24px calc(24px + env(safe-area-inset-bottom));
   background: theme('color-overlay-scrim');
 }
 
 .panel {
   width: 100%;
+  max-height: 82vh;
+  box-sizing: border-box;
   border-radius: 28px;
   background: theme('color-surface-container-lowest');
   padding: 28px;
@@ -41,6 +43,7 @@
   display: flex;
   gap: 12px;
   margin-top: 24px;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .action {

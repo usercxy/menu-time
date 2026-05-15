@@ -23,7 +23,16 @@
   height: 100%;
   border-radius: 50%;
   border: 4px solid theme('color-primary-container');
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: theme('color-primary-container');
   overflow: hidden;
+}
+
+.avatarIcon {
+  width: 52px;
+  height: 52px;
 }
 
 .roleBadge {
@@ -39,11 +48,20 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.profileMeta {
+  flex: 1;
+  min-width: 0;
+}
+
 .nickName {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 40px;
   font-weight: 700;
   color: theme('color-on-surface');
-  font-family: "Noto Serif SC", serif;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   margin-bottom: 4px;
 }
 
@@ -63,51 +81,43 @@
   border-radius: 999px;
   font-size: 20px;
   font-weight: 600;
+  max-width: 100%;
 }
 
 .familyBadgeIcon {
   width: 26px;
   height: 26px;
+  flex-shrink: 0;
 }
 
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+.familyBadge text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 32px;
+  border-radius: 24px;
+  background: theme('color-surface-container-lowest');
+  border: 1px dashed theme('color-outline-variant');
+  box-shadow: theme('shadow-soft');
   margin-bottom: 48px;
 }
 
-.statItem {
-  background: theme('color-surface-container-lowest');
-  padding: 32px 16px;
-  border-radius: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: theme('shadow-soft');
-}
-
-.statIcon {
-  width: 32px;
-  height: 32px;
-  margin-bottom: 12px;
-}
-
-.statValue {
-  font-size: 40px;
+.infoTitle {
+  color: theme('color-on-surface');
+  font-size: 28px;
   font-weight: 700;
-  color: theme('color-primary');
-  font-family: "Noto Serif SC", serif;
 }
 
-.statLabel {
-  font-size: 18px;
-  font-weight: 700;
-  color: theme('color-tertiary');
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 4px;
+.infoDescription {
+  color: theme('color-on-surface-variant');
+  font-size: 22px;
+  line-height: 1.7;
 }
 
 .menuGroup {
@@ -122,16 +132,22 @@
   align-items: center;
   justify-content: space-between;
   padding: 32px;
-  
-  &:active {
-    background: theme('color-surface-container');
-  }
+}
+
+.menuItemHover {
+  background: theme('color-surface-container');
+}
+
+.menuItemDisabled {
+  opacity: 0.82;
 }
 
 .menuLeft {
   display: flex;
   align-items: center;
   gap: 24px;
+  flex: 1;
+  min-width: 0;
 }
 
 .menuIcon {
@@ -162,9 +178,25 @@
 }
 
 .menuText {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 28px;
   font-weight: 500;
   color: theme('color-on-surface');
+}
+
+.menuCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.menuHint {
+  color: theme('color-on-surface-variant');
+  font-size: 22px;
 }
 
 .menuArrowIcon {
@@ -180,11 +212,11 @@
 }
 
 .planBadge {
-  padding: 2px 12px;
-  border-radius: 4px;
+  padding: 6px 14px;
+  border-radius: 999px;
   background: theme('color-primary');
   color: #ffffff;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
 }
 
@@ -214,7 +246,7 @@
 
 .quoteText {
   font-size: 32px;
-  font-family: "Noto Serif SC", serif;
+  font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
   color: theme('color-tertiary-dim');
   font-style: italic;
   display: block;

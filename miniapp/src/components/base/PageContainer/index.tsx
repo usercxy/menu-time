@@ -19,19 +19,22 @@ export function PageContainer({
   rightAction,
   children
 }: PageContainerProps) {
-  const { statusBarHeight, navBarHeight } = useMemo(() => {
+  const { statusBarHeight, navBarHeight, navSafeRight } = useMemo(() => {
     const sysInfo = Taro.getSystemInfoSync()
     const sHeight = sysInfo.statusBarHeight || 20
+    const windowWidth = sysInfo.windowWidth || 375
     
     let nHeight = 44
+    let safeRight = 40
     try {
       const rect = Taro.getMenuButtonBoundingClientRect()
       nHeight = (rect.top - sHeight) * 2 + rect.height
+      safeRight = Math.max(40, windowWidth - rect.left + 16)
     } catch (e) {
       nHeight = 44
     }
     
-    return { statusBarHeight: sHeight, navBarHeight: nHeight }
+    return { statusBarHeight: sHeight, navBarHeight: nHeight, navSafeRight: safeRight }
   }, [])
 
   const totalNavHeight = statusBarHeight + navBarHeight
@@ -45,6 +48,7 @@ export function PageContainer({
         rightAction={rightAction}
         statusBarHeight={statusBarHeight}
         navBarHeight={navBarHeight}
+        navSafeRight={navSafeRight}
       />
       <View className={`page-shell ${styles.body}`} style={{ paddingTop: `${totalNavHeight + 32}px` }}>
         {children}
